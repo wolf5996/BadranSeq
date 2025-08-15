@@ -1,15 +1,25 @@
 Package: BadranSeq
-Title: What the Package Does (One Line, Title Case)
+Title: Make transcriptomic analyses more pleasant
 Version: 0.0.0.9000
 Authors@R: 
     person("Badran", "Elshenawy", , "badran.elshenawy@ndm.ox.ac.uk", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: Convenience functions to aid visualisation and computation of useful metrics with a focus on scRNA-Seq data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    tidyr
 Config/testthat/edition: 3
 URL: https://github.com/wolf5996/BadranSeq
 BugReports: https://github.com/wolf5996/BadranSeq/issues
+Imports: 
+    dplyr,
+    ggplot2,
+    magrittr,
+    purrr,
+    stringr
+Depends: 
+    R (>= 3.5)
+LazyData: true

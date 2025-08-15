@@ -1,2 +1,6 @@
 ^BadranSeq\.Rproj$
 ^\.Rproj\.user$
+^LICENSE\.md$
+^README\.Rmd$
+^testing_and_developing\.qmd$
+^data-raw$
