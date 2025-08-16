@@ -1,0 +1,75 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# BadranSeq
+
+- `BadranSeq` provides convenience functions to make transcriptomic
+  analyses more pleasant, with a focus on single-cell RNA sequencing
+  (scRNA-Seq) data
+
+- The package offers intuitive tools for visualization and computation
+  of useful metrics to streamline your RNA-Seq workflow.
+
+## Key Features
+
+- **Visualization Tools**: Built-in ggplot2-based functions for common
+  scRNA-Seq plots
+- **Metric Computation**: Calculate useful transcriptomic metrics with
+  ease
+- **Data Wrangling**: Streamlined functions using dplyr and tidyverse
+  principles
+- **Convenience Functions**: Reduce repetitive code in your RNA-Seq
+  analysis workflows
+- **scRNA-Seq Focus**: Specialized tools tailored for single-cell RNA
+  sequencing analysis
+
+## Installation
+
+You can install the development version of BadranSeq from GitHub:
+
+``` r
+# Install from GitHub
+if (!require(devtools)) install.packages("devtools")
+devtools::install_github("wolf5996/BadranSeq")
+
+# Or using pak (recommended)
+if (!require(pak)) install.packages("pak")
+pak::pkg_install("wolf5996/BadranSeq")
+```
+
+### Dependencies
+
+BadranSeq requires R \>= 3.5 and depends on the following packages:
+
+- **Core dependencies**: dplyr, ggplot2, magrittr, purrr, stringr
+- **Suggested packages**: testthat, tidyr
+
+All dependencies will be installed automatically when you install
+BadranSeq.
+
+## Citation
+
+If you use BadranSeq in your research, please cite:
+
+    Elshenawy, B. (2024). BadranSeq: Make transcriptomic analyses more pleasant. 
+    R package version 0.0.0.9000. 
+    https://github.com/wolf5996/BadranSeq
+
+## Getting Help
+
+- **Issues**: Report bugs and request features at [GitHub
+  Issues](https://github.com/wolf5996/BadranSeq/issues)
+- **Documentation**: Use `?function_name` for help with specific
+  functions
+
+## License
+
+This project is licensed under the [MIT License](LICENSE) - see the
+LICENSE file for details.
+
+## Acknowledgments
+
+- Built with [R](https://www.r-project.org/) and the
+  [tidyverse](https://www.tidyverse.org/)
+- Visualization powered by [ggplot2](https://ggplot2.tidyverse.org/)
+- Developed at the Nuffield Department of Medicine, University of Oxford
