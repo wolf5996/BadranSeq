@@ -1,7 +1,33 @@
+# Helper function to check if GSEA object contains GO terms
+is_go_gsea <- function(gsea_object) {
+  if (is.null(gsea_object) || nrow(gsea_object@result) == 0) {
+    return(FALSE)
+  }
+
+  # Check if the ID column contains GO identifiers (GO:XXXXXXX pattern)
+  go_pattern <- "^GO:\\d{7}$"
+  go_ids <- gsea_object@result$ID
+
+  # Return TRUE if any IDs match GO pattern
+  any(grepl(go_pattern, go_ids))
+}
+
+# Helper function to simplify GO terms if applicable
+simplify_if_go <- function(gsea_object, cutoff = 0.7, by = "p.adjust", select_fun = min) {
+  if (is_go_gsea(gsea_object)) {
+    message("GO terms detected. Applying clusterProfiler::simplify()...")
+    return(clusterProfiler::simplify(gsea_object, cutoff = cutoff, by = by, select_fun = select_fun))
+  } else {
+    message("Non-GO terms detected. Skipping simplification.")
+    return(gsea_object)
+  }
+}
+
 #' GSEA Barplot Enhanced
 #'
-#' @param gsea_object A `GSEA` object containing the results of a Gene Set Enrichment Analysis. Usually created using the `clusterProfiler`  or `ReactomePA` packages.
+#' @param gsea_object A `GSEA` object containing the results of a Gene Set Enrichment Analysis. Usually created using the `clusterProfiler` or `ReactomePA` packages.
 #' @param analysis_name A character string representing the name of the analysis for labeling purposes.
+#' @param simplify_go Logical, whether to apply `clusterProfiler::simplify()` to GO terms. Default is TRUE.
 #'
 #' @returns A ggplot object visualizing GSEA results.
 #' Instead of the default dotplots, which do not clearly convey normalized
@@ -13,7 +39,12 @@
 #' @export
 #'
 #' @examples
-create_enhanced_plot <- function(gsea_object, analysis_name) {
+create_enhanced_plot <- function(gsea_object, analysis_name = "GSEA Analysis", simplify_go = TRUE) {
+
+  # Simplify GO terms if requested and applicable
+  if (simplify_go) {
+    gsea_object <- simplify_if_go(gsea_object)
+  }
 
   # extract results dataframe
   gsea_df <- gsea_object@result

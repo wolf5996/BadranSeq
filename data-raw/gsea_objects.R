@@ -1,13 +1,19 @@
-# code to prepare `gsea_object` dataset goes here
+# Code to prepare GSEA results datasets goes here
 
-# load libraries
-library(clusterProfiler)
-library(tidyverse)
-library(ReactomePA)
+# Check if required packages are available
+required_packages <- c("clusterProfiler", "ReactomePA")
+missing_packages <- required_packages[!sapply(required_packages, requireNamespace, quietly = TRUE)]
 
-# import GSEA results
-gsea_go_bp_results <- read_rds(file = "inst/extdata/gsea_go_bp_results.rds")
-gsea_go_reactome_results <- read_rds(file = "inst/extdata/gsea_reactome_results.rds")
+if (length(missing_packages) > 0) {
+  stop("The following packages are required to build package data:\n",
+       paste(missing_packages, collapse = ", "), "\n",
+       "Install with: BiocManager::install(c('",
+       paste(missing_packages, collapse = "', '"), "'))")
+}
 
-# save GSEA object as rda file for package use
-usethis::use_data(gsea_go_bp_results, gsea_go_reactome_results, overwrite = TRUE)
+# Import GSEA results from external data files
+gsea_go_bp_results <- readr::read_rds(file = "inst/extdata/gsea_go_bp_results.rds")
+gsea_reactome_results <- readr::read_rds(file = "inst/extdata/gsea_reactome_results.rds")
+
+# Save GSEA objects as .rda files for package use
+usethis::use_data(gsea_go_bp_results, gsea_reactome_results, overwrite = TRUE)

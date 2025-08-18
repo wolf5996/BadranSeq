@@ -4,12 +4,18 @@
 \alias{create_enhanced_plot}
 \title{GSEA Barplot Enhanced}
 \usage{
-create_enhanced_plot(gsea_object, analysis_name)
+create_enhanced_plot(
+  gsea_object,
+  analysis_name = "GSEA Analysis",
+  simplify_go = TRUE
+)
 }
 \arguments{
-\item{gsea_object}{A \code{GSEA} object containing the results of a Gene Set Enrichment Analysis. Usually created using the \code{clusterProfiler}  or \code{ReactomePA} packages.}
+\item{gsea_object}{A \code{GSEA} object containing the results of a Gene Set Enrichment Analysis. Usually created using the \code{clusterProfiler} or \code{ReactomePA} packages.}
 
 \item{analysis_name}{A character string representing the name of the analysis for labeling purposes.}
+
+\item{simplify_go}{Logical, whether to apply \code{clusterProfiler::simplify()} to GO terms. Default is TRUE.}
 }
 \value{
 A ggplot object visualizing GSEA results.

@@ -2,4 +2,5 @@
 
 export("%>%")
 export(create_enhanced_plot)
+export(select_cells_interactive)
 importFrom(magrittr,"%>%")

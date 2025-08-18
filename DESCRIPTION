@@ -15,11 +15,15 @@ Config/testthat/edition: 3
 URL: https://github.com/wolf5996/BadranSeq
 BugReports: https://github.com/wolf5996/BadranSeq/issues
 Imports: 
+    clusterProfiler,
     dplyr,
     ggplot2,
     magrittr,
     purrr,
+    Seurat,
+    shiny,
     stringr
 Depends: 
     R (>= 3.5)
 LazyData: true
+LazyDataCompression: xz

@@ -41,7 +41,7 @@ pak::pkg_install("wolf5996/BadranSeq")
 
 ### Dependencies
 
-BadranSeq requires R \>= 3.5 and depends on the following packages:
+`BadranSeq` requires R \>= 3.5 and depends on the following packages:
 
 -   **Core dependencies**: dplyr, ggplot2, magrittr, purrr, stringr
 -   **Suggested packages**: testthat, tidyr
@@ -50,7 +50,7 @@ All dependencies will be installed automatically when you install BadranSeq.
 
 ## Citation
 
-If you use BadranSeq in your research, please cite:
+If you use `BadranSeq` in your research, please cite:
 
 ```         
 Elshenawy, B. (2024). BadranSeq: Make transcriptomic analyses more pleasant. 
