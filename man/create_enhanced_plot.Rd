@@ -7,7 +7,8 @@
 create_enhanced_plot(
   gsea_object,
   analysis_name = "GSEA Analysis",
-  simplify_go = TRUE
+  simplify_go = TRUE,
+  number_of_pathways = 10
 )
 }
 \arguments{
@@ -16,14 +17,17 @@ create_enhanced_plot(
 \item{analysis_name}{A character string representing the name of the analysis for labeling purposes.}
 
 \item{simplify_go}{Logical, whether to apply \code{clusterProfiler::simplify()} to GO terms. Default is TRUE.}
+
+\item{number_of_pathways}{Integer, number of top pathways to display for each direction (upregulated/downregulated). Default is 10.}
 }
 \value{
 A ggplot object visualizing GSEA results.
 Instead of the default dotplots, which do not clearly convey normalized
-enrichment scores (NES), this function generates a barplot of the top 10
-upregulated and downregulated pathways. The plot displays NES values along
-with adjusted p-values (padj), and includes leading-edge genes in the labels
-for easier interpretation and to facilitate identification of duplicate terms.
+enrichment scores (NES), this function generates a barplot of the top N
+upregulated and downregulated pathways (where N = number_of_pathways).
+The plot displays NES values along with adjusted p-values (padj), and includes
+leading-edge genes in the labels for easier interpretation and to facilitate
+identification of duplicate terms.
 }
 \description{
 GSEA Barplot Enhanced

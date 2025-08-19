@@ -28,18 +28,23 @@ simplify_if_go <- function(gsea_object, cutoff = 0.7, by = "p.adjust", select_fu
 #' @param gsea_object A `GSEA` object containing the results of a Gene Set Enrichment Analysis. Usually created using the `clusterProfiler` or `ReactomePA` packages.
 #' @param analysis_name A character string representing the name of the analysis for labeling purposes.
 #' @param simplify_go Logical, whether to apply `clusterProfiler::simplify()` to GO terms. Default is TRUE.
+#' @param number_of_pathways Integer, number of top pathways to display for each direction (upregulated/downregulated). Default is 10.
 #'
 #' @returns A ggplot object visualizing GSEA results.
 #' Instead of the default dotplots, which do not clearly convey normalized
-#' enrichment scores (NES), this function generates a barplot of the top 10
-#' upregulated and downregulated pathways. The plot displays NES values along
-#' with adjusted p-values (padj), and includes leading-edge genes in the labels
-#' for easier interpretation and to facilitate identification of duplicate terms.
+#' enrichment scores (NES), this function generates a barplot of the top N
+#' upregulated and downregulated pathways (where N = number_of_pathways).
+#' The plot displays NES values along with adjusted p-values (padj), and includes
+#' leading-edge genes in the labels for easier interpretation and to facilitate
+#' identification of duplicate terms.
 #'
 #' @export
 #'
 #' @examples
-create_enhanced_plot <- function(gsea_object, analysis_name = "GSEA Analysis", simplify_go = TRUE) {
+create_enhanced_plot <- function(gsea_object,
+                                 analysis_name = "GSEA Analysis",
+                                 simplify_go = TRUE,
+                                 number_of_pathways = 10) {
 
   # Simplify GO terms if requested and applicable
   if (simplify_go) {
@@ -77,11 +82,11 @@ create_enhanced_plot <- function(gsea_object, analysis_name = "GSEA Analysis", s
 
   top <- gsea_df %>%
     dplyr::filter(NES > 0) %>%
-    dplyr::slice_max(order_by = NES, n = 10)
+    dplyr::slice_max(order_by = NES, n = number_of_pathways)
 
   bottom <- gsea_df %>%
     dplyr::filter(NES < 0) %>%
-    dplyr::slice_min(order_by = NES, n = 10)
+    dplyr::slice_min(order_by = NES, n = number_of_pathways)
 
   both <- rbind(top, bottom)
 
