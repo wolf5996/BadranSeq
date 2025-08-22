@@ -2,5 +2,7 @@
 
 export("%>%")
 export(create_enhanced_plot)
+export(do_PcaPlot)
+export(get_pca_variance)
 export(select_cells_interactive)
 importFrom(magrittr,"%>%")
