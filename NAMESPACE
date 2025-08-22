@@ -3,6 +3,7 @@
 export("%>%")
 export(create_enhanced_plot)
 export(do_PcaPlot)
+export(do_UmapPlot)
 export(get_pca_variance)
 export(select_cells_interactive)
 importFrom(magrittr,"%>%")

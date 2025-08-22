@@ -32,13 +32,13 @@ with as many named colors as unique values of group.by.}
 \item{variance_digits}{numeric. Number of decimal places for variance percentages.
 Defaults to 1.}
 
-\item{...}{Additional arguments passed to SCpubr::do_DimPlot().}
+\item{...}{Additional arguments passed to \code{SCpubr::do_DimPlot()}.}
 }
 \value{
 ggplot2 object with PCA plot including variance explained in axis labels.
 }
 \description{
-A wrapper around SCpubr::do_DimPlot() specifically designed for PCA plots that
+A wrapper around \code{SCpubr::do_DimPlot()} specifically designed for PCA plots that
 automatically adds variance explained percentages to the axis labels.
 }
 \examples{
