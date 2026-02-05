@@ -5,7 +5,7 @@
 \title{Generalized Dimensionality Reduction Plot}
 \usage{
 do_DimPlot(
-  sample,
+  object,
   reduction = "umap",
   dims = c(1, 2),
   group.by = NULL,
@@ -20,11 +20,16 @@ do_DimPlot(
   plot.axes = TRUE,
   variance_digits = 1,
   shuffle = TRUE,
+  plot_cell_borders = TRUE,
+  border.size = 2,
+  border.color = "black",
+  legend.title = NULL,
+  ncol = NULL,
   ...
 )
 }
 \arguments{
-\item{sample}{Seurat object.}
+\item{object}{Seurat object.}
 
 \item{reduction}{character. Reduction to use (default: "umap").}
 
@@ -32,7 +37,7 @@ do_DimPlot(
 
 \item{group.by}{character. Metadata column for grouping (default: active identity).}
 
-\item{split.by}{character. Metadata column for faceting.}
+\item{split.by}{character. Metadata column for splitting (creates panels with silhouettes).}
 
 \item{colors.use}{Named vector of colors for groups.}
 
@@ -54,6 +59,16 @@ do_DimPlot(
 
 \item{shuffle}{logical. Randomize cell plotting order (default: TRUE).}
 
+\item{plot_cell_borders}{logical. Plot black borders around cells (default: TRUE).}
+
+\item{border.size}{numeric. Border size multiplier (default: 2).}
+
+\item{border.color}{character. Border color (default: "black").}
+
+\item{legend.title}{character. Custom legend title (NULL removes title).}
+
+\item{ncol}{numeric. Number of columns for split panels (default: NULL, auto).}
+
 \item{...}{Additional arguments (currently unused).}
 }
 \value{
@@ -61,13 +76,14 @@ ggplot2 object with dimensionality reduction plot.
 }
 \description{
 Unified wrapper for dimensionality reduction plots. Routes to specialized
-functions for PCA and UMAP, handles other reductions directly.
+functions for PCA and UMAP, handles other reductions directly. When split.by
+is used, shows each split category with a grey silhouette of all other cells.
 }
 \examples{
 \dontrun{
 do_DimPlot(seurat_object, group.by = "condition")
 do_DimPlot(seurat_object, reduction = "pca", group.by = "cluster")
-do_DimPlot(seurat_object, reduction = "harmony", group.by = "batch")
+do_DimPlot(seurat_object, split.by = "sample")  # Shows silhouettes
 }
 
 }

@@ -5,14 +5,14 @@
 \title{Interactive Cell Selection for Seurat Objects}
 \usage{
 select_cells_interactive(
-  seurat_obj,
+  object,
   reduction = c("umap", "tsne", "pca"),
   color_by = "Idents",
   return_cells = FALSE
 )
 }
 \arguments{
-\item{seurat_obj}{Seurat object with dimensionality reduction computed.}
+\item{object}{Seurat object with dimensionality reduction computed.}
 
 \item{reduction}{character. Reduction to use ("umap", "tsne", "pca").}
 

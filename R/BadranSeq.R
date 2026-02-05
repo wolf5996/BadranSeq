@@ -3,7 +3,8 @@
 
 # Suppress R CMD check notes for ggplot2 NSE variables
 utils::globalVariables(c("Dim1", "Dim2", "group", "PC", "Value",
-                         "dim1", "dim2", "color_var", "expression"))
+                         "dim1", "dim2", "color_var", "expression",
+                         "split_var", "is_silhouette"))
 
 # ============================================================================
 # PCA Variance Helper
@@ -14,7 +15,7 @@ utils::globalVariables(c("Dim1", "Dim2", "group", "PC", "Value",
 #' @description
 #' Helper function to extract variance explained information from a Seurat object.
 #'
-#' @param sample Seurat object with PCA reduction.
+#' @param object Seurat object with PCA reduction.
 #' @param n_pcs numeric. Number of top PCs to return. If NULL, returns all PCs.
 #'
 #' @return data.frame with PC number, variance explained percentage, and cumulative variance.
@@ -26,17 +27,17 @@ utils::globalVariables(c("Dim1", "Dim2", "group", "PC", "Value",
 #' }
 #'
 #' @export
-get_pca_variance <- function(sample, n_pcs = NULL) {
+get_pca_variance <- function(object, n_pcs = NULL) {
 
-  if (!inherits(sample, "Seurat")) {
-    stop("sample must be a Seurat object")
+  if (!inherits(object, "Seurat")) {
+    stop("object must be a Seurat object")
   }
 
-  if (!"pca" %in% names(sample@reductions)) {
+  if (!"pca" %in% names(object@reductions)) {
     stop("PCA reduction not found in Seurat object. Please run RunPCA() first.")
   }
 
-  pca_stdev <- sample@reductions$pca@stdev
+  pca_stdev <- object@reductions$pca@stdev
   total_variance <- sum(pca_stdev^2)
   variance_explained <- (pca_stdev^2 / total_variance) * 100
 
@@ -68,12 +69,15 @@ get_pca_variance <- function(sample, n_pcs = NULL) {
 #'
 #' @description
 #' Core function that builds dimensionality reduction plots using native ggplot2.
+#' When split.by is used, shows the split population in color with a grey
+#' silhouette of all other cells in the background (SCpubr-style).
 #'
-#' @param sample Seurat object.
+#' @param object Seurat object.
 #' @param reduction character. Name of reduction to use.
 #' @param dims numeric. Vector of 2 dimensions to plot.
 #' @param group.by character. Metadata column for grouping.
-#' @param split.by character. Metadata column for faceting.
+#' @param split.by character. Metadata column for splitting (creates separate
+#'   panels with silhouettes of other cells).
 #' @param colors.use Named vector of colors.
 #' @param label logical. Show cluster labels.
 #' @param label.size numeric. Label font size.
@@ -86,12 +90,17 @@ get_pca_variance <- function(sample, n_pcs = NULL) {
 #' @param shuffle logical. Randomize cell plotting order.
 #' @param raster logical. Rasterize points for large datasets.
 #' @param raster.dpi numeric. DPI for rasterization.
-#' @param na.value character. Color for NA values.
+#' @param na.value character. Color for NA/silhouette cells.
+#' @param plot_cell_borders logical. Plot black borders around cells.
+#' @param border.size numeric. Border size multiplier (default: 2).
+#' @param border.color character. Border color (default: "black").
+#' @param legend.title character. Custom legend title (NULL for default).
+#' @param ncol numeric. Number of columns for split panels (default: NULL, auto).
 #'
-#' @return ggplot2 object.
+#' @return ggplot2 object or list of ggplot2 objects when split.by is used.
 #' @keywords internal
 .do_DimPlot_internal <- function(
-    sample,
+    object,
     reduction = "umap",
     dims = c(1, 2),
     group.by = NULL,
@@ -108,11 +117,16 @@ get_pca_variance <- function(sample, n_pcs = NULL) {
     shuffle = TRUE,
     raster = NULL,
     raster.dpi = 300,
-    na.value = "grey75"
+    na.value = "grey75",
+    plot_cell_borders = TRUE,
+    border.size = 2,
+    border.color = "black",
+    legend.title = NULL,
+    ncol = NULL
 ) {
 
   # ---- Data Extraction ----
-  embeddings <- sample@reductions[[reduction]]@cell.embeddings[, dims]
+  embeddings <- object@reductions[[reduction]]@cell.embeddings[, dims]
   colnames(embeddings) <- c("Dim1", "Dim2")
 
   plot_data <- as.data.frame(embeddings)
@@ -120,28 +134,28 @@ get_pca_variance <- function(sample, n_pcs = NULL) {
 
   # Determine grouping variable
   if (is.null(group.by)) {
-    plot_data$group <- as.factor(Seurat::Idents(sample))
-    group_var <- "Identity"
+    plot_data$group <- as.factor(Seurat::Idents(object))
+    group_var <- if (is.null(legend.title)) NULL else legend.title
   } else {
-    if (!group.by %in% colnames(sample@meta.data)) {
+    if (!group.by %in% colnames(object@meta.data)) {
       stop(paste0("'", group.by, "' not found in metadata. Available columns: ",
-                  paste(colnames(sample@meta.data), collapse = ", ")))
+                  paste(colnames(object@meta.data), collapse = ", ")))
     }
-    plot_data$group <- as.factor(sample@meta.data[[group.by]])
-    group_var <- group.by
+    plot_data$group <- as.factor(object@meta.data[[group.by]])
+    group_var <- if (is.null(legend.title)) NULL else legend.title
   }
 
   # Add split.by variable if specified
   if (!is.null(split.by)) {
-    if (!split.by %in% colnames(sample@meta.data)) {
+    if (!split.by %in% colnames(object@meta.data)) {
       stop(paste0("'", split.by, "' not found in metadata."))
     }
-    plot_data$split_var <- as.factor(sample@meta.data[[split.by]])
+    plot_data$split_var <- as.factor(object@meta.data[[split.by]])
   }
 
   # ---- Shuffle cells ----
   if (shuffle) {
-    plot_data <- plot_data[sample(nrow(plot_data)), ]
+    plot_data <- plot_data[base::sample(nrow(plot_data)), ]
   }
 
   # ---- Color setup ----
@@ -171,17 +185,69 @@ get_pca_variance <- function(sample, n_pcs = NULL) {
     raster <- nrow(plot_data) > 50000
   }
 
-  # ---- Build base plot ----
-  p <- ggplot2::ggplot(plot_data, ggplot2::aes(x = Dim1, y = Dim2, color = group))
+  # ---- Handle split.by with silhouette approach ----
+  if (!is.null(split.by)) {
+    return(.do_DimPlot_split_silhouette(
+      plot_data = plot_data,
+      colors.use = colors.use,
+      group_var = group_var,
+      label = label,
+      label.size = label.size,
+      label.color = label.color,
+      label.fill = label.fill,
+      label.box = label.box,
+      pt.size = pt.size,
+      pt.alpha = pt.alpha,
+      plot.axes = plot.axes,
+      raster = raster,
+      raster.dpi = raster.dpi,
+      na.value = na.value,
+      plot_cell_borders = plot_cell_borders,
+      border.size = border.size,
+      border.color = border.color,
+      ncol = ncol
+    ))
+  }
 
-  # Add points (with optional rasterization)
+  # ---- Build base plot (no split.by) ----
+  p <- ggplot2::ggplot(plot_data, ggplot2::aes(x = Dim1, y = Dim2))
+
+  # ---- Add cell border layer (black points underneath) ----
+  if (plot_cell_borders) {
+    if (raster && requireNamespace("ggrastr", quietly = TRUE)) {
+      p <- p + ggrastr::rasterise(
+        ggplot2::geom_point(
+          color = border.color,
+          size = pt.size * border.size,
+          show.legend = FALSE
+        ),
+        dpi = raster.dpi
+      )
+    } else {
+      p <- p + ggplot2::geom_point(
+        color = border.color,
+        size = pt.size * border.size,
+        show.legend = FALSE
+      )
+    }
+  }
+
+  # ---- Add colored points on top ----
   if (raster && requireNamespace("ggrastr", quietly = TRUE)) {
     p <- p + ggrastr::rasterise(
-      ggplot2::geom_point(size = pt.size, alpha = pt.alpha),
+      ggplot2::geom_point(
+        ggplot2::aes(color = group),
+        size = pt.size,
+        alpha = pt.alpha
+      ),
       dpi = raster.dpi
     )
   } else {
-    p <- p + ggplot2::geom_point(size = pt.size, alpha = pt.alpha)
+    p <- p + ggplot2::geom_point(
+      ggplot2::aes(color = group),
+      size = pt.size,
+      alpha = pt.alpha
+    )
   }
 
   # ---- Add labels ----
@@ -225,12 +291,210 @@ get_pca_variance <- function(sample, n_pcs = NULL) {
       )
     )
 
-  # ---- Faceting ----
-  if (!is.null(split.by)) {
-    p <- p + ggplot2::facet_wrap(~ split_var, scales = "fixed")
+  return(p)
+}
+
+#' Internal Split.by Silhouette Implementation
+#'
+#' @description
+#' Creates split panels where each panel shows cells of that category in color
+#' with a grey silhouette of all other cells in the background.
+#'
+#' @keywords internal
+.do_DimPlot_split_silhouette <- function(
+    plot_data,
+    colors.use,
+    group_var,
+    label,
+    label.size,
+    label.color,
+    label.fill,
+    label.box,
+    pt.size,
+    pt.alpha,
+    plot.axes,
+    raster,
+    raster.dpi,
+    na.value,
+    plot_cell_borders,
+    border.size,
+    border.color,
+    ncol
+) {
+
+  # Get unique split values
+  split_levels <- levels(plot_data$split_var)
+  if (is.null(split_levels)) {
+    split_levels <- unique(as.character(plot_data$split_var))
   }
 
-  return(p)
+  # Store axis limits from full data for consistency
+  x_range <- range(plot_data$Dim1)
+  y_range <- range(plot_data$Dim2)
+
+  # Create a plot for each split value
+  plot_list <- lapply(split_levels, function(split_val) {
+
+    # Create silhouette data (all cells, colored grey)
+    silhouette_data <- plot_data
+    silhouette_data$is_silhouette <- TRUE
+
+    # Create foreground data (only cells in this split category)
+    foreground_data <- plot_data[plot_data$split_var == split_val, ]
+    foreground_data$is_silhouette <- FALSE
+
+    # Build plot
+    p <- ggplot2::ggplot()
+
+    # Layer 1: Black borders for ALL cells (silhouette context)
+    if (plot_cell_borders) {
+      if (raster && requireNamespace("ggrastr", quietly = TRUE)) {
+        p <- p + ggrastr::rasterise(
+          ggplot2::geom_point(
+            data = silhouette_data,
+            ggplot2::aes(x = Dim1, y = Dim2),
+            color = border.color,
+            size = pt.size * border.size,
+            show.legend = FALSE
+          ),
+          dpi = raster.dpi
+        )
+      } else {
+        p <- p + ggplot2::geom_point(
+          data = silhouette_data,
+          ggplot2::aes(x = Dim1, y = Dim2),
+          color = border.color,
+          size = pt.size * border.size,
+          show.legend = FALSE
+        )
+      }
+    }
+
+    # Layer 2: Grey silhouette of ALL cells
+    if (raster && requireNamespace("ggrastr", quietly = TRUE)) {
+      p <- p + ggrastr::rasterise(
+        ggplot2::geom_point(
+          data = silhouette_data,
+          ggplot2::aes(x = Dim1, y = Dim2),
+          color = na.value,
+          size = pt.size,
+          show.legend = FALSE
+        ),
+        dpi = raster.dpi
+      )
+    } else {
+      p <- p + ggplot2::geom_point(
+        data = silhouette_data,
+        ggplot2::aes(x = Dim1, y = Dim2),
+        color = na.value,
+        size = pt.size,
+        show.legend = FALSE
+      )
+    }
+
+    # Layer 3: Black borders for foreground cells
+    if (plot_cell_borders && nrow(foreground_data) > 0) {
+      if (raster && requireNamespace("ggrastr", quietly = TRUE)) {
+        p <- p + ggrastr::rasterise(
+          ggplot2::geom_point(
+            data = foreground_data,
+            ggplot2::aes(x = Dim1, y = Dim2),
+            color = border.color,
+            size = pt.size * border.size,
+            show.legend = FALSE
+          ),
+          dpi = raster.dpi
+        )
+      } else {
+        p <- p + ggplot2::geom_point(
+          data = foreground_data,
+          ggplot2::aes(x = Dim1, y = Dim2),
+          color = border.color,
+          size = pt.size * border.size,
+          show.legend = FALSE
+        )
+      }
+    }
+
+    # Layer 4: Colored foreground cells
+    if (nrow(foreground_data) > 0) {
+      if (raster && requireNamespace("ggrastr", quietly = TRUE)) {
+        p <- p + ggrastr::rasterise(
+          ggplot2::geom_point(
+            data = foreground_data,
+            ggplot2::aes(x = Dim1, y = Dim2, color = group),
+            size = pt.size,
+            alpha = pt.alpha
+          ),
+          dpi = raster.dpi
+        )
+      } else {
+        p <- p + ggplot2::geom_point(
+          data = foreground_data,
+          ggplot2::aes(x = Dim1, y = Dim2, color = group),
+          size = pt.size,
+          alpha = pt.alpha
+        )
+      }
+    }
+
+    # Add labels for foreground cells only
+    if (label && nrow(foreground_data) > 0) {
+      label_data <- stats::aggregate(
+        cbind(Dim1, Dim2) ~ group,
+        data = foreground_data,
+        FUN = mean
+      )
+
+      if (label.box) {
+        p <- p + ggplot2::geom_label(
+          data = label_data,
+          ggplot2::aes(x = Dim1, y = Dim2, label = group),
+          color = label.color,
+          fill = label.fill,
+          size = label.size,
+          fontface = "bold",
+          show.legend = FALSE
+        )
+      } else {
+        p <- p + ggplot2::geom_text(
+          data = label_data,
+          ggplot2::aes(x = Dim1, y = Dim2, label = group),
+          color = label.color,
+          size = label.size,
+          fontface = "bold",
+          show.legend = FALSE
+        )
+      }
+    }
+
+    # Apply colors, theme, and consistent axis limits
+    p <- p +
+      ggplot2::scale_color_manual(values = colors.use, name = group_var, na.value = na.value) +
+      ggplot2::coord_cartesian(xlim = x_range, ylim = y_range) +
+      theme_badranseq(plot.axes = plot.axes) +
+      ggplot2::guides(
+        color = ggplot2::guide_legend(
+          override.aes = list(size = 4, alpha = 1)
+        )
+      ) +
+      ggplot2::ggtitle(split_val)
+
+    return(p)
+  })
+
+  names(plot_list) <- split_levels
+
+  # Combine plots using patchwork if available
+if (requireNamespace("patchwork", quietly = TRUE)) {
+    combined <- patchwork::wrap_plots(plot_list, ncol = ncol, guides = "collect") +
+      patchwork::plot_layout(guides = "collect") &
+      ggplot2::theme(legend.position = "bottom")
+    return(combined)
+  } else {
+    # Return list if patchwork not available
+    return(plot_list)
+  }
 }
 
 # ============================================================================
@@ -241,12 +505,13 @@ get_pca_variance <- function(sample, n_pcs = NULL) {
 #'
 #' @description
 #' Creates a PCA dimensionality reduction plot with variance explained
-#' percentages automatically added to axis labels.
+#' percentages automatically added to axis labels. When split.by is used,
+#' shows each split category with a grey silhouette of all other cells.
 #'
-#' @param sample Seurat object.
+#' @param object Seurat object.
 #' @param dims numeric. Vector of 2 PC dimensions to plot (default: c(1, 2)).
 #' @param group.by character. Metadata column for grouping (default: active identity).
-#' @param split.by character. Metadata column for faceting.
+#' @param split.by character. Metadata column for splitting (creates panels with silhouettes).
 #' @param colors.use Named vector of colors for groups.
 #' @param label logical. Show cluster labels (default: TRUE).
 #' @param label.size numeric. Label font size (default: 4).
@@ -257,6 +522,11 @@ get_pca_variance <- function(sample, n_pcs = NULL) {
 #' @param plot.axes logical. Show axes (default: TRUE).
 #' @param variance_digits numeric. Decimal places for variance (default: 1).
 #' @param shuffle logical. Randomize cell plotting order (default: TRUE).
+#' @param plot_cell_borders logical. Plot black borders around cells (default: TRUE).
+#' @param border.size numeric. Border size multiplier (default: 2).
+#' @param border.color character. Border color (default: "black").
+#' @param legend.title character. Custom legend title (NULL removes title).
+#' @param ncol numeric. Number of columns for split panels (default: NULL, auto).
 #' @param ... Additional arguments (currently unused).
 #'
 #' @return ggplot2 object with PCA plot including variance explained in axis labels.
@@ -265,11 +535,12 @@ get_pca_variance <- function(sample, n_pcs = NULL) {
 #' \dontrun{
 #' do_PcaPlot(seurat_object, group.by = "condition")
 #' do_PcaPlot(seurat_object, dims = c(2, 3), group.by = "cluster")
+#' do_PcaPlot(seurat_object, split.by = "sample")  # Shows silhouettes
 #' }
 #'
 #' @export
 do_PcaPlot <- function(
-    sample,
+    object,
     dims = c(1, 2),
     group.by = NULL,
     split.by = NULL,
@@ -283,15 +554,20 @@ do_PcaPlot <- function(
     plot.axes = TRUE,
     variance_digits = 1,
     shuffle = TRUE,
+    plot_cell_borders = TRUE,
+    border.size = 2,
+    border.color = "black",
+    legend.title = NULL,
+    ncol = NULL,
     ...
 ) {
 
   # Validation
-  if (!inherits(sample, "Seurat")) {
-    stop("sample must be a Seurat object")
+  if (!inherits(object, "Seurat")) {
+    stop("object must be a Seurat object")
   }
 
-  if (!"pca" %in% names(sample@reductions)) {
+  if (!"pca" %in% names(object@reductions)) {
     stop("PCA reduction not found. Please run RunPCA() first.")
   }
 
@@ -299,13 +575,13 @@ do_PcaPlot <- function(
     stop("dims must be a vector of 2 positive integers")
   }
 
-  max_pc <- ncol(sample@reductions$pca@cell.embeddings)
+  max_pc <- ncol(object@reductions$pca@cell.embeddings)
   if (any(dims > max_pc)) {
     stop(paste("Requested PC dimensions exceed available PCs. Maximum PC:", max_pc))
   }
 
   # Calculate variance explained
-  pca_stdev <- sample@reductions$pca@stdev
+  pca_stdev <- object@reductions$pca@stdev
   total_variance <- sum(pca_stdev^2)
   variance_explained <- (pca_stdev^2 / total_variance) * 100
 
@@ -317,7 +593,7 @@ do_PcaPlot <- function(
 
   # Build plot
   plot <- .do_DimPlot_internal(
-    sample = sample,
+    object = object,
     reduction = "pca",
     dims = dims,
     group.by = group.by,
@@ -330,7 +606,12 @@ do_PcaPlot <- function(
     pt.size = pt.size,
     pt.alpha = pt.alpha,
     plot.axes = plot.axes,
-    shuffle = shuffle
+    shuffle = shuffle,
+    plot_cell_borders = plot_cell_borders,
+    border.size = border.size,
+    border.color = border.color,
+    legend.title = legend.title,
+    ncol = ncol
   )
 
   # Add variance labels
@@ -343,6 +624,8 @@ do_PcaPlot <- function(
 #'
 #' @description
 #' Creates a UMAP dimensionality reduction plot with publication-ready styling.
+#' When split.by is used, shows each split category with a grey silhouette of
+#' all other cells.
 #'
 #' @inheritParams do_PcaPlot
 #'
@@ -351,12 +634,12 @@ do_PcaPlot <- function(
 #' @examples
 #' \dontrun{
 #' do_UmapPlot(seurat_object, group.by = "condition")
-#' do_UmapPlot(seurat_object, group.by = "condition", label = FALSE)
+#' do_UmapPlot(seurat_object, split.by = "sample")  # Shows silhouettes
 #' }
 #'
 #' @export
 do_UmapPlot <- function(
-    sample,
+    object,
     dims = c(1, 2),
     group.by = NULL,
     split.by = NULL,
@@ -369,15 +652,20 @@ do_UmapPlot <- function(
     pt.alpha = 1,
     plot.axes = TRUE,
     shuffle = TRUE,
+    plot_cell_borders = TRUE,
+    border.size = 2,
+    border.color = "black",
+    legend.title = NULL,
+    ncol = NULL,
     ...
 ) {
 
   # Validation
-  if (!inherits(sample, "Seurat")) {
-    stop("sample must be a Seurat object")
+  if (!inherits(object, "Seurat")) {
+    stop("object must be a Seurat object")
   }
 
-  if (!"umap" %in% names(sample@reductions)) {
+  if (!"umap" %in% names(object@reductions)) {
     stop("UMAP reduction not found. Please run RunUMAP() first.")
   }
 
@@ -385,14 +673,14 @@ do_UmapPlot <- function(
     stop("dims must be a vector of 2 positive integers")
   }
 
-  max_dim <- ncol(sample@reductions$umap@cell.embeddings)
+  max_dim <- ncol(object@reductions$umap@cell.embeddings)
   if (any(dims > max_dim)) {
     stop(paste("Requested UMAP dimensions exceed available dimensions. Maximum:", max_dim))
   }
 
   # Build plot
   plot <- .do_DimPlot_internal(
-    sample = sample,
+    object = object,
     reduction = "umap",
     dims = dims,
     group.by = group.by,
@@ -405,7 +693,12 @@ do_UmapPlot <- function(
     pt.size = pt.size,
     pt.alpha = pt.alpha,
     plot.axes = plot.axes,
-    shuffle = shuffle
+    shuffle = shuffle,
+    plot_cell_borders = plot_cell_borders,
+    border.size = border.size,
+    border.color = border.color,
+    legend.title = legend.title,
+    ncol = ncol
   )
 
   # Standard UMAP axis labels
@@ -421,7 +714,8 @@ do_UmapPlot <- function(
 #'
 #' @description
 #' Unified wrapper for dimensionality reduction plots. Routes to specialized
-#' functions for PCA and UMAP, handles other reductions directly.
+#' functions for PCA and UMAP, handles other reductions directly. When split.by
+#' is used, shows each split category with a grey silhouette of all other cells.
 #'
 #' @inheritParams do_PcaPlot
 #' @param reduction character. Reduction to use (default: "umap").
@@ -432,12 +726,12 @@ do_UmapPlot <- function(
 #' \dontrun{
 #' do_DimPlot(seurat_object, group.by = "condition")
 #' do_DimPlot(seurat_object, reduction = "pca", group.by = "cluster")
-#' do_DimPlot(seurat_object, reduction = "harmony", group.by = "batch")
+#' do_DimPlot(seurat_object, split.by = "sample")  # Shows silhouettes
 #' }
 #'
 #' @export
 do_DimPlot <- function(
-    sample,
+    object,
     reduction = "umap",
     dims = c(1, 2),
     group.by = NULL,
@@ -452,23 +746,28 @@ do_DimPlot <- function(
     plot.axes = TRUE,
     variance_digits = 1,
     shuffle = TRUE,
+    plot_cell_borders = TRUE,
+    border.size = 2,
+    border.color = "black",
+    legend.title = NULL,
+    ncol = NULL,
     ...
 ) {
 
   # Validation
-  if (!inherits(sample, "Seurat")) {
-    stop("sample must be a Seurat object")
+  if (!inherits(object, "Seurat")) {
+    stop("object must be a Seurat object")
   }
 
-  if (!reduction %in% names(sample@reductions)) {
+  if (!reduction %in% names(object@reductions)) {
     stop(paste0("'", reduction, "' not found. Available reductions: ",
-                paste(names(sample@reductions), collapse = ", ")))
+                paste(names(object@reductions), collapse = ", ")))
   }
 
   # Route to specialized functions
   if (reduction == "pca") {
     return(do_PcaPlot(
-      sample = sample,
+      object = object,
       dims = dims,
       group.by = group.by,
       split.by = split.by,
@@ -482,11 +781,16 @@ do_DimPlot <- function(
       plot.axes = plot.axes,
       variance_digits = variance_digits,
       shuffle = shuffle,
+      plot_cell_borders = plot_cell_borders,
+      border.size = border.size,
+      border.color = border.color,
+      legend.title = legend.title,
+      ncol = ncol,
       ...
     ))
   } else if (reduction == "umap") {
     return(do_UmapPlot(
-      sample = sample,
+      object = object,
       dims = dims,
       group.by = group.by,
       split.by = split.by,
@@ -499,13 +803,18 @@ do_DimPlot <- function(
       pt.alpha = pt.alpha,
       plot.axes = plot.axes,
       shuffle = shuffle,
+      plot_cell_borders = plot_cell_borders,
+      border.size = border.size,
+      border.color = border.color,
+      legend.title = legend.title,
+      ncol = ncol,
       ...
     ))
   }
 
   # Handle other reductions (harmony, tsne, etc.)
   plot <- .do_DimPlot_internal(
-    sample = sample,
+    object = object,
     reduction = reduction,
     dims = dims,
     group.by = group.by,
@@ -518,7 +827,12 @@ do_DimPlot <- function(
     pt.size = pt.size,
     pt.alpha = pt.alpha,
     plot.axes = plot.axes,
-    shuffle = shuffle
+    shuffle = shuffle,
+    plot_cell_borders = plot_cell_borders,
+    border.size = border.size,
+    border.color = border.color,
+    legend.title = legend.title,
+    ncol = ncol
   )
 
   # Standardized axis labels
@@ -562,7 +876,7 @@ do_DimPlot <- function(
 #'
 #' @export
 do_FeaturePlot <- function(
-    sample,
+    object,
     features,
     reduction = "umap",
     dims = c(1, 2),
@@ -579,17 +893,20 @@ do_FeaturePlot <- function(
     max.cutoff = NA,
     na.value = "grey90",
     split.by = NULL,
+    plot_cell_borders = TRUE,
+    border.size = 2,
+    border.color = "black",
     ...
 ) {
 
   # ---- Validation ----
-  if (!inherits(sample, "Seurat")) {
-    stop("sample must be a Seurat object")
+  if (!inherits(object, "Seurat")) {
+    stop("object must be a Seurat object")
   }
 
-  if (!reduction %in% names(sample@reductions)) {
+  if (!reduction %in% names(object@reductions)) {
     stop(paste0("'", reduction, "' not found. Available reductions: ",
-                paste(names(sample@reductions), collapse = ", ")))
+                paste(names(object@reductions), collapse = ", ")))
   }
 
   if (missing(features) || length(features) == 0) {
@@ -597,25 +914,25 @@ do_FeaturePlot <- function(
   }
 
   # ---- Get embeddings ----
-  embeddings <- sample@reductions[[reduction]]@cell.embeddings[, dims]
+  embeddings <- object@reductions[[reduction]]@cell.embeddings[, dims]
   colnames(embeddings) <- c("Dim1", "Dim2")
   plot_data <- as.data.frame(embeddings)
   plot_data$cell_id <- rownames(plot_data)
 
   # ---- Add split.by if specified ----
   if (!is.null(split.by)) {
-    if (!split.by %in% colnames(sample@meta.data)) {
+    if (!split.by %in% colnames(object@meta.data)) {
       stop(paste0("'", split.by, "' not found in metadata."))
     }
-    plot_data$split_var <- as.factor(sample@meta.data[[split.by]])
+    plot_data$split_var <- as.factor(object@meta.data[[split.by]])
   }
 
   # ---- Fetch expression data ----
-  expr_data <- Seurat::FetchData(sample, vars = features, slot = slot)
+  expr_data <- Seurat::FetchData(object, vars = features, slot = slot)
 
   # ---- Generate axis labels ----
   if (reduction == "pca") {
-    pca_stdev <- sample@reductions$pca@stdev
+    pca_stdev <- object@reductions$pca@stdev
     total_variance <- sum(pca_stdev^2)
     variance_explained <- (pca_stdev^2 / total_variance) * 100
     x_label <- paste0("PC", dims[1], " (", round(variance_explained[dims[1]], variance_digits), "%)")
@@ -662,9 +979,24 @@ do_FeaturePlot <- function(
       feature_data <- feature_data[order(feature_data$expression, na.last = FALSE), ]
     }
 
-    # Build plot
-    p <- ggplot2::ggplot(feature_data, ggplot2::aes(x = Dim1, y = Dim2, color = expression)) +
-      ggplot2::geom_point(size = pt.size, alpha = pt.alpha) +
+    # Build plot with optional cell borders
+    p <- ggplot2::ggplot(feature_data, ggplot2::aes(x = Dim1, y = Dim2))
+
+    # Add border layer first (underneath)
+    if (plot_cell_borders) {
+      p <- p + ggplot2::geom_point(
+        color = border.color,
+        size = pt.size * border.size,
+        show.legend = FALSE
+      )
+    }
+
+    # Add colored points on top
+    p <- p + ggplot2::geom_point(
+      ggplot2::aes(color = expression),
+      size = pt.size,
+      alpha = pt.alpha
+    ) +
       ggplot2::labs(
         x = x_label,
         y = y_label,
@@ -853,7 +1185,7 @@ seurat_sleepwalk <- function(object, embedding = "umap", features = "pca") {
 
 #' Interactive Cell Selection for Seurat Objects
 #'
-#' @param seurat_obj Seurat object with dimensionality reduction computed.
+#' @param object Seurat object with dimensionality reduction computed.
 #' @param reduction character. Reduction to use ("umap", "tsne", "pca").
 #' @param color_by character. Metadata column for coloring (default: "Idents").
 #' @param return_cells logical. Return cell names instead of Seurat subset.
@@ -868,7 +1200,7 @@ seurat_sleepwalk <- function(object, embedding = "umap", features = "pca") {
 #'
 #' @export
 select_cells_interactive <- function(
-    seurat_obj,
+    object,
     reduction = c("umap", "tsne", "pca"),
     color_by = "Idents",
     return_cells = FALSE
@@ -884,24 +1216,24 @@ select_cells_interactive <- function(
 
   reduction <- match.arg(reduction)
 
-  if (is.null(seurat_obj@reductions[[reduction]])) {
+  if (is.null(object@reductions[[reduction]])) {
     stop("Reduction '", reduction, "' not found. Please compute it first.")
   }
 
-  if (color_by != "Idents" && !color_by %in% colnames(seurat_obj@meta.data)) {
+  if (color_by != "Idents" && !color_by %in% colnames(object@meta.data)) {
     stop("color_by '", color_by, "' not found in metadata. Available columns: ",
-         paste(colnames(seurat_obj@meta.data), collapse = ", "))
+         paste(colnames(object@meta.data), collapse = ", "))
   }
 
-  coords <- as.data.frame(seurat_obj@reductions[[reduction]]@cell.embeddings[, 1:2])
+  coords <- as.data.frame(object@reductions[[reduction]]@cell.embeddings[, 1:2])
   colnames(coords) <- c("dim1", "dim2")
   coords$cell_name <- rownames(coords)
 
   if (color_by == "Idents") {
-    coords$color_var <- as.character(Seurat::Idents(seurat_obj))
+    coords$color_var <- as.character(Seurat::Idents(object))
     color_label <- "Identity"
   } else {
-    coords$color_var <- as.character(seurat_obj@meta.data[[color_by]])
+    coords$color_var <- as.character(object@meta.data[[color_by]])
     color_label <- color_by
   }
 
@@ -1020,6 +1352,6 @@ select_cells_interactive <- function(
   if (return_cells) {
     return(selected_cells)
   } else {
-    return(subset(seurat_obj, cells = selected_cells))
+    return(subset(object, cells = selected_cells))
   }
 }

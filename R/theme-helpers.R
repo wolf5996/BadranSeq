@@ -5,33 +5,19 @@
 # Color Palette
 # ============================================================================
 
-#' Default BadranSeq Color Palette
-#'
-#' @description
-#' Predefined colors inspired by colorspace "Dark 3" palette.
-#' Extended to 20 distinct colors for larger datasets.
-#'
-#' @keywords internal
-.badranseq_palette <- c(
-
-"#E16A86", "#909800", "#00AD9A", "#9183E6",
-  "#D95F02", "#7570B3", "#E7298A", "#66A61E",
-  "#E6AB02", "#A6761D", "#666666", "#1B9E77",
-  "#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3",
-  "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"
-)
-
 #' Generate Categorical Color Palette
 #'
 #' @description
 #' Internal function to generate publication-ready categorical colors
-#' similar to SCpubr's default palette.
+#' matching SCpubr's default palette. Uses colorspace "Dark 3" palette
+#' with adjusted saturation and value for more vivid, slightly darker colors.
 #'
 #' @param n numeric. Number of colors needed.
 #' @param custom.colors character. Optional custom color vector.
 #'
 #' @return Character vector of hex colors.
 #' @keywords internal
+#' @export
 generate_badranseq_colors <- function(n, custom.colors = NULL) {
 
   if (!is.null(custom.colors)) {
@@ -42,12 +28,29 @@ generate_badranseq_colors <- function(n, custom.colors = NULL) {
     return(custom.colors[1:n])
   }
 
-  if (n <= length(.badranseq_palette)) {
-    return(.badranseq_palette[1:n])
-  } else {
-    # Generate more colors using scales
-    return(scales::hue_pal()(n))
-  }
+  # Generate colors using colorspace Dark 3 palette (same as SCpubr)
+  colors <- colorspace::qualitative_hcl(n, palette = "Dark 3")
+
+  # Convert to RGB then HSV for adjustment
+  colors_rgb <- grDevices::col2rgb(colors)
+  colors_hsv <- grDevices::rgb2hsv(colors_rgb)
+
+  # Adjust saturation and value (SCpubr approach)
+  # Decrease value by 0.1 (slightly darker)
+  colors_hsv["v", ] <- colors_hsv["v", ] - 0.1
+  # Increase saturation by 0.2 (more vivid), cap at 1
+ colors_hsv["s", ] <- colors_hsv["s", ] + 0.2
+  colors_hsv["s", ][colors_hsv["s", ] > 1] <- 1
+
+  # Convert back to hex
+  colors <- grDevices::hsv(
+    h = colors_hsv["h", ],
+    s = colors_hsv["s", ],
+    v = colors_hsv["v", ],
+    alpha = 1
+  )
+
+  return(colors)
 }
 
 # ============================================================================

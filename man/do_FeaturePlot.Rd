@@ -5,7 +5,7 @@
 \title{Enhanced Feature Plot with Viridis Support}
 \usage{
 do_FeaturePlot(
-  sample,
+  object,
   features,
   reduction = "umap",
   dims = c(1, 2),
@@ -22,11 +22,14 @@ do_FeaturePlot(
   max.cutoff = NA,
   na.value = "grey90",
   split.by = NULL,
+  plot_cell_borders = TRUE,
+  border.size = 2,
+  border.color = "black",
   ...
 )
 }
 \arguments{
-\item{sample}{Seurat object.}
+\item{object}{Seurat object.}
 
 \item{features}{character. Gene names or metadata columns to plot.}
 
@@ -58,7 +61,13 @@ do_FeaturePlot(
 
 \item{na.value}{character. Color for NA/zero values (default: "grey90").}
 
-\item{split.by}{character. Metadata column for faceting.}
+\item{split.by}{character. Metadata column for splitting (creates panels with silhouettes).}
+
+\item{plot_cell_borders}{logical. Plot black borders around cells (default: TRUE).}
+
+\item{border.size}{numeric. Border size multiplier (default: 2).}
+
+\item{border.color}{character. Border color (default: "black").}
 
 \item{...}{Additional arguments (currently unused).}
 }

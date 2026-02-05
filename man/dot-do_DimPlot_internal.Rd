@@ -5,7 +5,7 @@
 \title{Internal DimPlot Implementation}
 \usage{
 .do_DimPlot_internal(
-  sample,
+  object,
   reduction = "umap",
   dims = c(1, 2),
   group.by = NULL,
@@ -22,11 +22,16 @@
   shuffle = TRUE,
   raster = NULL,
   raster.dpi = 300,
-  na.value = "grey75"
+  na.value = "grey75",
+  plot_cell_borders = TRUE,
+  border.size = 2,
+  border.color = "black",
+  legend.title = NULL,
+  ncol = NULL
 )
 }
 \arguments{
-\item{sample}{Seurat object.}
+\item{object}{Seurat object.}
 
 \item{reduction}{character. Name of reduction to use.}
 
@@ -34,7 +39,8 @@
 
 \item{group.by}{character. Metadata column for grouping.}
 
-\item{split.by}{character. Metadata column for faceting.}
+\item{split.by}{character. Metadata column for splitting (creates separate
+panels with silhouettes of other cells).}
 
 \item{colors.use}{Named vector of colors.}
 
@@ -60,12 +66,24 @@
 
 \item{raster.dpi}{numeric. DPI for rasterization.}
 
-\item{na.value}{character. Color for NA values.}
+\item{na.value}{character. Color for NA/silhouette cells.}
+
+\item{plot_cell_borders}{logical. Plot black borders around cells.}
+
+\item{border.size}{numeric. Border size multiplier (default: 2).}
+
+\item{border.color}{character. Border color (default: "black").}
+
+\item{legend.title}{character. Custom legend title (NULL for default).}
+
+\item{ncol}{numeric. Number of columns for split panels (default: NULL, auto).}
 }
 \value{
-ggplot2 object.
+ggplot2 object or list of ggplot2 objects when split.by is used.
 }
 \description{
 Core function that builds dimensionality reduction plots using native ggplot2.
+When split.by is used, shows the split population in color with a grey
+silhouette of all other cells in the background (SCpubr-style).
 }
 \keyword{internal}

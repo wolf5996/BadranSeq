@@ -7,3 +7,7 @@
 ^BadranSeq\.R\.backup$
 ^\.BadranSeq\.R\.backup$
 ^data-raw$
+^context$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

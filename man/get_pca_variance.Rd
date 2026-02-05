@@ -4,10 +4,10 @@
 \alias{get_pca_variance}
 \title{Get PCA Variance Explained Summary}
 \usage{
-get_pca_variance(sample, n_pcs = NULL)
+get_pca_variance(object, n_pcs = NULL)
 }
 \arguments{
-\item{sample}{Seurat object with PCA reduction.}
+\item{object}{Seurat object with PCA reduction.}
 
 \item{n_pcs}{numeric. Number of top PCs to return. If NULL, returns all PCs.}
 }

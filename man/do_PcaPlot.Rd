@@ -5,7 +5,7 @@
 \title{Enhanced PCA Plot with Variance Explained}
 \usage{
 do_PcaPlot(
-  sample,
+  object,
   dims = c(1, 2),
   group.by = NULL,
   split.by = NULL,
@@ -19,17 +19,22 @@ do_PcaPlot(
   plot.axes = TRUE,
   variance_digits = 1,
   shuffle = TRUE,
+  plot_cell_borders = TRUE,
+  border.size = 2,
+  border.color = "black",
+  legend.title = NULL,
+  ncol = NULL,
   ...
 )
 }
 \arguments{
-\item{sample}{Seurat object.}
+\item{object}{Seurat object.}
 
 \item{dims}{numeric. Vector of 2 PC dimensions to plot (default: c(1, 2)).}
 
 \item{group.by}{character. Metadata column for grouping (default: active identity).}
 
-\item{split.by}{character. Metadata column for faceting.}
+\item{split.by}{character. Metadata column for splitting (creates panels with silhouettes).}
 
 \item{colors.use}{Named vector of colors for groups.}
 
@@ -51,6 +56,16 @@ do_PcaPlot(
 
 \item{shuffle}{logical. Randomize cell plotting order (default: TRUE).}
 
+\item{plot_cell_borders}{logical. Plot black borders around cells (default: TRUE).}
+
+\item{border.size}{numeric. Border size multiplier (default: 2).}
+
+\item{border.color}{character. Border color (default: "black").}
+
+\item{legend.title}{character. Custom legend title (NULL removes title).}
+
+\item{ncol}{numeric. Number of columns for split panels (default: NULL, auto).}
+
 \item{...}{Additional arguments (currently unused).}
 }
 \value{
@@ -58,12 +73,14 @@ ggplot2 object with PCA plot including variance explained in axis labels.
 }
 \description{
 Creates a PCA dimensionality reduction plot with variance explained
-percentages automatically added to axis labels.
+percentages automatically added to axis labels. When split.by is used,
+shows each split category with a grey silhouette of all other cells.
 }
 \examples{
 \dontrun{
 do_PcaPlot(seurat_object, group.by = "condition")
 do_PcaPlot(seurat_object, dims = c(2, 3), group.by = "cluster")
+do_PcaPlot(seurat_object, split.by = "sample")  # Shows silhouettes
 }
 
 }

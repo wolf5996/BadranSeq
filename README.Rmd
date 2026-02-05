@@ -7,68 +7,160 @@ output: github_document
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
 )
 ```
 
 # BadranSeq
 
--   `BadranSeq` provides convenience functions to make transcriptomic analyses more pleasant, with a focus on single-cell RNA sequencing (scRNA-Seq) data
+BadranSeq provides publication-ready visualization tools for single-cell RNA sequencing (scRNA-Seq) data, built on native ggplot2 with consistent, beautiful defaults.
 
--   The package offers intuitive tools for visualization and computation of useful metrics to streamline your RNA-Seq workflow.
+## Why BadranSeq?
 
-## Key Features
+Standard Seurat plotting functions require extensive customization for publication-quality figures. BadranSeq solves common pain points:
 
--   **Visualization Tools**: Built-in ggplot2-based functions for common scRNA-Seq plots
--   **Metric Computation**: Calculate useful transcriptomic metrics with ease
--   **Data Wrangling**: Streamlined functions using dplyr and tidyverse principles
--   **Convenience Functions**: Reduce repetitive code in your RNA-Seq analysis workflows
--   **scRNA-Seq Focus**: Specialized tools tailored for single-cell RNA sequencing analysis
+1. **Repetitive boilerplate** - Publication-ready defaults out of the box
+2. **Missing information** - PCA plots automatically include variance explained percentages
+3. **Split comparisons** - Unique silhouette feature shows split populations with context of all cells
+4. **Cell borders** - Clear cell boundaries via black point borders (SCpubr-inspired)
+5. **Interactive selection** - Shiny-based cell selection for subsetting
 
 ## Installation
 
-You can install the development version of BadranSeq from GitHub:
+Install the development version from GitHub:
 
-``` r
-# Install from GitHub
-if (!require(devtools)) install.packages("devtools")
-devtools::install_github("wolf5996/BadranSeq")
-
-# Or using pak (recommended)
+```r
+# Using pak (recommended)
 if (!require(pak)) install.packages("pak")
 pak::pkg_install("wolf5996/BadranSeq")
+
+# Or using devtools
+if (!require(devtools)) install.packages("devtools")
+devtools::install_github("wolf5996/BadranSeq")
 ```
 
-### Dependencies
+## Quick Start
 
-`BadranSeq` requires R \>= 3.5 and depends on the following packages:
+```r
+library(BadranSeq)
+library(Seurat)
 
--   **Core dependencies**: dplyr, ggplot2, magrittr, purrr, stringr
--   **Suggested packages**: testthat, tidyr
+# Load example data
+data(pbmc3k)
 
-All dependencies will be installed automatically when you install BadranSeq.
+# UMAP with cluster labels (defaults: label=TRUE, plot.axes=TRUE)
+do_UmapPlot(pbmc3k)
+
+# PCA with variance explained on axes
+do_PcaPlot(pbmc3k)
+
+# Feature expression
+do_FeaturePlot(pbmc3k, features = "CD3D")
+
+# Split by condition with silhouettes
+do_UmapPlot(pbmc3k, split.by = "seurat_clusters")
+```
+
+## Key Features
+
+### Publication-Ready Defaults
+
+All plotting functions come with sensible defaults:
+
+- **Labels**: Cluster labels displayed by default
+- **Axes**: Axis lines and labels shown by default
+- **Cell borders**: Black borders around cells for clarity
+- **Colors**: Vibrant, distinguishable categorical palette (colorspace Dark 3)
+- **Theme**: Clean, minimal theme optimized for publication
+
+### PCA Variance Labels
+
+`do_PcaPlot()` automatically calculates and displays variance explained:
+```r
+do_PcaPlot(pbmc3k)  # Shows "PC1 (X.X%)" on axes
+```
+
+### Split.by with Silhouettes
+
+When splitting by a categorical variable, each panel shows the split population in color with a grey silhouette of all other cells for context:
+```r
+do_UmapPlot(pbmc3k, split.by = "condition")
+```
+
+This approach (inspired by SCpubr) provides crucial spatial context when comparing populations.
+
+### Cell Border Visualization
+
+All DimPlots render cells with black borders, making individual cells clearly distinguishable even in dense regions:
+```r
+do_UmapPlot(pbmc3k, plot_cell_borders = TRUE, border.size = 2)
+```
+
+### Interactive Cell Selection
+
+Select cells interactively using a Shiny interface:
+```r
+selected <- select_cells_interactive(pbmc3k, reduction = "umap")
+```
+
+### Enhanced Elbow Plot
+
+Visualize PCA variance with optional cutoff annotations:
+```r
+EnhancedElbowPlot(pbmc3k, cutoff_pc = 10)
+```
+
+## Function Reference
+
+| Function | Description |
+|----------|-------------|
+| `do_DimPlot()` | Generalized dimensionality reduction plot |
+| `do_UmapPlot()` | UMAP visualization |
+| `do_PcaPlot()` | PCA with variance explained |
+| `do_FeaturePlot()` | Gene expression overlay |
+| `EnhancedElbowPlot()` | PCA variance elbow plot |
+| `get_pca_variance()` | Extract variance explained data |
+| `select_cells_interactive()` | Shiny-based cell selection |
+| `seurat_sleepwalk()` | Interactive distance exploration |
+| `generate_badranseq_colors()` | Generate categorical color palette |
+
+## Dependencies
+
+**Core**: ggplot2, Seurat, colorspace, magrittr, stats
+
+**Suggested**: patchwork (for split.by panels), ggrastr (for rasterization), shiny (for interactive selection), sleepwalk (for distance exploration)
+
+## Acknowledgments
+
+BadranSeq's aesthetic approach is heavily inspired by [SCpubr](https://github.com/enblacar/SCpubr), an excellent package for publication-ready single-cell visualizations. Key design elements adopted from SCpubr include:
+
+- Cell border visualization for clarity
+- Color palette generation using colorspace
+- Clean, minimal theme styling
+
+BadranSeq differs by providing a lighter-weight, native ggplot2 implementation without SCpubr as a dependency, while adding features like automatic PCA variance labels and the silhouette split.by approach.
 
 ## Citation
 
-If you use `BadranSeq` in your research, please cite:
+If you use BadranSeq in your research, please cite:
 
-```         
-Elshenawy, B. (2024). BadranSeq: Make transcriptomic analyses more pleasant. 
-R package version 0.0.0.9000. 
+```
+Elshenawy, B. (2025). BadranSeq: Publication-ready scRNA-Seq visualization.
+R package version 0.0.0.9000.
 https://github.com/wolf5996/BadranSeq
 ```
 
 ## Getting Help
 
--   **Issues**: Report bugs and request features at [GitHub Issues](https://github.com/wolf5996/BadranSeq/issues)
--   **Documentation**: Use `?function_name` for help with specific functions
+- **Issues**: Report bugs and request features at [GitHub Issues](https://github.com/wolf5996/BadranSeq/issues)
+- **Documentation**: Use `?function_name` for help with specific functions
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
+MIT License - see [LICENSE](LICENSE) for details.
 
-## Acknowledgments
+---
 
--   Built with [R](https://www.r-project.org/) and the [tidyverse](https://www.tidyverse.org/)
--   Visualization powered by [ggplot2](https://ggplot2.tidyverse.org/)
--   Developed at the Nuffield Department of Medicine, University of Oxford
+Developed at the Nuffield Department of Medicine, University of Oxford

@@ -16,6 +16,7 @@ Character vector of hex colors.
 }
 \description{
 Internal function to generate publication-ready categorical colors
-similar to SCpubr's default palette.
+matching SCpubr's default palette. Uses colorspace "Dark 3" palette
+with adjusted saturation and value for more vivid, slightly darker colors.
 }
 \keyword{internal}

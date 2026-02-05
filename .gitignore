@@ -15,3 +15,7 @@ BadranSeq.R.backup
 # OS files
 .DS_Store
 Thumbs.db
+
+# Context repo
+context/
+docs
