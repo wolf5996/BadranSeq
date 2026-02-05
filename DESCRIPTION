@@ -1,7 +1,7 @@
 Package: BadranSeq
 Title: Make transcriptomic analyses more pleasant
 Version: 0.0.0.9000
-Authors@R: 
+Authors@R:
     person("Badran", "Elshenawy", , "badran.elshenawy@ndm.ox.ac.uk", role = c("aut", "cre"))
 Description: Convenience functions to aid visualisation and computation of useful metrics with a focus on scRNA-Seq data.
 License: MIT + file LICENSE
@@ -14,13 +14,13 @@ Suggests:
     testthat (>= 3.0.0),
     tidyr
 Config/testthat/edition: 3
-URL: https://github.com/wolf5996/BadranSeq
+URL: https://github.com/wolf5996/BadranSeq, https://wolf5996.github.io/BadranSeq/
 BugReports: https://github.com/wolf5996/BadranSeq/issues
 Imports:
     colorspace,
     ggplot2,
     magrittr,
-    Seurat,
+    Seurat (>= 5.0.0),
     shiny,
     sleepwalk,
     stats

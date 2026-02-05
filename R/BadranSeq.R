@@ -928,7 +928,7 @@ do_FeaturePlot <- function(
   }
 
   # ---- Fetch expression data ----
-  expr_data <- Seurat::FetchData(object, vars = features, slot = slot)
+  expr_data <- Seurat::FetchData(object, vars = features, layer = slot)
 
   # ---- Generate axis labels ----
   if (reduction == "pca") {

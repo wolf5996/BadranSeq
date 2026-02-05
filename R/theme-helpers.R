@@ -60,14 +60,23 @@ generate_badranseq_colors <- function(n, custom.colors = NULL) {
 #' BadranSeq Publication-Ready Theme
 #'
 #' @description
-#' Internal theme function providing consistent SCpubr-like aesthetics
-#' for publication-ready plots.
+#' Theme function providing consistent SCpubr-like aesthetics
+#' for publication-ready plots. Can be applied to any ggplot2 object.
 #'
 #' @param base_size numeric. Base font size (default: 14).
 #' @param plot.axes logical. Whether to show axes (default: TRUE).
 #'
 #' @return ggplot2 theme object.
-#' @keywords internal
+#'
+#' @examples
+#' \dontrun{
+#' library(ggplot2)
+#' ggplot(mtcars, aes(mpg, wt)) +
+#'   geom_point() +
+#'   theme_badranseq()
+#' }
+#'
+#' @export
 theme_badranseq <- function(base_size = 14, plot.axes = TRUE) {
 
   # Base theme
