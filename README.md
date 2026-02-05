@@ -69,14 +69,7 @@ BadranSeq::do_UmapPlot(pbmc3k)
 #> Loading required namespace: SeuratObject
 ```
 
-<div class="figure">
-
-<img src="man/figures/README-umap-basic-1.png" alt="plot of chunk umap-basic" width="100%" />
-<p class="caption">
-plot of chunk umap-basic
-</p>
-
-</div>
+<img src="man/figures/README-umap-basic-1.png" alt="" width="100%" />
 
 ### Customization Options
 
@@ -85,14 +78,7 @@ plot of chunk umap-basic
 BadranSeq::do_UmapPlot(pbmc3k, group.by = "seurat_clusters", label = TRUE)
 ```
 
-<div class="figure">
-
-<img src="man/figures/README-umap-custom-1.png" alt="plot of chunk umap-custom" width="100%" />
-<p class="caption">
-plot of chunk umap-custom
-</p>
-
-</div>
+<img src="man/figures/README-umap-custom-1.png" alt="" width="100%" />
 
 ### Without Labels (for cleaner figures)
 
@@ -100,14 +86,7 @@ plot of chunk umap-custom
 BadranSeq::do_UmapPlot(pbmc3k, label = FALSE)
 ```
 
-<div class="figure">
-
-<img src="man/figures/README-umap-no-labels-1.png" alt="plot of chunk umap-no-labels" width="100%" />
-<p class="caption">
-plot of chunk umap-no-labels
-</p>
-
-</div>
+<img src="man/figures/README-umap-no-labels-1.png" alt="" width="100%" />
 
 ### Without Cell Borders
 
@@ -115,14 +94,7 @@ plot of chunk umap-no-labels
 BadranSeq::do_UmapPlot(pbmc3k, plot_cell_borders = FALSE)
 ```
 
-<div class="figure">
-
-<img src="man/figures/README-umap-no-borders-1.png" alt="plot of chunk umap-no-borders" width="100%" />
-<p class="caption">
-plot of chunk umap-no-borders
-</p>
-
-</div>
+<img src="man/figures/README-umap-no-borders-1.png" alt="" width="100%" />
 
 <br>
 
@@ -138,14 +110,7 @@ explained percentages on the axes. No more manual calculation of
 BadranSeq::do_PcaPlot(pbmc3k)
 ```
 
-<div class="figure">
-
-<img src="man/figures/README-pca-basic-1.png" alt="plot of chunk pca-basic" width="100%" />
-<p class="caption">
-plot of chunk pca-basic
-</p>
-
-</div>
+<img src="man/figures/README-pca-basic-1.png" alt="" width="100%" />
 
 Notice the axis labels show “PC1 (X.X%)” - this is calculated
 automatically from the Seurat object’s PCA standard deviations.
@@ -157,14 +122,7 @@ automatically from the Seurat object’s PCA standard deviations.
 BadranSeq::do_PcaPlot(pbmc3k, dims = c(2, 3))
 ```
 
-<div class="figure">
-
-<img src="man/figures/README-pca-dims-1.png" alt="plot of chunk pca-dims" width="100%" />
-<p class="caption">
-plot of chunk pca-dims
-</p>
-
-</div>
+<img src="man/figures/README-pca-dims-1.png" alt="" width="100%" />
 
 ### Control Variance Decimal Places
 
@@ -172,14 +130,7 @@ plot of chunk pca-dims
 BadranSeq::do_PcaPlot(pbmc3k, variance_digits = 2)
 ```
 
-<div class="figure">
-
-<img src="man/figures/README-pca-digits-1.png" alt="plot of chunk pca-digits" width="100%" />
-<p class="caption">
-plot of chunk pca-digits
-</p>
-
-</div>
+<img src="man/figures/README-pca-digits-1.png" alt="" width="100%" />
 
 <br>
 
@@ -194,127 +145,344 @@ standard labels).
 BadranSeq::do_DimPlot(pbmc3k)
 ```
 
-<div class="figure">
-
-<img src="man/figures/README-dimplot-examples-1.png" alt="plot of chunk dimplot-examples" width="100%" />
-<p class="caption">
-plot of chunk dimplot-examples
-</p>
-
-</div>
+<img src="man/figures/README-dimplot-examples-1.png" alt="" width="100%" />
 
 ``` r
 # Routes to BadranSeq::do_PcaPlot() with variance labels
 BadranSeq::do_DimPlot(pbmc3k, reduction = "pca")
 ```
 
-<div class="figure">
+<img src="man/figures/README-dimplot-pca-1.png" alt="" width="100%" />
 
-<img src="man/figures/README-dimplot-pca-1.png" alt="plot of chunk dimplot-pca" width="100%" />
-<p class="caption">
-plot of chunk dimplot-pca
-</p>
+## Split.by with Silhouettes
 
-</div>
+**Why it’s better:** When comparing populations across conditions,
+standard faceting only shows cells in each category. You lose spatial
+context. BadranSeq’s silhouette approach shows **all cells in grey** as
+background, with only the current category colored - so you can see
+where your population sits relative to the whole dataset.
 
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| \## Split.by with Silhouettes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| **Why it’s better:** When comparing populations across conditions, standard faceting only shows cells in each category. You lose spatial context. BadranSeq’s silhouette approach shows **all cells in grey** as background, with only the current category colored - so you can see where your population sits relative to the whole dataset.                                                                                                                                                                                                                                                                                                     |
-| `r BadranSeq::do_UmapPlot(pbmc3k, split.by = "seurat_clusters", ncol = 4)`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| Each panel shows: 1. **Grey silhouette** of ALL cells (background context) 2. **Black borders** for ALL cells (structure) 3. **Colored cells** only for the current split category                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| This is inspired by SCpubr’s approach and provides crucial spatial context when comparing populations.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \## `BadranSeq::do_FeaturePlot()` - Gene Expression Overlay                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| **Why it’s better:** Uses viridis color scale by default (perceptually uniform, colorblind-friendly), includes cell borders, and supports expression cutoffs.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| \### Basic Usage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `r BadranSeq::do_FeaturePlot(pbmc3k, features = "CD3D")`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| \### Multiple Features                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `r plots <- BadranSeq::do_FeaturePlot(pbmc3k, features = c("CD3D", "CD8A", "CD14")) # Returns a list of plots patchwork::wrap_plots(plots, ncol = 3)`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| \### Different Viridis Palettes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `r # Palette options: "A" through "H" BadranSeq::do_FeaturePlot(pbmc3k, features = "CD3D", viridis.palette = "C")`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| \### Expression Cutoffs                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `r # Clip to 10th and 90th percentiles BadranSeq::do_FeaturePlot(pbmc3k, features = "CD3D", min.cutoff = "q10", max.cutoff = "q90")`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| \### On PCA (with variance labels)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `r BadranSeq::do_FeaturePlot(pbmc3k, features = "CD3D", reduction = "pca")`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \## `BadranSeq::EnhancedElbowPlot()` - PCA Variance Visualization                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| **Why it’s better:** Shows variance explained (not just standard deviation), includes optional cutoff annotation, and has publication-ready styling.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \### Basic Usage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `r BadranSeq::EnhancedElbowPlot(pbmc3k)`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| \### With Cutoff Annotation                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| `r BadranSeq::EnhancedElbowPlot(pbmc3k, cutoff_pc = 10)`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| \### Standard Deviation Mode (like Seurat)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| `r BadranSeq::EnhancedElbowPlot(pbmc3k, variance = FALSE)`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \## `BadranSeq::get_pca_variance()` - Extract Variance Data                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| **Why it’s better:** Returns a clean data.frame with PC number, variance explained, and cumulative variance - useful for programmatic access or custom plots.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| `r # Get variance for top 10 PCs var_df <- BadranSeq::get_pca_variance(pbmc3k, n_pcs = 10) var_df #>    PC variance_explained cumulative_variance #> 1   1          33.084958            33.08496 #> 2   2          13.034154            46.11911 #> 3   3           9.346548            55.46566 #> 4   4           5.321569            60.78723 #> 5   5           2.997895            63.78512 #> 6   6           2.224722            66.00985 #> 7   7           2.042296            68.05214 #> 8   8           1.779563            69.83171 #> 9   9           1.397088            71.22879 #> 10 10           1.249528            72.47832` |
-| \### Use for Custom Analysis                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `r # Find number of PCs for 80% cumulative variance var_df <- BadranSeq::get_pca_variance(pbmc3k) min(which(var_df$cumulative_variance >= 80)) #> [1] 18`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \## `BadranSeq::generate_badranseq_colors()` - Color Palette Generation                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| **Why it’s better:** Generates vibrant, distinguishable categorical colors using the same algorithm as SCpubr (colorspace Dark 3 palette with saturation/value adjustments).                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| \`\`\` r \# Generate 8 colors colors \<- BadranSeq::generate_badranseq_colors(8) colors \#\> \[1\] “\#C83658FF” “\#AE6700FF” “\#787F00FF” “\#008F3BFF” “\#009483FF” “\#008EBAFF” \#\> \[7\] “\#5E4CCDFF” “\#BE34ACFF”                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| \# Visualize barplot(rep(1, 8), col = colors, border = NA, axes = FALSE) \`\`\`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| \### Custom Colors                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `r # You can also provide your own colors my_colors <- c("red", "blue", "green") BadranSeq::generate_badranseq_colors(3, custom.colors = my_colors) #> [1] "red"   "blue"  "green"`                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \## `BadranSeq::select_cells_interactive()` - Shiny-based Cell Selection                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| **Why it’s better:** Provides an interactive GUI for selecting cells from embeddings with brush selection, additive/subtractive selection, and returns either cell names or a subsetted Seurat object. \`\`\`r \# Launch interactive selector (only works in interactive R sessions) selected_cells \<- BadranSeq::select_cells_interactive(pbmc3k, reduction = “umap”, return_cells = TRUE)                                                                                                                                                                                                                                                       |
-| \# Or get a subsetted Seurat object directly subset_obj \<- BadranSeq::select_cells_interactive(pbmc3k, reduction = “umap”) \`\`\`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| Features: - **Brush selection**: Click and drag to select cells - **Additive selection**: Build up selection across multiple brushes - **Deselection**: Remove cells from selection - **Clear**: Start over - **Returns**: Either cell names (character vector) or subsetted Seurat object                                                                                                                                                                                                                                                                                                                                                         |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \## `BadranSeq::seurat_sleepwalk()` - Interactive Distance Exploration                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| **Why it’s better:** Thin wrapper around the excellent `sleepwalk` package for exploring how well your 2D embedding preserves high-dimensional distances.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `r # Launch interactive distance explorer BadranSeq::seurat_sleepwalk(pbmc3k, embedding = "umap", features = "pca")`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| Hover over cells to see which other cells are nearby in PCA space - helps identify whether your UMAP is faithfully representing the data structure.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \## `BadranSeq::theme_badranseq()` - Publication-Ready Theme                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| All plots use a consistent theme that you can also apply to your own ggplots:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| \`\`\` r \# Apply to any ggplot library(ggplot2)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| ggplot(mtcars, aes(mpg, wt, color = factor(cyl))) + geom_point(size = 3) + BadranSeq::theme_badranseq() + scale_color_manual(values = BadranSeq::generate_badranseq_colors(3)) \`\`\`                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \# Comparison with Seurat                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| \`\`\` r library(Seurat) \#\> Warning: package ‘Seurat’ was built under R version 4.5.1 \#\> Loading required package: SeuratObject \#\> Warning: package ‘SeuratObject’ was built under R version 4.5.1 \#\> Loading required package: sp \#\> \#\> Attaching package: ‘SeuratObject’ \#\> The following objects are masked from ‘package:base’: \#\> \#\> intersect, t library(patchwork) \#\> Warning: package ‘patchwork’ was built under R version 4.5.1                                                                                                                                                                                      |
-| \# Seurat default p1 \<- DimPlot(pbmc3k, reduction = “umap”) + ggtitle(“Seurat DimPlot”)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| \# BadranSeq p2 \<- BadranSeq::do_UmapPlot(pbmc3k) + ggtitle(“BadranSeq do_UmapPlot”)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| p1 + p2 \`\`\`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| Key differences: - **Labels**: BadranSeq shows labels by default - **Cell borders**: BadranSeq adds black borders for clarity - **Theme**: BadranSeq uses a cleaner, publication-ready theme - **Colors**: BadranSeq uses a more vibrant color palette                                                                                                                                                                                                                                                                                                                                                                                             |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \# Dependencies                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| **Core** (automatically installed): - `ggplot2` - all plotting - `Seurat` - scRNA-seq data structures - `colorspace` - color palette generation - `magrittr` - pipe operator                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| **Suggested** (install for full functionality): - `patchwork` - combining split.by panels - `ggrastr` - rasterization for large datasets - `shiny` - interactive cell selection - `sleepwalk` - interactive distance exploration                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \# Acknowledgments                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| BadranSeq’s aesthetic approach is heavily inspired by [SCpubr](https://github.com/enblacar/SCpubr) by Enrique Blanco Carmona. Key design elements adopted from SCpubr include:                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| \- Cell border visualization for clarity - Color palette generation using colorspace - Clean, minimal theme styling - The silhouette approach for split.by comparisons                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| BadranSeq differs by providing a **lighter-weight, native ggplot2 implementation** without SCpubr as a dependency, while adding features like **automatic PCA variance labels**.                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| If you need SCpubr’s full feature set (dozens of specialized plot types), use SCpubr. If you want the core aesthetics with minimal dependencies, use BadranSeq.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \# Citation                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| If you use BadranSeq in your research, please cite:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| \> Elshenawy, B. (2025). BadranSeq: Publication-ready scRNA-Seq visualization. R package version 0.0.0.9000. https://github.com/wolf5996/BadranSeq                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| *Author: Dr. Badran Elshenawy, University of Oxford*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \# Getting Help                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| \- **Issues**: Report bugs and request features at [GitHub Issues](https://github.com/wolf5996/BadranSeq/issues) - **Documentation**: Use `?function_name` for help with specific functions                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \# License                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| MIT License - see [LICENSE](LICENSE) for details.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| <br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| \# Disclaimer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| This package was developed independently by Dr. Badran Elshenawy as a personal project. It does not represent the University of Oxford, the Nuffield Department of Medicine, or any affiliated institution. Use at your own discretion.                                                                                                                                                                                                                                                                                                                                                                                                            |
+``` r
+BadranSeq::do_UmapPlot(pbmc3k, split.by = "seurat_clusters", ncol = 4)
+```
+
+<img src="man/figures/README-split-silhouette-1.png" alt="" width="100%" />
+
+Each panel shows: 1. **Grey silhouette** of ALL cells (background
+context) 2. **Black borders** for ALL cells (structure) 3. **Colored
+cells** only for the current split category
+
+This is inspired by SCpubr’s approach and provides crucial spatial
+context when comparing populations.
+
+<br>
+
+## `BadranSeq::do_FeaturePlot()` - Gene Expression Overlay
+
+**Why it’s better:** Uses viridis color scale by default (perceptually
+uniform, colorblind-friendly), includes cell borders, and supports
+expression cutoffs.
+
+### Basic Usage
+
+``` r
+BadranSeq::do_FeaturePlot(pbmc3k, features = "CD3D")
+```
+
+<img src="man/figures/README-feature-basic-1.png" alt="" width="100%" />
+
+### Multiple Features
+
+``` r
+plots <- BadranSeq::do_FeaturePlot(pbmc3k, features = c("CD3D", "CD8A", "CD14"))
+# Returns a list of plots
+patchwork::wrap_plots(plots, ncol = 3)
+```
+
+<img src="man/figures/README-feature-multiple-1.png" alt="" width="100%" />
+
+### Different Viridis Palettes
+
+``` r
+# Palette options: "A" through "H"
+BadranSeq::do_FeaturePlot(pbmc3k, features = "CD3D", viridis.palette = "C")
+```
+
+<img src="man/figures/README-feature-viridis-1.png" alt="" width="100%" />
+
+### Expression Cutoffs
+
+``` r
+# Clip to 10th and 90th percentiles
+BadranSeq::do_FeaturePlot(pbmc3k, features = "CD3D", min.cutoff = "q10", max.cutoff = "q90")
+```
+
+<img src="man/figures/README-feature-cutoffs-1.png" alt="" width="100%" />
+
+### On PCA (with variance labels)
+
+``` r
+BadranSeq::do_FeaturePlot(pbmc3k, features = "CD3D", reduction = "pca")
+```
+
+<img src="man/figures/README-feature-pca-1.png" alt="" width="100%" />
+
+<br>
+
+## `BadranSeq::EnhancedElbowPlot()` - PCA Variance Visualization
+
+**Why it’s better:** Shows variance explained (not just standard
+deviation), includes optional cutoff annotation, and has
+publication-ready styling.
+
+### Basic Usage
+
+``` r
+BadranSeq::EnhancedElbowPlot(pbmc3k)
+```
+
+<img src="man/figures/README-elbow-basic-1.png" alt="" width="100%" />
+
+### With Cutoff Annotation
+
+``` r
+BadranSeq::EnhancedElbowPlot(pbmc3k, cutoff_pc = 10)
+```
+
+<img src="man/figures/README-elbow-cutoff-1.png" alt="" width="100%" />
+
+### Standard Deviation Mode (like Seurat)
+
+``` r
+BadranSeq::EnhancedElbowPlot(pbmc3k, variance = FALSE)
+```
+
+<img src="man/figures/README-elbow-stdev-1.png" alt="" width="100%" />
+
+<br>
+
+## `BadranSeq::get_pca_variance()` - Extract Variance Data
+
+**Why it’s better:** Returns a clean data.frame with PC number, variance
+explained, and cumulative variance - useful for programmatic access or
+custom plots.
+
+``` r
+# Get variance for top 10 PCs
+var_df <- BadranSeq::get_pca_variance(pbmc3k, n_pcs = 10)
+var_df
+#>    PC variance_explained cumulative_variance
+#> 1   1          33.084958            33.08496
+#> 2   2          13.034154            46.11911
+#> 3   3           9.346548            55.46566
+#> 4   4           5.321569            60.78723
+#> 5   5           2.997895            63.78512
+#> 6   6           2.224722            66.00985
+#> 7   7           2.042296            68.05214
+#> 8   8           1.779563            69.83171
+#> 9   9           1.397088            71.22879
+#> 10 10           1.249528            72.47832
+```
+
+### Use for Custom Analysis
+
+``` r
+# Find number of PCs for 80% cumulative variance
+var_df <- BadranSeq::get_pca_variance(pbmc3k)
+min(which(var_df$cumulative_variance >= 80))
+#> [1] 18
+```
+
+<br>
+
+## `BadranSeq::generate_badranseq_colors()` - Color Palette Generation
+
+**Why it’s better:** Generates vibrant, distinguishable categorical
+colors using the same algorithm as SCpubr (colorspace Dark 3 palette
+with saturation/value adjustments).
+
+``` r
+# Generate 8 colors
+colors <- BadranSeq::generate_badranseq_colors(8)
+colors
+#> [1] "#C83658FF" "#AE6700FF" "#787F00FF" "#008F3BFF" "#009483FF" "#008EBAFF"
+#> [7] "#5E4CCDFF" "#BE34ACFF"
+
+# Visualize
+barplot(rep(1, 8), col = colors, border = NA, axes = FALSE)
+```
+
+<img src="man/figures/README-colors-demo-1.png" alt="" width="100%" />
+
+### Custom Colors
+
+``` r
+# You can also provide your own colors
+my_colors <- c("red", "blue", "green")
+BadranSeq::generate_badranseq_colors(3, custom.colors = my_colors)
+#> [1] "red"   "blue"  "green"
+```
+
+<br>
+
+## `BadranSeq::select_cells_interactive()` - Shiny-based Cell Selection
+
+**Why it’s better:** Provides an interactive GUI for selecting cells
+from embeddings with brush selection, additive/subtractive selection,
+and returns either cell names or a subsetted Seurat object.
+
+``` r
+# Launch interactive selector (only works in interactive R sessions)
+selected_cells <- BadranSeq::select_cells_interactive(pbmc3k, reduction = "umap", return_cells = TRUE)
+
+# Or get a subsetted Seurat object directly
+subset_obj <- BadranSeq::select_cells_interactive(pbmc3k, reduction = "umap")
+```
+
+Features: - **Brush selection**: Click and drag to select cells -
+**Additive selection**: Build up selection across multiple brushes -
+**Deselection**: Remove cells from selection - **Clear**: Start over -
+**Returns**: Either cell names (character vector) or subsetted Seurat
+object
+
+<br>
+
+## `BadranSeq::seurat_sleepwalk()` - Interactive Distance Exploration
+
+**Why it’s better:** Thin wrapper around the excellent `sleepwalk`
+package for exploring how well your 2D embedding preserves
+high-dimensional distances.
+
+``` r
+# Launch interactive distance explorer
+BadranSeq::seurat_sleepwalk(pbmc3k, embedding = "umap", features = "pca")
+```
+
+Hover over cells to see which other cells are nearby in PCA space -
+helps identify whether your UMAP is faithfully representing the data
+structure.
+
+<br>
+
+## `BadranSeq::theme_badranseq()` - Publication-Ready Theme
+
+All plots use a consistent theme that you can also apply to your own
+ggplots:
+
+``` r
+# Apply to any ggplot
+library(ggplot2)
+
+ggplot(mtcars, aes(mpg, wt, color = factor(cyl))) +
+  geom_point(size = 3) +
+  BadranSeq::theme_badranseq() +
+  scale_color_manual(values = BadranSeq::generate_badranseq_colors(3))
+```
+
+<img src="man/figures/README-theme-demo-1.png" alt="" width="100%" />
+
+<br>
+
+# Comparison with Seurat
+
+``` r
+library(Seurat)
+#> Warning: package 'Seurat' was built under R version 4.5.1
+#> Loading required package: SeuratObject
+#> Warning: package 'SeuratObject' was built under R version 4.5.1
+#> Loading required package: sp
+#> 
+#> Attaching package: 'SeuratObject'
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, t
+library(patchwork)
+#> Warning: package 'patchwork' was built under R version 4.5.1
+
+# Seurat default
+p1 <- DimPlot(pbmc3k, reduction = "umap") + ggtitle("Seurat DimPlot")
+
+# BadranSeq
+p2 <- BadranSeq::do_UmapPlot(pbmc3k) + ggtitle("BadranSeq do_UmapPlot")
+
+p1 + p2
+```
+
+<img src="man/figures/README-comparison-1.png" alt="" width="100%" />
+
+Key differences: - **Labels**: BadranSeq shows labels by default -
+**Cell borders**: BadranSeq adds black borders for clarity - **Theme**:
+BadranSeq uses a cleaner, publication-ready theme - **Colors**:
+BadranSeq uses a more vibrant color palette
+
+<br>
+
+# Dependencies
+
+**Core** (automatically installed): - `ggplot2` - all plotting -
+`Seurat` - scRNA-seq data structures - `colorspace` - color palette
+generation - `magrittr` - pipe operator
+
+**Suggested** (install for full functionality): - `patchwork` -
+combining split.by panels - `ggrastr` - rasterization for large
+datasets - `shiny` - interactive cell selection - `sleepwalk` -
+interactive distance exploration
+
+<br>
+
+# Acknowledgments
+
+BadranSeq’s aesthetic approach is heavily inspired by
+[SCpubr](https://github.com/enblacar/SCpubr) by Enrique Blanco Carmona.
+Key design elements adopted from SCpubr include:
+
+-   Cell border visualization for clarity
+-   Color palette generation using colorspace
+-   Clean, minimal theme styling
+-   The silhouette approach for split.by comparisons
+
+BadranSeq differs by providing a **lighter-weight, native ggplot2
+implementation** without SCpubr as a dependency, while adding features
+like **automatic PCA variance labels**.
+
+If you need SCpubr’s full feature set (dozens of specialized plot
+types), use SCpubr. If you want the core aesthetics with minimal
+dependencies, use BadranSeq.
+
+<br>
+
+# Citation
+
+If you use BadranSeq in your research, please cite:
+
+> Elshenawy, B. (2025). BadranSeq: Publication-ready scRNA-Seq
+> visualization. R package version 0.0.0.9000.
+> https://github.com/wolf5996/BadranSeq
+
+*Author: Dr. Badran Elshenawy, University of Oxford*
+
+<br>
+
+# Getting Help
+
+-   **Issues**: Report bugs and request features at [GitHub
+    Issues](https://github.com/wolf5996/BadranSeq/issues)
+-   **Documentation**: Use `?function_name` for help with specific
+    functions
+
+<br>
+
+# License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+<br>
+
+# Disclaimer
+
+This package was developed independently by Dr. Badran Elshenawy as a
+personal project. It does not represent the University of Oxford, the
+Nuffield Department of Medicine, or any affiliated institution. Use at
+your own discretion.
 
 *Developed by Dr. Badran Elshenawy*
