@@ -1,0 +1,23 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://wolf5996.github.io/BadranSeq/404.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/LICENSE-text.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/LICENSE.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/authors.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/index.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/EnhancedElbowPlot.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/do_DimPlot.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/do_FeaturePlot.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/do_PcaPlot.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/do_UmapPlot.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/dot-do_DimPlot_internal.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/dot-do_DimPlot_split_silhouette.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/generate_badranseq_colors.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/get_pca_variance.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/index.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/pbmc3k.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/pipe.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/select_cells_interactive.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/seurat_sleepwalk.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/theme_badranseq.html</loc></url>
+</urlset>
+
