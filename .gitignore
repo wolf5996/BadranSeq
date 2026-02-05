@@ -1,0 +1,16 @@
+# Development files
+CLAUDE.md
+testing_and_developing.qmd
+BadranSeq.R.backup
+
+# R package build artifacts
+*.tar.gz
+*.Rcheck/
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# OS files
+.DS_Store
+Thumbs.db
