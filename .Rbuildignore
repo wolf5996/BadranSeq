@@ -5,4 +5,5 @@
 ^testing_and_developing\.qmd$
 ^CLAUDE\.md$
 ^BadranSeq\.R\.backup$
+^\.BadranSeq\.R\.backup$
 ^data-raw$

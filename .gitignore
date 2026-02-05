@@ -2,6 +2,7 @@
 CLAUDE.md
 testing_and_developing.qmd
 BadranSeq.R.backup
+.BadranSeq.R.backup
 
 # R package build artifacts
 *.tar.gz
