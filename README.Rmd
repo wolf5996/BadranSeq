@@ -145,7 +145,7 @@ BadranSeq::do_DimPlot(pbmc3k, reduction = "pca")
 
 **Why it's better:** When comparing populations across conditions, standard faceting only shows cells in each category. You lose spatial context. BadranSeq's silhouette approach shows **all cells in grey** as background, with only the current category colored - so you can see where your population sits relative to the whole dataset.
 
-```{r split-silhouette, fig.width=12, fig.height=5}
+```{r split-silhouette, eval=FALSE}
 BadranSeq::do_UmapPlot(pbmc3k, split.by = "seurat_clusters", ncol = 4)
 ```
 
