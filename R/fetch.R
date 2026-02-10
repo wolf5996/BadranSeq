@@ -91,3 +91,48 @@ utils::globalVariables(c("feature", "cell_id", "name", "value"))
 
   scaffold
 }
+
+#' Fetch Cell-Level Data from a Seurat Object
+#'
+#' @description
+#' Extracts a tidy tibble with one row per cell containing cell identifiers,
+#' optional dimensionality reduction embeddings, and optional metadata.
+#' No expression data is included — use \code{\link{fetch_feature_data}} for that.
+#'
+#' @param object Seurat object.
+#' @param reductions character. Reduction names to include (default: NULL = none).
+#'   Example: \code{c("umap", "pca")}.
+#' @param dims integer. Dimensions to extract per reduction (default: 1:2).
+#' @param metadata logical or character. TRUE = all metadata columns,
+#'   FALSE = none, or a character vector of specific column names.
+#'
+#' @return A tibble with columns: cell_id, optional embedding columns, and
+#'   optional metadata columns.
+#'
+#' @examples
+#' \dontrun{
+#' # All metadata, no embeddings
+#' fetch_cell_data(seurat_obj)
+#'
+#' # With UMAP coordinates
+#' fetch_cell_data(seurat_obj, reductions = "umap")
+#'
+#' # Specific metadata + PCA
+#' fetch_cell_data(seurat_obj, reductions = "pca", dims = 1:10,
+#'                 metadata = c("seurat_clusters", "condition"))
+#' }
+#'
+#' @export
+fetch_cell_data <- function(
+    object,
+    reductions = NULL,
+    dims = 1:2,
+    metadata = TRUE
+) {
+  .build_cell_scaffold(
+    object = object,
+    reductions = reductions,
+    dims = dims,
+    metadata = metadata
+  )
+}
