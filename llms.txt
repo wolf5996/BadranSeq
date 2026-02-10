@@ -493,6 +493,10 @@ your own discretion.
   : Enhanced PCA Plot with Variance Explained
 - [`do_UmapPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_UmapPlot.md)
   : Enhanced UMAP Plot
+- [`fetch_cell_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_cell_data.md)
+  : Fetch Cell-Level Data from a Seurat Object
+- [`fetch_feature_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_feature_data.md)
+  : Fetch Feature Expression Data from a Seurat Object
 - [`get_pca_variance()`](https://wolf5996.github.io/BadranSeq/reference/get_pca_variance.md)
   : Get PCA Variance Explained Summary
 - [`pbmc3k`](https://wolf5996.github.io/BadranSeq/reference/pbmc3k.md) :
@@ -504,3 +508,20 @@ your own discretion.
 - [`theme_badranseq()`](https://wolf5996.github.io/BadranSeq/reference/theme_badranseq.md)
   : BadranSeq Publication-Ready Theme
 
+# Articles
+
+### Getting Started
+
+- [Tidy Data Extraction from Seurat
+  Objects](https://wolf5996.github.io/BadranSeq/articles/data-extraction.md):
+
+  Extract cell-level metadata, embeddings, and feature expression data
+  as tidy tibbles — replacing Seurat’s FetchData() with explicit,
+  composable functions.
+
+- [Publication-Ready Single-Cell
+  Visualisation](https://wolf5996.github.io/BadranSeq/articles/visualisation.md):
+
+  Generate publication-quality dimensionality reduction plots with
+  sensible defaults — cell borders, cluster labels, variance
+  annotations, and split-panel silhouettes out of the box.

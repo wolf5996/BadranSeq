@@ -12,6 +12,10 @@
   : Enhanced PCA Plot with Variance Explained
 - [`do_UmapPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_UmapPlot.md)
   : Enhanced UMAP Plot
+- [`fetch_cell_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_cell_data.md)
+  : Fetch Cell-Level Data from a Seurat Object
+- [`fetch_feature_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_feature_data.md)
+  : Fetch Feature Expression Data from a Seurat Object
 - [`get_pca_variance()`](https://wolf5996.github.io/BadranSeq/reference/get_pca_variance.md)
   : Get PCA Variance Explained Summary
 - [`pbmc3k`](https://wolf5996.github.io/BadranSeq/reference/pbmc3k.md) :
