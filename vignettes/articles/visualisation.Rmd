@@ -34,8 +34,8 @@ The quickest way to see the difference — the same data plotted with
 
 ```{r}
 #| label: comparison
-#| fig-width: 14
-#| fig-height: 5
+#| fig.width: 14
+#| fig.height: 5
 p1 <- Seurat::DimPlot(pbmc3k, reduction = "umap") +
   ggtitle("Seurat::DimPlot()")
 
@@ -56,8 +56,8 @@ automatically. No `theme()` calls needed.
 
 ```{r}
 #| label: umap-basic
-#| fig-width: 7
-#| fig-height: 5
+#| fig.width: 7
+#| fig.height: 5
 do_UmapPlot(pbmc3k)
 ```
 
@@ -65,8 +65,8 @@ do_UmapPlot(pbmc3k)
 
 ```{r}
 #| label: umap-groupby
-#| fig-width: 7
-#| fig-height: 5
+#| fig.width: 7
+#| fig.height: 5
 do_UmapPlot(pbmc3k, group.by = "seurat_annotations")
 ```
 
@@ -74,8 +74,8 @@ do_UmapPlot(pbmc3k, group.by = "seurat_annotations")
 
 ```{r}
 #| label: umap-customise
-#| fig-width: 7
-#| fig-height: 5
+#| fig.width: 7
+#| fig.height: 5
 do_UmapPlot(pbmc3k, pt.size = 0.3, label = FALSE)
 ```
 
@@ -83,8 +83,8 @@ do_UmapPlot(pbmc3k, pt.size = 0.3, label = FALSE)
 
 ```{r}
 #| label: umap-no-borders
-#| fig-width: 7
-#| fig-height: 5
+#| fig.width: 7
+#| fig.height: 5
 do_UmapPlot(pbmc3k, plot_cell_borders = FALSE)
 ```
 
@@ -95,8 +95,8 @@ explained per PC and formats the axis labels as "PC1 (X.X%)".
 
 ```{r}
 #| label: pca-comparison
-#| fig-width: 14
-#| fig-height: 5
+#| fig.width: 14
+#| fig.height: 5
 p1 <- Seurat::DimPlot(pbmc3k, reduction = "pca") +
   ggtitle("Seurat::DimPlot(reduction = 'pca')")
 
@@ -115,8 +115,8 @@ Explore PC2 vs PC3:
 
 ```{r}
 #| label: pca-dims
-#| fig-width: 7
-#| fig-height: 5
+#| fig.width: 7
+#| fig.height: 5
 do_PcaPlot(pbmc3k, dims = c(2, 3))
 ```
 
@@ -133,8 +133,8 @@ argument:
 
 ```{r}
 #| label: dimplot-routing
-#| fig-width: 14
-#| fig-height: 5
+#| fig.width: 14
+#| fig.height: 5
 p1 <- do_DimPlot(pbmc3k, reduction = "umap") + ggtitle("reduction = 'umap'")
 p2 <- do_DimPlot(pbmc3k, reduction = "pca") + ggtitle("reduction = 'pca'")
 
@@ -152,8 +152,8 @@ colour scale.
 
 ```{r}
 #| label: featureplot
-#| fig-width: 14
-#| fig-height: 5
+#| fig.width: 14
+#| fig.height: 5
 p1 <- do_FeaturePlot(pbmc3k, features = "CD3D")
 p2 <- do_FeaturePlot(pbmc3k, features = "CD14")
 p3 <- do_FeaturePlot(pbmc3k, features = "MS4A1")
@@ -193,8 +193,8 @@ Now compare Seurat's default split with BadranSeq's silhouette approach:
 
 ```{r}
 #| label: split-comparison
-#| fig-width: 14
-#| fig-height: 5
+#| fig.width: 14
+#| fig.height: 5
 p1 <- Seurat::DimPlot(pbmc3k, reduction = "umap", split.by = "condition") +
   ggtitle("Seurat::DimPlot(split.by)")
 
@@ -203,8 +203,8 @@ p1
 
 ```{r}
 #| label: split-silhouette
-#| fig-width: 14
-#| fig-height: 7
+#| fig.width: 14
+#| fig.height: 7
 do_UmapPlot(pbmc3k, split.by = "condition")
 ```
 
@@ -217,7 +217,7 @@ The silhouette approach works with any grouping:
 
 ```{r}
 #| label: split-annotations
-#| fig-width: 14
-#| fig-height: 7
+#| fig.width: 14
+#| fig.height: 7
 do_UmapPlot(pbmc3k, group.by = "seurat_annotations", split.by = "condition")
 ```

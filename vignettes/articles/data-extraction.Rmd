@@ -202,8 +202,8 @@ a variance percentage axis and a visual cutoff line:
 
 ```{r}
 #| label: elbow-plot
-#| fig-width: 7
-#| fig-height: 5
+#| fig.width: 7
+#| fig.height: 5
 EnhancedElbowPlot(pbmc3k, ndims = 30, cutoff_pc = 10)
 ```
 
@@ -217,8 +217,8 @@ annotations, then produce a grouped violin plot entirely from the tidy tibble.
 
 ```{r}
 #| label: workflow
-#| fig-width: 8
-#| fig-height: 5
+#| fig.width: 8
+#| fig.height: 5
 markers <- fetch_feature_data(
   pbmc3k,
   features = c("CD3D", "CD8A", "CD4", "IL7R"),
