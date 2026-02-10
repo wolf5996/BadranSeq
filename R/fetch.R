@@ -2,7 +2,7 @@
 # Tidy data extraction from Seurat objects
 
 # Suppress R CMD check notes for dplyr/tidyr NSE variables
-utils::globalVariables(c("feature", "cell_id", "name", "value"))
+utils::globalVariables(c("feature"))
 
 #' Build Cell Scaffold Tibble
 #'
