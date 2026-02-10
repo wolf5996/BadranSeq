@@ -73,3 +73,36 @@ test_that(".build_cell_scaffold validates inputs", {
     "not found in metadata"
   )
 })
+
+# --- fetch_cell_data() tests ---
+
+test_that("fetch_cell_data returns tibble with cell_id and all metadata", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- fetch_cell_data(pbmc3k)
+  expect_s3_class(result, "tbl_df")
+  expect_true("cell_id" %in% colnames(result))
+  expect_equal(nrow(result), ncol(pbmc3k))
+  # All metadata columns present
+  expect_true(all(colnames(pbmc3k@meta.data) %in% colnames(result)))
+  # No embedding columns (reductions = NULL)
+  expect_false("UMAP1" %in% colnames(result))
+})
+
+test_that("fetch_cell_data includes embeddings when requested", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- fetch_cell_data(pbmc3k, reductions = c("umap", "pca"), dims = 1:2)
+  expect_true(all(c("UMAP1", "UMAP2", "PC1", "PC2") %in% colnames(result)))
+})
+
+test_that("fetch_cell_data respects metadata selection", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- fetch_cell_data(pbmc3k, metadata = c("seurat_clusters"))
+  expect_true("seurat_clusters" %in% colnames(result))
+  expect_false("nCount_RNA" %in% colnames(result))
+})
+
+test_that("fetch_cell_data with no metadata and no reductions returns cell_id only", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- fetch_cell_data(pbmc3k, metadata = FALSE)
+  expect_equal(colnames(result), "cell_id")
+})
