@@ -20,6 +20,7 @@ Imports:
     dplyr,
     ggplot2,
     magrittr,
+    purrr,
     rlang,
     Seurat (>= 5.0.0),
     shiny,
