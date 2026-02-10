@@ -106,3 +106,116 @@ test_that("fetch_cell_data with no metadata and no reductions returns cell_id on
   result <- fetch_cell_data(pbmc3k, metadata = FALSE)
   expect_equal(colnames(result), "cell_id")
 })
+
+# --- fetch_feature_data() tests ---
+
+test_that("fetch_feature_data returns tibble with correct structure", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- fetch_feature_data(pbmc3k, features = c("CD3D", "CD8A"))
+  expect_s3_class(result, "tbl_df")
+  expect_true(all(c("cell_id", "feature", "data") %in% colnames(result)))
+  # One row per cell per feature
+  expect_equal(nrow(result), ncol(pbmc3k) * 2)
+})
+
+test_that("fetch_feature_data feature column is a factor with correct order", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- fetch_feature_data(pbmc3k, features = c("CD8A", "CD3D"))
+  expect_s3_class(result$feature, "factor")
+  expect_equal(levels(result$feature), c("CD8A", "CD3D"))
+})
+
+test_that("fetch_feature_data handles single layer", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- fetch_feature_data(pbmc3k, features = "CD3D", layer = "counts")
+  expect_true("counts" %in% colnames(result))
+  expect_false("data" %in% colnames(result))
+})
+
+test_that("fetch_feature_data handles multiple layers", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- fetch_feature_data(
+    pbmc3k,
+    features = "CD3D",
+    layer = c("counts", "data")
+  )
+  expect_true(all(c("counts", "data") %in% colnames(result)))
+})
+
+test_that("fetch_feature_data includes embeddings when requested", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- fetch_feature_data(
+    pbmc3k,
+    features = "CD3D",
+    reductions = "umap"
+  )
+  expect_true(all(c("UMAP1", "UMAP2") %in% colnames(result)))
+})
+
+test_that("fetch_feature_data includes metadata when requested", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- fetch_feature_data(
+    pbmc3k,
+    features = "CD3D",
+    metadata = c("seurat_clusters")
+  )
+  expect_true("seurat_clusters" %in% colnames(result))
+})
+
+test_that("fetch_feature_data respects assay parameter", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- fetch_feature_data(
+    pbmc3k,
+    features = "CD3D",
+    assay = "RNA",
+    layer = "data",
+    metadata = FALSE
+  )
+  expect_s3_class(result, "tbl_df")
+  expect_true("data" %in% colnames(result))
+})
+
+test_that("fetch_feature_data warns on missing features and drops them", {
+  data(pbmc3k, package = "BadranSeq")
+  expect_warning(
+    result <- fetch_feature_data(
+      pbmc3k,
+      features = c("CD3D", "FAKEGENE"),
+      metadata = FALSE
+    ),
+    "not found"
+  )
+  expect_equal(levels(result$feature), "CD3D")
+})
+
+test_that("fetch_feature_data errors when all features missing", {
+  data(pbmc3k, package = "BadranSeq")
+  expect_error(
+    fetch_feature_data(pbmc3k, features = c("FAKE1", "FAKE2")),
+    "No valid features"
+  )
+})
+
+test_that("fetch_feature_data errors on empty features", {
+  data(pbmc3k, package = "BadranSeq")
+  expect_error(
+    fetch_feature_data(pbmc3k, features = character(0)),
+    "features must be a non-empty character vector"
+  )
+})
+
+test_that("fetch_feature_data validates assay", {
+  data(pbmc3k, package = "BadranSeq")
+  expect_error(
+    fetch_feature_data(pbmc3k, features = "CD3D", assay = "nonexistent"),
+    "not found"
+  )
+})
+
+test_that("fetch_feature_data validates layer", {
+  data(pbmc3k, package = "BadranSeq")
+  expect_error(
+    fetch_feature_data(pbmc3k, features = "CD3D", layer = "nonexistent"),
+    "not found"
+  )
+})
