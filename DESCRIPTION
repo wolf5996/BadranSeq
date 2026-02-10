@@ -23,6 +23,7 @@ Imports:
     purrr,
     rlang,
     Seurat (>= 5.0.0),
+    SeuratObject,
     shiny,
     sleepwalk,
     stats,

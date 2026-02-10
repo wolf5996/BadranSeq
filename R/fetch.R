@@ -178,6 +178,7 @@ fetch_cell_data <- function(
 #'                    assay = "RNA", layer = "counts")
 #' }
 #'
+#' @importFrom rlang %||%
 #' @export
 fetch_feature_data <- function(
     object,
