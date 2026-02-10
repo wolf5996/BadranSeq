@@ -1,0 +1,237 @@
+---
+title: "Tidy Data Extraction from Seurat Objects"
+description: >
+  Extract cell-level metadata, embeddings, and feature expression data as tidy
+  tibbles — replacing Seurat's FetchData() with explicit, composable functions.
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(BadranSeq)
+library(Seurat)
+library(dplyr)
+library(ggplot2)
+data(pbmc3k, package = "BadranSeq")
+```
+
+## Motivation
+
+Seurat's `FetchData()` is the standard way to pull data out of a Seurat object
+for custom plotting or downstream analysis. It works, but has a few rough edges:
+
+- Returns a `data.frame` with cell barcodes as **rownames**, not a column
+- Mixes expression data, embeddings, and metadata into one flat call
+- No control over which layer (counts vs normalised) to extract
+- Returns wide format for features, which requires manual pivoting for tidy
+  workflows
+
+BadranSeq provides two focused alternatives:
+
+| Function | Returns | Use case |
+|----------|---------|----------|
+| `fetch_cell_data()` | One row per cell | Metadata, embeddings — no expression |
+| `fetch_feature_data()` | One row per cell × feature | Expression data + optional metadata/embeddings |
+
+Both return tibbles with `cell_id` as an explicit column.
+
+## The FetchData problem
+
+Here is what `Seurat::FetchData()` returns for a simple request — UMAP
+coordinates plus a gene:
+
+```{r}
+#| label: fetchdata-seurat
+head(Seurat::FetchData(pbmc3k, vars = c("umap_1", "umap_2", "CD3D")))
+```
+
+Cell barcodes are trapped in rownames. Expression and embeddings are mingled.
+There is no way to request a specific layer.
+
+Compare with BadranSeq's approach — embeddings and expression are requested
+through separate, explicit arguments:
+
+```{r}
+#| label: fetchdata-badranseq
+fetch_feature_data(
+  pbmc3k,
+  features = "CD3D",
+  layer = "data",
+  reductions = "umap",
+  metadata = FALSE
+)
+```
+
+`cell_id` is a column. The feature name is explicit. The layer is explicit. The
+output is a tibble ready for `ggplot2` or `dplyr` pipelines.
+
+## Cell-level data
+
+`fetch_cell_data()` extracts metadata and embeddings — no expression data. This
+is the right tool when you need cell annotations for plotting or filtering.
+
+### All metadata (default)
+
+```{r}
+#| label: cell-all-meta
+fetch_cell_data(pbmc3k)
+```
+
+### Add UMAP coordinates
+
+```{r}
+#| label: cell-umap
+fetch_cell_data(pbmc3k, reductions = "umap")
+```
+
+### Select specific metadata columns
+
+```{r}
+#| label: cell-specific-meta
+fetch_cell_data(
+  pbmc3k,
+  reductions = "umap",
+  metadata = c("seurat_clusters", "nFeature_RNA")
+)
+```
+
+### Embeddings only (no metadata)
+
+```{r}
+#| label: cell-embed-only
+fetch_cell_data(pbmc3k, reductions = c("pca", "umap"), metadata = FALSE)
+```
+
+## Feature expression data
+
+`fetch_feature_data()` returns one row per cell per feature in long format.
+Expression values are columns named after the requested layers.
+
+### Single gene, normalised expression
+
+```{r}
+#| label: feat-single
+fetch_feature_data(pbmc3k, features = "CD3D")
+```
+
+### Multiple genes
+
+The `feature` column is a factor preserving your input order — useful for
+controlling facet ordering in plots:
+
+```{r}
+#| label: feat-multi
+fetch_feature_data(
+  pbmc3k,
+  features = c("CD3D", "CD8A", "CD14", "MS4A1"),
+  metadata = "seurat_clusters"
+)
+```
+
+### Multiple layers side-by-side
+
+Request both raw counts and normalised data. Each layer becomes its own column:
+
+```{r}
+#| label: feat-layers
+fetch_feature_data(
+  pbmc3k,
+  features = "CD3D",
+  layer = c("counts", "data"),
+  metadata = FALSE
+)
+```
+
+### With embeddings for custom plots
+
+Combine expression with UMAP coordinates for a fully self-contained plotting
+tibble:
+
+```{r}
+#| label: feat-comparison
+cd3d <- fetch_feature_data(
+  pbmc3k,
+  features = "CD3D",
+  reductions = "umap",
+  metadata = FALSE
+)
+
+ggplot(cd3d, aes(x = UMAP1, y = UMAP2, colour = data)) +
+  geom_point(size = 0.5) +
+  scale_colour_viridis_c(option = "B", direction = -1) +
+  theme_minimal() +
+  labs(colour = "CD3D")
+```
+
+Compare this with the equivalent using `FetchData()`:
+
+```{r}
+#| label: feat-comparison-seurat
+fd <- Seurat::FetchData(pbmc3k, vars = c("umap_1", "umap_2", "CD3D"))
+
+ggplot(fd, aes(x = umap_1, y = umap_2, colour = CD3D)) +
+  geom_point(size = 0.5) +
+  scale_colour_viridis_c(option = "B", direction = -1) +
+  theme_minimal()
+```
+
+Both produce the same plot, but `fetch_feature_data()` gives you a tidy tibble
+where the feature name is data, not a column name — making it straightforward to
+facet across multiple genes without reshaping.
+
+## PCA diagnostics
+
+BadranSeq includes two functions for understanding PCA results:
+`get_pca_variance()` for the raw numbers and `EnhancedElbowPlot()` for the
+visual.
+
+### Variance explained table
+
+```{r}
+#| label: pca-variance
+get_pca_variance(pbmc3k, n_pcs = 10)
+```
+
+The cumulative variance column helps decide how many PCs to retain — a common
+question when choosing dimensions for clustering and UMAP.
+
+### Enhanced elbow plot
+
+`EnhancedElbowPlot()` improves on Seurat's `ElbowPlot()` by optionally showing
+a variance percentage axis and a visual cutoff line:
+
+```{r}
+#| label: elbow-plot
+#| fig-width: 7
+#| fig-height: 5
+EnhancedElbowPlot(pbmc3k, ndims = 30, cutoff_pc = 10)
+```
+
+The red dashed line at PC 10 marks the analyst's chosen cutoff — a quick
+visual reference when deciding how many PCs to retain for downstream analysis.
+
+## Putting it together
+
+A practical example: extract expression for T cell markers with cluster
+annotations, then produce a grouped violin plot entirely from the tidy tibble.
+
+```{r}
+#| label: workflow
+#| fig-width: 8
+#| fig-height: 5
+markers <- fetch_feature_data(
+  pbmc3k,
+  features = c("CD3D", "CD8A", "CD4", "IL7R"),
+  metadata = "seurat_clusters"
+)
+
+ggplot(markers, aes(x = seurat_clusters, y = data, fill = seurat_clusters)) +
+  geom_violin(scale = "width", trim = TRUE) +
+  facet_wrap(~feature, scales = "free_y") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(x = "Cluster", y = "Normalised expression")
+```
+
+Because `feature` is a factor in input order, the facet panels appear in the
+biologically meaningful order you specified — not alphabetically.

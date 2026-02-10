@@ -13,3 +13,6 @@
 ^pkgdown$
 ^\.github$
 ^paper$
+^vignettes/articles$
+^vignettes/\.quarto$
+^Rplots\.pdf$

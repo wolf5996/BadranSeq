@@ -1,6 +1,6 @@
 Package: BadranSeq
 Title: Make transcriptomic analyses more pleasant
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R:
     person("Badran", "Elshenawy", , "badran.elshenawy@ndm.ox.ac.uk", role = c("aut", "cre"))
 Description: Convenience functions to aid visualisation and computation of useful metrics with a focus on scRNA-Seq data.

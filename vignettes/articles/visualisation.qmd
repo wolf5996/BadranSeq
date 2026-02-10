@@ -1,0 +1,223 @@
+---
+title: "Publication-Ready Single-Cell Visualisation"
+description: >
+  Generate publication-quality dimensionality reduction plots with sensible
+  defaults — cell borders, cluster labels, variance annotations, and
+  split-panel silhouettes out of the box.
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(BadranSeq)
+library(Seurat)
+library(ggplot2)
+library(patchwork)
+data(pbmc3k, package = "BadranSeq")
+```
+
+## Motivation
+
+Seurat's plotting functions are designed for exploration. Getting them to
+publication quality typically requires layering `ggplot2` theme adjustments,
+adding cell borders, repositioning legends, and reformatting axis labels — the
+same boilerplate repeated across every figure in a manuscript.
+
+BadranSeq wraps this into a small set of functions with opinionated defaults:
+cell borders on, cluster labels on, clean white theme, legend at bottom. The
+goal is a plot that looks good in a paper without additional customisation.
+
+## From Seurat defaults to publication-ready
+
+The quickest way to see the difference — the same data plotted with
+`Seurat::DimPlot()` and `BadranSeq::do_UmapPlot()`:
+
+```{r}
+#| label: comparison
+#| fig-width: 14
+#| fig-height: 5
+p1 <- Seurat::DimPlot(pbmc3k, reduction = "umap") +
+  ggtitle("Seurat::DimPlot()")
+
+p2 <- do_UmapPlot(pbmc3k) +
+  ggtitle("BadranSeq::do_UmapPlot()")
+
+p1 + p2
+```
+
+BadranSeq adds cell borders, boxed cluster labels, and a clean theme
+automatically. No `theme()` calls needed.
+
+## UMAP plots
+
+`do_UmapPlot()` is the workhorse for UMAP visualisation.
+
+### Basic usage
+
+```{r}
+#| label: umap-basic
+#| fig-width: 7
+#| fig-height: 5
+do_UmapPlot(pbmc3k)
+```
+
+### Group by a metadata column
+
+```{r}
+#| label: umap-groupby
+#| fig-width: 7
+#| fig-height: 5
+do_UmapPlot(pbmc3k, group.by = "seurat_annotations")
+```
+
+### Adjust point size and remove labels
+
+```{r}
+#| label: umap-customise
+#| fig-width: 7
+#| fig-height: 5
+do_UmapPlot(pbmc3k, pt.size = 0.3, label = FALSE)
+```
+
+### Remove cell borders
+
+```{r}
+#| label: umap-no-borders
+#| fig-width: 7
+#| fig-height: 5
+do_UmapPlot(pbmc3k, plot_cell_borders = FALSE)
+```
+
+## PCA with automatic variance labels
+
+`do_PcaPlot()` does what Seurat's PCA plot does not — it calculates variance
+explained per PC and formats the axis labels as "PC1 (X.X%)".
+
+```{r}
+#| label: pca-comparison
+#| fig-width: 14
+#| fig-height: 5
+p1 <- Seurat::DimPlot(pbmc3k, reduction = "pca") +
+  ggtitle("Seurat::DimPlot(reduction = 'pca')")
+
+p2 <- do_PcaPlot(pbmc3k) +
+  ggtitle("BadranSeq::do_PcaPlot()")
+
+p1 + p2
+```
+
+The variance annotation is automatic — no manual calculation or label formatting
+required.
+
+### Different dimension pairs
+
+Explore PC2 vs PC3:
+
+```{r}
+#| label: pca-dims
+#| fig-width: 7
+#| fig-height: 5
+do_PcaPlot(pbmc3k, dims = c(2, 3))
+```
+
+## The unified entry point
+
+`do_DimPlot()` routes to the appropriate handler based on the `reduction`
+argument:
+
+| `reduction` | Routes to | Axis labels |
+|-------------|-----------|-------------|
+| `"umap"` | `do_UmapPlot()` | UMAP1, UMAP2 |
+| `"pca"` | `do_PcaPlot()` | PC1 (X.X%), PC2 (X.X%) |
+| other | `.do_DimPlot_internal()` | REDUCTION1, REDUCTION2 |
+
+```{r}
+#| label: dimplot-routing
+#| fig-width: 14
+#| fig-height: 5
+p1 <- do_DimPlot(pbmc3k, reduction = "umap") + ggtitle("reduction = 'umap'")
+p2 <- do_DimPlot(pbmc3k, reduction = "pca") + ggtitle("reduction = 'pca'")
+
+p1 + p2
+```
+
+Use `do_DimPlot()` when writing general-purpose code that should work with any
+reduction. Use the specific functions (`do_UmapPlot()`, `do_PcaPlot()`) when
+you know the reduction type.
+
+## Feature expression plots
+
+`do_FeaturePlot()` overlays gene expression on the embedding using a viridis
+colour scale.
+
+```{r}
+#| label: featureplot
+#| fig-width: 14
+#| fig-height: 5
+p1 <- do_FeaturePlot(pbmc3k, features = "CD3D")
+p2 <- do_FeaturePlot(pbmc3k, features = "CD14")
+p3 <- do_FeaturePlot(pbmc3k, features = "MS4A1")
+
+p1 + p2 + p3
+```
+
+Cells are ordered by expression by default (`order = TRUE`), so high-expressing
+cells are plotted on top — avoiding the common problem of rare populations being
+hidden beneath low-expressing cells.
+
+## Split-panel silhouettes
+
+This is BadranSeq's signature visualisation feature. When you pass `split.by`,
+each panel shows:
+
+1. A **grey silhouette** of all cells (spatial context)
+2. **Black borders** on all cells
+3. **Coloured cells** only for the current split category
+
+This preserves the spatial layout across panels, making it easy to see where a
+subpopulation sits relative to the full dataset.
+
+First, add a synthetic condition to demonstrate:
+
+```{r}
+#| label: split-setup
+set.seed(42)
+pbmc3k$condition <- sample(
+  c("Control", "Treatment"),
+  ncol(pbmc3k),
+  replace = TRUE
+)
+```
+
+Now compare Seurat's default split with BadranSeq's silhouette approach:
+
+```{r}
+#| label: split-comparison
+#| fig-width: 14
+#| fig-height: 5
+p1 <- Seurat::DimPlot(pbmc3k, reduction = "umap", split.by = "condition") +
+  ggtitle("Seurat::DimPlot(split.by)")
+
+p1
+```
+
+```{r}
+#| label: split-silhouette
+#| fig-width: 14
+#| fig-height: 7
+do_UmapPlot(pbmc3k, split.by = "condition")
+```
+
+In the Seurat version, each panel only shows its own cells — you lose the sense
+of where those cells sit in the overall structure. In BadranSeq's version, the
+grey background preserves this context: you can immediately see which clusters
+are enriched in each condition.
+
+The silhouette approach works with any grouping:
+
+```{r}
+#| label: split-annotations
+#| fig-width: 14
+#| fig-height: 7
+do_UmapPlot(pbmc3k, group.by = "seurat_annotations", split.by = "condition")
+```
