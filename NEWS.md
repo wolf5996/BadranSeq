@@ -1,28 +1,61 @@
-# BadranSeq (development version)
+# BadranSeq 1.0.0
 
-## New features
+## Visualisation
 
-* Added `fetch_cell_data()` for tidy extraction of cell-level data from Seurat
-  objects. Returns a tibble with one row per cell containing cell identifiers,
-  optional dimensionality reduction embeddings, and optional metadata. No
-  expression data is included.
+* `do_DimPlot()` provides a unified entry point for dimensionality reduction
+  plots, routing to specialised handlers based on the `reduction` argument.
 
-* Added `fetch_feature_data()` for tidy extraction of feature expression data
-  from Seurat objects. Returns a tibble with one row per cell per feature, with
-  expression values as one column per requested layer (features long, layers
-  wide). Supports explicit assay and layer selection, optional embeddings, and
-  optional metadata.
+* `do_UmapPlot()` produces publication-ready UMAP plots with cell borders,
+  boxed cluster labels, and a clean theme out of the box.
+
+* `do_PcaPlot()` adds automatic variance-explained labels to PCA axes,
+  formatted as "PC1 (X.X%)".
+
+* `do_FeaturePlot()` overlays gene expression on embeddings using a viridis
+  colour scale with cells ordered by expression.
+
+* `EnhancedElbowPlot()` extends Seurat's elbow plot with a variance percentage
+  axis and an optional visual cutoff line.
+
+* Split-panel silhouette feature: when `split.by` is used, each panel shows
+  coloured cells for the current category against a grey silhouette of all
+  cells, preserving spatial context across panels.
+
+## Data extraction
+
+* `fetch_cell_data()` extracts cell-level data from Seurat objects as a tidy
+  tibble with one row per cell. Supports optional embeddings and metadata
+  selection. No expression data is included.
+
+* `fetch_feature_data()` extracts feature expression data as a tidy tibble
+  with one row per cell per feature. Expression values are one column per
+  requested layer (features long, layers wide). Supports explicit assay and
+  layer selection, optional embeddings, and optional metadata.
 
 * Both functions replace `Seurat::FetchData()` with a cleaner interface:
   `cell_id` as a column (not rownames), tibble output, and explicit control
   over what data is returned.
 
-## Internal
+* `get_pca_variance()` returns a data.frame with variance explained and
+  cumulative variance per principal component.
 
-* Added `.build_cell_scaffold()` internal helper shared by both public
-  functions.
+## Theming
 
-## Dependencies
+* `theme_badranseq()` provides a consistent publication-ready ggplot2 theme
+  with white background, no grids, bold titles, and legend at bottom.
 
-* Added `tibble`, `dplyr`, `tidyr`, `rlang`, `purrr`, and `SeuratObject` to
-  Imports.
+* `generate_badranseq_colors()` generates vivid, slightly darkened colours
+  using the colorspace Dark 3 qualitative palette.
+
+## Interactive tools
+
+* `seurat_sleepwalk()` launches an interactive sleepwalk session for exploring
+  cell-to-cell distances in embedding space.
+
+* `select_cells_interactive()` provides a Shiny app with brush selection for
+  interactively selecting cells from embeddings.
+
+## Data
+
+* Bundled `pbmc3k` dataset: 3000 PBMCs preprocessed with SCTransform, PCA,
+  UMAP, and clustered at resolution 0.5.
