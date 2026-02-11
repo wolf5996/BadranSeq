@@ -2,7 +2,7 @@
 # Violin plot with ggbetweenstats-style aesthetics
 
 # Suppress R CMD check notes for dplyr/ggplot2 NSE variables
-utils::globalVariables(c("group_var", "centrality_label"))
+utils::globalVariables(c("centrality_label"))
 
 # ============================================================================
 # Internal: Build a single violin panel
@@ -75,7 +75,8 @@ utils::globalVariables(c("group_var", "centrality_label"))
       alpha = boxplot.alpha,
       fill = "white",
       color = "black",
-      outlier.shape = NA
+      outlier.shape = NA,
+      show.legend = FALSE
     )
   }
 
@@ -89,7 +90,11 @@ utils::globalVariables(c("group_var", "centrality_label"))
 
   # Layer 4: Centrality (optional)
   if (centrality) {
-    fn <- match.fun(centrality.fn)
+    fn <- switch(centrality.fn,
+      "median" = stats::median,
+      "mean"   = base::mean,
+      stats::median
+    )
     centrality_df <- dplyr::summarise(
       dplyr::group_by(df, .data[[group_col]]),
       centrality_label = round(fn(.data[[y_col]], na.rm = TRUE), 2),
@@ -121,7 +126,7 @@ utils::globalVariables(c("group_var", "centrality_label"))
       color = "black",
       size = 3,
       fontface = "bold",
-      nudge_y = max(df[[y_col]], na.rm = TRUE) * 0.05,
+      nudge_y = diff(range(df[[y_col]], na.rm = TRUE)) * 0.05,
       inherit.aes = FALSE
     )
   }
