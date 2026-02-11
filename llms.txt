@@ -491,8 +491,12 @@ your own discretion.
   : Enhanced Feature Plot with Viridis Support
 - [`do_PcaPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_PcaPlot.md)
   : Enhanced PCA Plot with Variance Explained
+- [`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md)
+  : Statistical Violin Plot via ggbetweenstats
 - [`do_UmapPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_UmapPlot.md)
   : Enhanced UMAP Plot
+- [`do_ViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_ViolinPlot.md)
+  : Violin Plot with ggbetweenstats-Style Aesthetics
 - [`fetch_cell_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_cell_data.md)
   : Fetch Cell-Level Data from a Seurat Object
 - [`fetch_feature_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_feature_data.md)
