@@ -147,6 +147,7 @@ test_that("do_StatsViolinPlot errors on single group level", {
 })
 
 test_that("do_StatsViolinPlot errors on non-Seurat object", {
+  skip_if_not_installed("ggstatsplot")
   expect_error(
     do_StatsViolinPlot("not_a_seurat", features = "CD3D"),
     "object must be a Seurat object"
@@ -154,6 +155,7 @@ test_that("do_StatsViolinPlot errors on non-Seurat object", {
 })
 
 test_that("do_StatsViolinPlot errors on invalid group.by", {
+  skip_if_not_installed("ggstatsplot")
   data(pbmc3k, package = "BadranSeq")
   expect_error(
     do_StatsViolinPlot(pbmc3k, features = "CD3D",

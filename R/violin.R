@@ -336,6 +336,8 @@ do_ViolinPlot <- function(
 #' @param assay character. Assay to use (default: NULL = DefaultAssay).
 #' @param type character. Type of statistical test to use. One of
 #'   "nonparametric" (default), "parametric", "robust", or "bayes".
+#'   Default is "nonparametric" (Kruskal-Wallis + Dunn's) because
+#'   single-cell expression data is typically non-normally distributed.
 #'   Passed through to \code{ggstatsplot::ggbetweenstats()}.
 #' @param p.adjust.method character. Method for p-value adjustment
 #'   (default: "holm"). Passed through to \code{ggstatsplot::ggbetweenstats()}.
@@ -460,7 +462,7 @@ do_StatsViolinPlot <- function(
   plots <- lapply(valid_features, function(feat) {
     gene_df <- df[df$feature == feat, ]
 
-    p <- ggstatsplot::ggbetweenstats(
+    ggstatsplot::ggbetweenstats(
       data = gene_df,
       x = !!rlang::sym(group_col),
       y = !!rlang::sym(layer),
@@ -468,12 +470,11 @@ do_StatsViolinPlot <- function(
       p.adjust.method = p.adjust.method,
       pairwise.display = pairwise.display,
       title = feat,
+      ggplot.component = ggplot2::scale_color_manual(
+        values = colors.use
+      ),
       ...
     )
-
-    p <- p + ggplot2::scale_color_manual(values = colors.use)
-
-    p
   })
 
   names(plots) <- valid_features

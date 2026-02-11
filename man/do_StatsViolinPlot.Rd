@@ -32,6 +32,8 @@ uses active Idents. Must have 2 or more levels for statistical comparison.}
 
 \item{type}{character. Type of statistical test to use. One of
 "nonparametric" (default), "parametric", "robust", or "bayes".
+Default is "nonparametric" (Kruskal-Wallis + Dunn's) because
+single-cell expression data is typically non-normally distributed.
 Passed through to \code{ggstatsplot::ggbetweenstats()}.}
 
 \item{p.adjust.method}{character. Method for p-value adjustment
