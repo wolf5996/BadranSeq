@@ -233,9 +233,8 @@ do_ViolinPlot <- function(
   # --- Resolve group.by ---
 
   if (is.null(group.by)) {
-    # Use active Idents; inject as temporary metadata column
-    object[["._badranseq_group"]] <- Seurat::Idents(object)
     group_col <- "._badranseq_group"
+    inject_idents <- TRUE
   } else {
     if (!group.by %in% colnames(object@meta.data)) {
       stop(
@@ -244,6 +243,7 @@ do_ViolinPlot <- function(
       )
     }
     group_col <- group.by
+    inject_idents <- FALSE
   }
 
   # --- Fetch data ---
@@ -253,15 +253,25 @@ do_ViolinPlot <- function(
     features = features,
     layer = layer,
     assay = assay,
-    metadata = group_col
+    metadata = if (inject_idents) FALSE else group_col
   )
+
+  # Inject Idents into tibble (avoids mutating the Seurat object)
+  if (inject_idents) {
+    ident_lookup <- setNames(
+      as.character(Seurat::Idents(object)),
+      colnames(object)
+    )
+    df[[group_col]] <- ident_lookup[df$cell_id]
+  }
 
   # valid features are those that survived fetch_feature_data
   valid_features <- levels(df$feature)
 
   # --- Generate colors ---
 
-  group_levels <- levels(as.factor(df[[group_col]]))
+  df[[group_col]] <- as.factor(df[[group_col]])
+  group_levels <- levels(df[[group_col]])
   n_groups <- length(group_levels)
 
   if (is.null(colors.use)) {
@@ -407,9 +417,8 @@ do_StatsViolinPlot <- function(
   # --- Resolve group.by ---
 
   if (is.null(group.by)) {
-    # Use active Idents; inject as temporary metadata column
-    object[["._badranseq_group"]] <- Seurat::Idents(object)
     group_col <- "._badranseq_group"
+    inject_idents <- TRUE
   } else {
     if (!group.by %in% colnames(object@meta.data)) {
       stop(
@@ -418,6 +427,7 @@ do_StatsViolinPlot <- function(
       )
     }
     group_col <- group.by
+    inject_idents <- FALSE
   }
 
   # --- Fetch data ---
@@ -427,8 +437,17 @@ do_StatsViolinPlot <- function(
     features = features,
     layer = layer,
     assay = assay,
-    metadata = group_col
+    metadata = if (inject_idents) FALSE else group_col
   )
+
+  # Inject Idents into tibble (avoids mutating the Seurat object)
+  if (inject_idents) {
+    ident_lookup <- setNames(
+      as.character(Seurat::Idents(object)),
+      colnames(object)
+    )
+    df[[group_col]] <- ident_lookup[df$cell_id]
+  }
 
   # valid features are those that survived fetch_feature_data
   valid_features <- levels(df$feature)
