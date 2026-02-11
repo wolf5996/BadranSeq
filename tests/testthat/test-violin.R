@@ -108,3 +108,76 @@ test_that("do_ViolinPlot ncol controls patchwork layout", {
   # patchwork stores layout info in the plot
   expect_equal(p$patches$layout$ncol, 1)
 })
+
+# --- do_StatsViolinPlot() tests ---
+
+test_that("do_StatsViolinPlot returns ggplot for single gene", {
+  skip_if_not_installed("ggstatsplot")
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_StatsViolinPlot(pbmc3k, features = "CD3D",
+                           group.by = "seurat_clusters")
+  expect_s3_class(p, "gg")
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("do_StatsViolinPlot returns patchwork for multiple genes", {
+  skip_if_not_installed("ggstatsplot")
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_StatsViolinPlot(pbmc3k, features = c("CD3D", "CD8A"),
+                           group.by = "seurat_clusters")
+  expect_s3_class(p, "patchwork")
+})
+
+test_that("do_StatsViolinPlot uses Idents when group.by is NULL", {
+  skip_if_not_installed("ggstatsplot")
+  data(pbmc3k, package = "BadranSeq")
+  Seurat::Idents(pbmc3k) <- "seurat_clusters"
+  p <- do_StatsViolinPlot(pbmc3k, features = "CD3D", group.by = NULL)
+  expect_s3_class(p, "gg")
+})
+
+test_that("do_StatsViolinPlot errors on single group level", {
+  skip_if_not_installed("ggstatsplot")
+  data(pbmc3k, package = "BadranSeq")
+  sub <- subset(pbmc3k, idents = "0")
+  expect_error(
+    do_StatsViolinPlot(sub, features = "CD3D"),
+    "group.by has only 1 level"
+  )
+})
+
+test_that("do_StatsViolinPlot errors on non-Seurat object", {
+  expect_error(
+    do_StatsViolinPlot("not_a_seurat", features = "CD3D"),
+    "object must be a Seurat object"
+  )
+})
+
+test_that("do_StatsViolinPlot errors on invalid group.by", {
+  data(pbmc3k, package = "BadranSeq")
+  expect_error(
+    do_StatsViolinPlot(pbmc3k, features = "CD3D",
+                        group.by = "nonexistent_column"),
+    "not found in metadata"
+  )
+})
+
+test_that("do_StatsViolinPlot errors without ggstatsplot", {
+  skip_if(requireNamespace("ggstatsplot", quietly = TRUE),
+          "ggstatsplot is installed, skipping missing-package test")
+  data(pbmc3k, package = "BadranSeq")
+  expect_error(
+    do_StatsViolinPlot(pbmc3k, features = "CD3D",
+                        group.by = "seurat_clusters"),
+    "ggstatsplot"
+  )
+})
+
+test_that("do_StatsViolinPlot passes type argument through", {
+  skip_if_not_installed("ggstatsplot")
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_StatsViolinPlot(pbmc3k, features = "CD3D",
+                           group.by = "seurat_clusters",
+                           type = "parametric")
+  expect_s3_class(p, "gg")
+})
