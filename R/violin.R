@@ -342,6 +342,9 @@ do_ViolinPlot <- function(
 #' @param features character. Gene names to plot (required). Must be non-empty.
 #' @param group.by character. Metadata column for grouping. If NULL (default),
 #'   uses active Idents. Must have 2 or more levels for statistical comparison.
+#' @param group.levels character. Subset of group levels to include
+#'   (default: NULL = all levels). Useful for comparing specific clusters
+#'   or conditions, e.g. \code{group.levels = c("0", "2", "5")}.
 #' @param layer character. Layer to extract expression from (default: "data").
 #' @param assay character. Assay to use (default: NULL = DefaultAssay).
 #' @param type character. Type of statistical test to use. One of
@@ -374,6 +377,11 @@ do_ViolinPlot <- function(
 #' do_StatsViolinPlot(seurat_obj, features = c("CD3D", "CD8A"),
 #'                    group.by = "seurat_clusters")
 #'
+#' # Compare specific clusters only
+#' do_StatsViolinPlot(seurat_obj, features = "CD3D",
+#'                    group.by = "seurat_clusters",
+#'                    group.levels = c("0", "2", "5"))
+#'
 #' # Parametric test
 #' do_StatsViolinPlot(seurat_obj, features = "CD3D",
 #'                    group.by = "condition", type = "parametric")
@@ -385,6 +393,7 @@ do_StatsViolinPlot <- function(
     object,
     features,
     group.by = NULL,
+    group.levels = NULL,
     layer = "data",
     assay = NULL,
     type = "nonparametric",
@@ -447,6 +456,19 @@ do_StatsViolinPlot <- function(
       colnames(object)
     )
     df[[group_col]] <- ident_lookup[df$cell_id]
+  }
+
+  # --- Filter to requested group levels ---
+
+  if (!is.null(group.levels)) {
+    invalid <- setdiff(group.levels, unique(df[[group_col]]))
+    if (length(invalid) > 0) {
+      stop(
+        "group.levels not found in '", group_col, "': ",
+        paste(invalid, collapse = ", ")
+      )
+    }
+    df <- df[df[[group_col]] %in% group.levels, ]
   }
 
   # valid features are those that survived fetch_feature_data

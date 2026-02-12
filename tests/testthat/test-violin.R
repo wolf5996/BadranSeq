@@ -183,3 +183,29 @@ test_that("do_StatsViolinPlot passes type argument through", {
                            type = "parametric")
   expect_s3_class(p, "gg")
 })
+
+test_that("do_StatsViolinPlot group.levels filters groups", {
+  skip_if_not_installed("ggstatsplot")
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_StatsViolinPlot(
+    pbmc3k,
+    features = "CD3D",
+    group.by = "seurat_clusters",
+    group.levels = c("0", "1")
+  )
+  expect_s3_class(p, "gg")
+})
+
+test_that("do_StatsViolinPlot errors on invalid group.levels", {
+  skip_if_not_installed("ggstatsplot")
+  data(pbmc3k, package = "BadranSeq")
+  expect_error(
+    do_StatsViolinPlot(
+      pbmc3k,
+      features = "CD3D",
+      group.by = "seurat_clusters",
+      group.levels = c("0", "999")
+    ),
+    "group.levels not found"
+  )
+})
