@@ -258,7 +258,7 @@ do_ViolinPlot <- function(
 
   # Inject Idents into tibble (avoids mutating the Seurat object)
   if (inject_idents) {
-    ident_lookup <- setNames(
+    ident_lookup <- stats::setNames(
       as.character(Seurat::Idents(object)),
       colnames(object)
     )
@@ -451,7 +451,7 @@ do_StatsViolinPlot <- function(
 
   # Inject Idents into tibble (avoids mutating the Seurat object)
   if (inject_idents) {
-    ident_lookup <- setNames(
+    ident_lookup <- stats::setNames(
       as.character(Seurat::Idents(object)),
       colnames(object)
     )

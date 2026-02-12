@@ -1,3 +1,14 @@
+# BadranSeq 1.1.0
+
+## New features
+
+* `do_SankeyPlot()` creates Sankey (alluvial) diagrams showing the relationship
+  between 2–3 categorical metadata variables from a Seurat object. Flows are
+  coloured by the first variable, with cell counts displayed inside strata.
+  Powered by ggalluvial.
+
+---
+
 # BadranSeq 1.0.0
 
 ## Visualisation
