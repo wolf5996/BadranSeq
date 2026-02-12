@@ -247,13 +247,14 @@ annotating the plot with p-values:
 #| fig.width: 7
 #| fig.height: 6
 do_StatsViolinPlot(pbmc3k, features = "CD3D",
-                   group.by = "seurat_clusters")
+                   group.by = "seurat_annotations",
+                   pairwise.display = "none")
 ```
 
-### Controlling pairwise comparisons
+With nine annotation groups, pairwise brackets would overwhelm the
+figure. The `pairwise.display` argument controls this:
 
-With many groups, pairwise brackets quickly clutter the plot. The
-`pairwise.display` argument controls which comparisons are drawn:
+### Controlling pairwise comparisons
 
 | Value              | Behaviour                          |
 |--------------------|------------------------------------|
@@ -264,30 +265,24 @@ With many groups, pairwise brackets quickly clutter the plot. The
 
 Setting `pairwise.display = "none"` keeps the subtitle showing the
 overall test statistic while removing all bracket annotations — useful
-for publication figures where the brackets would overlap:
-
-```{r}
-#| label: stats-violin-no-pairwise
-#| fig.width: 7
-#| fig.height: 6
-do_StatsViolinPlot(pbmc3k, features = "CD3D",
-                   group.by = "seurat_clusters",
-                   pairwise.display = "none")
-```
+for publication figures where the brackets would overlap.
 
 ### Comparing specific groups with `group.levels`
 
-Often you do not want to compare all clusters — perhaps only a few are
+Often you do not want to compare all cell types — perhaps only a few are
 biologically relevant. The `group.levels` argument filters the grouping
 variable to a specified subset *before* the statistical test is run, so
-the test is performed only on the groups you care about:
+the test is performed only on the groups you care about.
+
+With fewer groups, pairwise brackets become readable again:
+
 ```{r}
 #| label: stats-violin-group-levels
 #| fig.width: 7
 #| fig.height: 6
 do_StatsViolinPlot(pbmc3k, features = "CD3D",
-                   group.by = "seurat_clusters",
-                   group.levels = c("0", "1", "4"))
+                   group.by = "seurat_annotations",
+                   group.levels = c("Naive CD4 T", "Memory CD4 T", "CD8 T"))
 ```
 
 This is cleaner than subsetting the Seurat object manually and avoids
@@ -304,7 +299,8 @@ tests via the `type` argument:
 #| fig.width: 7
 #| fig.height: 6
 do_StatsViolinPlot(pbmc3k, features = "CD3D",
-                   group.by = "seurat_clusters",
+                   group.by = "seurat_annotations",
+                   group.levels = c("Naive CD4 T", "Memory CD4 T", "CD8 T"),
                    type = "parametric")
 ```
 
@@ -318,7 +314,8 @@ Pass a vector of gene names to get a combined patchwork layout:
 #| fig.height: 6
 do_StatsViolinPlot(pbmc3k,
                    features = c("CD3D", "CD8A"),
-                   group.by = "seurat_clusters",
+                   group.by = "seurat_annotations",
+                   pairwise.display = "none",
                    ncol = 2)
 ```
 
@@ -332,5 +329,6 @@ when you want a clean descriptive plot:
 #| label: plain-violin
 #| fig.width: 7
 #| fig.height: 5
-do_ViolinPlot(pbmc3k, features = "CD3D")
+do_ViolinPlot(pbmc3k, features = "CD3D",
+              group.by = "seurat_annotations")
 ```
