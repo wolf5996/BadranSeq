@@ -36,8 +36,9 @@
 <h2 class="pkg-version" data-toc-text="1.1.0" id="badranseq-110">BadranSeq 1.1.0<a class="anchor" aria-label="anchor" href="#badranseq-110"></a></h2>
 <div class="section level3">
 <h3 id="new-features-1-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0"></a></h3>
-<ul><li>
-<code><a href="../reference/do_SankeyPlot.html">do_SankeyPlot()</a></code> creates Sankey (alluvial) diagrams showing the relationship between 2–3 categorical metadata variables from a Seurat object. Each stratum is labelled and coloured; flows connect cells across variables. Powered by ggalluvial.</li>
+<ul><li><p><code><a href="../reference/do_SankeyPlot.html">do_SankeyPlot()</a></code> creates Sankey (alluvial) diagrams showing the relationship between 2–3 categorical metadata variables from a Seurat object. Each stratum is labelled and coloured; flows connect cells across variables. Powered by ggalluvial.</p></li>
+<li><p><code><a href="../reference/seurat_to_h5ad.html">seurat_to_h5ad()</a></code> converts a Seurat object to a Python AnnData object (and optionally writes an .h5ad file). The first requested layer becomes AnnData.X; additional layers and all reductions are transferred. Replaces sceasy, which does not support Seurat v5.</p></li>
+<li><p><code><a href="../reference/run_scvi.html">run_scvi()</a></code> wraps the scVI variational autoencoder into a single function call for batch correction. Normalises, selects highly variable features, converts to AnnData via <code><a href="../reference/seurat_to_h5ad.html">seurat_to_h5ad()</a></code>, trains the model, and stores the latent representation as a dimensional reduction. Requires Python <code>scvi-tools</code> and <code>anndata</code>, plus R packages <code>reticulate</code> and <code>anndata</code>.</p></li>
 </ul><hr></div>
 </div>
     <div class="section level2">

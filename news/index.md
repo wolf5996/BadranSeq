@@ -10,6 +10,21 @@
   is labelled and coloured; flows connect cells across variables.
   Powered by ggalluvial.
 
+- [`seurat_to_h5ad()`](https://wolf5996.github.io/BadranSeq/reference/seurat_to_h5ad.md)
+  converts a Seurat object to a Python AnnData object (and optionally
+  writes an .h5ad file). The first requested layer becomes AnnData.X;
+  additional layers and all reductions are transferred. Replaces sceasy,
+  which does not support Seurat v5.
+
+- [`run_scvi()`](https://wolf5996.github.io/BadranSeq/reference/run_scvi.md)
+  wraps the scVI variational autoencoder into a single function call for
+  batch correction. Normalises, selects highly variable features,
+  converts to AnnData via
+  [`seurat_to_h5ad()`](https://wolf5996.github.io/BadranSeq/reference/seurat_to_h5ad.md),
+  trains the model, and stores the latent representation as a
+  dimensional reduction. Requires Python `scvi-tools` and `anndata`,
+  plus R packages `reticulate` and `anndata`.
+
 ------------------------------------------------------------------------
 
 ## BadranSeq 1.0.0
