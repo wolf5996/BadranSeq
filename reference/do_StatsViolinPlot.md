@@ -21,6 +21,7 @@ do_StatsViolinPlot(
   object,
   features,
   group.by = NULL,
+  group.levels = NULL,
   layer = "data",
   assay = NULL,
   type = "nonparametric",
@@ -46,6 +47,12 @@ do_StatsViolinPlot(
 
   character. Metadata column for grouping. If NULL (default), uses
   active Idents. Must have 2 or more levels for statistical comparison.
+
+- group.levels:
+
+  character. Subset of group levels to include (default: NULL = all
+  levels). Useful for comparing specific clusters or conditions, e.g.
+  `group.levels = c("0", "2", "5")`.
 
 - layer:
 
@@ -108,6 +115,11 @@ do_StatsViolinPlot(seurat_obj, features = "CD3D",
 # Multiple genes
 do_StatsViolinPlot(seurat_obj, features = c("CD3D", "CD8A"),
                    group.by = "seurat_clusters")
+
+# Compare specific clusters only
+do_StatsViolinPlot(seurat_obj, features = "CD3D",
+                   group.by = "seurat_clusters",
+                   group.levels = c("0", "2", "5"))
 
 # Parametric test
 do_StatsViolinPlot(seurat_obj, features = "CD3D",
