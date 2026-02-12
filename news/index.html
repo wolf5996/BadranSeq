@@ -42,6 +42,8 @@
 <li><p><code><a href="../reference/do_FeaturePlot.html">do_FeaturePlot()</a></code> overlays gene expression on embeddings using a viridis colour scale with cells ordered by expression.</p></li>
 <li><p><code><a href="../reference/EnhancedElbowPlot.html">EnhancedElbowPlot()</a></code> extends Seurat’s elbow plot with a variance percentage axis and an optional visual cutoff line.</p></li>
 <li><p>Split-panel silhouette feature: when <code>split.by</code> is used, each panel shows coloured cells for the current category against a grey silhouette of all cells, preserving spatial context across panels.</p></li>
+<li><p><code><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot()</a></code> creates statistical violin plots via <code><a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html" class="external-link">ggstatsplot::ggbetweenstats()</a></code> with Seurat-aware data extraction, automatic colour generation, and nonparametric testing (Kruskal–Wallis + Dunn’s) by default. The <code>group.levels</code> argument allows comparing a subset of groups without manually subsetting the Seurat object. The <code>pairwise.display</code> argument controls bracket visibility.</p></li>
+<li><p><code><a href="../reference/do_ViolinPlot.html">do_ViolinPlot()</a></code> creates descriptive violin plots with boxplot overlay, jittered raw data points, and centrality markers (median/mean diamond with numeric label). Pure ggplot2, no statistical testing.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="data-extraction-1-0-0">Data extraction<a class="anchor" aria-label="anchor" href="#data-extraction-1-0-0"></a></h3>
@@ -62,7 +64,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="data-1-0-0">Data<a class="anchor" aria-label="anchor" href="#data-1-0-0"></a></h3>
-<ul><li>Bundled <code>pbmc3k</code> dataset: 3000 PBMCs preprocessed with SCTransform, PCA, UMAP, and clustered at resolution 0.5.</li>
+<ul><li>Bundled <code>pbmc3k</code> dataset: 3000 PBMCs preprocessed with SCTransform, PCA, UMAP, and clustered at resolution 0.5. Includes <code>seurat_annotations</code> with biological cell type labels.</li>
 </ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
