@@ -8,15 +8,23 @@ data(pbmc3k, package = "BadranSeq")
 
 test_that("do_SankeyPlot returns ggplot for 2 columns", {
   skip_if_not_installed("ggalluvial")
-  p <- do_SankeyPlot(pbmc3k, columns = c("seurat_annotations", "seurat_clusters"))
+  p <- do_SankeyPlot(
+    pbmc3k,
+    columns = c("seurat_annotations", "seurat_clusters")
+  )
   expect_s3_class(p, "gg")
 })
 
 test_that("do_SankeyPlot returns ggplot for 3 columns", {
   skip_if_not_installed("ggalluvial")
   set.seed(1)
-  pbmc3k$Phase <- sample(c("G1", "S", "G2M"), ncol(pbmc3k), replace = TRUE)
-  p <- do_SankeyPlot(pbmc3k, columns = c("seurat_annotations", "seurat_clusters", "Phase"))
+  pbmc3k$Phase <- sample(
+    c("G1", "S", "G2M"), ncol(pbmc3k), replace = TRUE
+  )
+  p <- do_SankeyPlot(
+    pbmc3k,
+    columns = c("seurat_annotations", "seurat_clusters", "Phase")
+  )
   expect_s3_class(p, "gg")
 })
 
@@ -39,44 +47,41 @@ test_that("do_SankeyPlot errors with 4 columns", {
 test_that("do_SankeyPlot errors with invalid column name", {
   skip_if_not_installed("ggalluvial")
   expect_error(
-    do_SankeyPlot(pbmc3k, columns = c("seurat_annotations", "nonexistent")),
+    do_SankeyPlot(
+      pbmc3k,
+      columns = c("seurat_annotations", "nonexistent")
+    ),
     "not found in metadata"
   )
 })
 
 test_that("do_SankeyPlot errors with non-Seurat object", {
   skip_if_not_installed("ggalluvial")
-  expect_error(do_SankeyPlot(data.frame(), columns = c("a", "b")), "Seurat")
+  expect_error(
+    do_SankeyPlot(data.frame(), columns = c("a", "b")),
+    "Seurat"
+  )
 })
 
 test_that("do_SankeyPlot messages about dropped NAs", {
   skip_if_not_installed("ggalluvial")
   expect_message(
-    do_SankeyPlot(pbmc3k, columns = c("seurat_annotations", "seurat_clusters")),
+    do_SankeyPlot(
+      pbmc3k,
+      columns = c("seurat_annotations", "seurat_clusters")
+    ),
     "excluded"
   )
 })
 
-test_that("do_SankeyPlot accepts custom colors", {
-  skip_if_not_installed("ggalluvial")
-  lvls <- levels(pbmc3k$seurat_annotations)
-  lvls <- lvls[!is.na(lvls)]
-  custom <- rep("red", length(lvls))
-  names(custom) <- lvls
-  p <- suppressMessages(
-    do_SankeyPlot(pbmc3k,
-                  columns = c("seurat_annotations", "seurat_clusters"),
-                  colors.use = custom)
-  )
-  expect_s3_class(p, "gg")
-})
-
-test_that("do_SankeyPlot works with label = FALSE", {
+test_that("do_SankeyPlot accepts custom label.size", {
   skip_if_not_installed("ggalluvial")
   p <- suppressMessages(
-    do_SankeyPlot(pbmc3k,
-                  columns = c("seurat_annotations", "seurat_clusters"),
-                  label = FALSE)
+    do_SankeyPlot(
+      pbmc3k,
+      columns = c("seurat_annotations", "seurat_clusters"),
+      label.size = 5
+    )
   )
   expect_s3_class(p, "gg")
 })

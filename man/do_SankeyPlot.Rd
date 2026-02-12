@@ -4,15 +4,7 @@
 \alias{do_SankeyPlot}
 \title{Sankey Plot for Categorical Metadata}
 \usage{
-do_SankeyPlot(
-  object,
-  columns,
-  colors.use = NULL,
-  label = TRUE,
-  label.size = 3,
-  alpha = 0.5,
-  curve_type = "sigmoid"
-)
+do_SankeyPlot(object, columns, label.size = 3)
 }
 \arguments{
 \item{object}{Seurat object.}
@@ -20,44 +12,27 @@ do_SankeyPlot(
 \item{columns}{character. Vector of 2–3 metadata column names whose
 relationships to visualise (required).}
 
-\item{colors.use}{character. Named vector of colours for the first column
-in \code{columns}. If NULL, generates colours automatically with
-\code{\link{generate_badranseq_colors}}.}
-
-\item{label}{logical. Whether to display cell counts inside strata
-(default: TRUE).}
-
 \item{label.size}{numeric. Text size for stratum labels (default: 3).}
-
-\item{alpha}{numeric. Flow transparency (default: 0.5).}
-
-\item{curve_type}{character. Curve type for flows (default: "sigmoid").
-Passed to \code{ggalluvial::geom_alluvium()}.}
 }
 \value{
 A ggplot2 object.
 }
 \description{
 Creates a Sankey (alluvial) diagram showing the relationship between 2–3
-categorical metadata variables from a Seurat object. Flows are coloured by
-the first variable in \code{columns}. Cell counts are displayed inside
-each stratum by default.
+categorical metadata variables from a Seurat object. Each stratum is
+labelled and coloured; flows connect cells across variables.
 
 Requires the \pkg{ggalluvial} package to be installed.
 }
 \examples{
 \dontrun{
 # Relationship between cell type and cluster
-do_SankeyPlot(seurat_obj, columns = c("seurat_annotations", "seurat_clusters"))
+do_SankeyPlot(seurat_obj,
+              columns = c("seurat_annotations", "seurat_clusters"))
 
 # Three-way relationship
 do_SankeyPlot(seurat_obj,
               columns = c("seurat_annotations", "condition", "Phase"))
-
-# Custom colours
-do_SankeyPlot(seurat_obj,
-              columns = c("seurat_annotations", "seurat_clusters"),
-              colors.use = c("B" = "blue", "T" = "red"))
 }
 
 }
