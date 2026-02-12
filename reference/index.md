@@ -10,6 +10,8 @@
   : Enhanced Feature Plot with Viridis Support
 - [`do_PcaPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_PcaPlot.md)
   : Enhanced PCA Plot with Variance Explained
+- [`do_SankeyPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_SankeyPlot.md)
+  : Sankey Plot for Categorical Metadata
 - [`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md)
   : Statistical Violin Plot via ggbetweenstats
 - [`do_UmapPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_UmapPlot.md)
