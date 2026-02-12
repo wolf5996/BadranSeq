@@ -6,9 +6,9 @@
 
 - [`do_SankeyPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_SankeyPlot.md)
   creates Sankey (alluvial) diagrams showing the relationship between
-  2–3 categorical metadata variables from a Seurat object. Flows are
-  coloured by the first variable, with cell counts displayed inside
-  strata. Powered by ggalluvial.
+  2–3 categorical metadata variables from a Seurat object. Each stratum
+  is labelled and coloured; flows connect cells across variables.
+  Powered by ggalluvial.
 
 ------------------------------------------------------------------------
 
