@@ -1,480 +1,160 @@
 # BadranSeq
 
-**BadranSeq** provides publication-ready visualization tools for
-single-cell RNA sequencing (scRNA-Seq) data, built on native ggplot2
-with consistent, beautiful defaults.
+**BadranSeq** is an R package that produces publication-ready figures
+from Seurat objects without additional styling. Built on native ggplot2,
+it closes the gap between exploratory analysis and manuscript-quality
+visualisation that Seurat’s defaults leave open.
 
-## Why BadranSeq?
+## The problem
 
-If you’ve ever spent time customizing Seurat plots for publication, you
-know the pain:
+Seurat’s plotting functions are designed for exploration, not
+publication. Every project ends with the same boilerplate: computing and
+formatting PCA variance labels, adding cell borders, styling themes,
+building split-panel comparisons that preserve spatial context, and
+wiring up statistical annotations on violin plots. This work is repeated
+across every analysis, every manuscript, and every lab.
 
-| Problem                        | Seurat Default          | BadranSeq Solution                   |
-|--------------------------------|-------------------------|--------------------------------------|
-| PCA plots lack context         | No variance explained   | **Automatic variance % on axes**     |
-| Cells blend together           | No borders              | **Black cell borders for clarity**   |
-| Split comparisons lose context | Facets only show subset | **Grey silhouettes of all cells**    |
-| Repetitive styling             | Minimal defaults        | **Publication-ready out of the box** |
-| No cluster labels              | Must add manually       | **Labels shown by default**          |
+## How BadranSeq solves it
 
-BadranSeq is **lightweight** (native ggplot2, no heavy dependencies) and
-**opinionated** (sensible defaults so you can focus on biology, not
-aesthetics).
+| Feature                     |              Seurat              |                   BadranSeq                   |
+|-----------------------------|:--------------------------------:|:---------------------------------------------:|
+| PCA variance labels on axes |                No                |                 **Automatic**                 |
+| Cell borders                |                No                |               **On by default**               |
+| Cluster labels              |          Off by default          |               **On by default**               |
+| Split-panel silhouettes     | No — facets lose spatial context |     **Grey silhouette preserves context**     |
+| Statistical violin plots    |           Not built-in           | **Kruskal–Wallis + pairwise via ggstatsplot** |
+| Viridis feature plots       |                No                |                  **Default**                  |
+| Interactive cell selection  |     Limited (`CellSelector`)     |   **Additive/subtractive brush selection**    |
+| Publication theme           |                No                |       **Consistent across all outputs**       |
+| Automatic rasterisation     |                No                |        **\>50k cells auto-rasterised**        |
 
-## Installation
+## Visual comparison
 
-``` r
-# Using pak (recommended)
-if (!require(pak)) install.packages("pak")
-pak::pkg_install("wolf5996/BadranSeq")
-
-# Or using devtools
-if (!require(devtools)) install.packages("devtools")
-devtools::install_github("wolf5996/BadranSeq")
-```
-
-## Setup
+The figures below are generated with default settings — no theme
+adjustments, no manual annotations.
 
 ``` r
 library(BadranSeq)
-library(ggplot2)
-
-# Load bundled PBMC3k dataset
-data(pbmc3k)
-```
-
-  
-
-# Function Examples
-
-## `BadranSeq::do_UmapPlot()` - UMAP Visualization
-
-**Why it’s better:** Shows cluster labels by default, includes axis
-labels, and renders cells with black borders for clear visibility even
-in dense regions.
-
-### Basic Usage
-
-``` r
-BadranSeq::do_UmapPlot(pbmc3k)
-#> Loading required namespace: SeuratObject
-```
-
-![](reference/figures/README-umap-basic-1.png)
-
-### Customization Options
-
-``` r
-# Color by a different metadata column
-BadranSeq::do_UmapPlot(pbmc3k, group.by = "seurat_clusters", label = TRUE)
-```
-
-![](reference/figures/README-umap-custom-1.png)
-
-### Without Labels (for cleaner figures)
-
-``` r
-BadranSeq::do_UmapPlot(pbmc3k, label = FALSE)
-```
-
-![](reference/figures/README-umap-no-labels-1.png)
-
-### Without Cell Borders
-
-``` r
-BadranSeq::do_UmapPlot(pbmc3k, plot_cell_borders = FALSE)
-```
-
-![](reference/figures/README-umap-no-borders-1.png)
-
-  
-
-## `BadranSeq::do_PcaPlot()` - PCA with Variance Explained
-
-**Why it’s better:** Automatically calculates and displays variance
-explained percentages on the axes. No more manual calculation of
-`(stdev^2 / sum(stdev^2)) * 100`.
-
-### Basic Usage
-
-``` r
-BadranSeq::do_PcaPlot(pbmc3k)
-```
-
-![](reference/figures/README-pca-basic-1.png)
-
-Notice the axis labels show “PC1 (X.X%)” - this is calculated
-automatically from the Seurat object’s PCA standard deviations.
-
-### Different PC Dimensions
-
-``` r
-# Plot PC2 vs PC3
-BadranSeq::do_PcaPlot(pbmc3k, dims = c(2, 3))
-```
-
-![](reference/figures/README-pca-dims-1.png)
-
-### Control Variance Decimal Places
-
-``` r
-BadranSeq::do_PcaPlot(pbmc3k, variance_digits = 2)
-```
-
-![](reference/figures/README-pca-digits-1.png)
-
-  
-
-## `BadranSeq::do_DimPlot()` - Universal Dimensionality Reduction
-
-**Why it’s better:** Single entry point that automatically routes to the
-appropriate specialized function (PCA gets variance labels, UMAP gets
-standard labels).
-
-``` r
-# Automatically uses UMAP
-BadranSeq::do_DimPlot(pbmc3k)
-```
-
-![](reference/figures/README-dimplot-examples-1.png)
-
-``` r
-# Routes to BadranSeq::do_PcaPlot() with variance labels
-BadranSeq::do_DimPlot(pbmc3k, reduction = "pca")
-```
-
-![](reference/figures/README-dimplot-pca-1.png)
-
-## Split.by with Silhouettes
-
-**Why it’s better:** When comparing populations across conditions,
-standard faceting only shows cells in each category. You lose spatial
-context. BadranSeq’s silhouette approach shows **all cells in grey** as
-background, with only the current category colored - so you can see
-where your population sits relative to the whole dataset.
-
-``` r
-BadranSeq::do_UmapPlot(pbmc3k, split.by = "seurat_clusters", ncol = 4)
-```
-
-![](reference/figures/README-split-silhouette-1.png)
-
-Each panel shows: 1. **Grey silhouette** of ALL cells (background
-context) 2. **Black borders** for ALL cells (structure) 3. **Colored
-cells** only for the current split category
-
-This is inspired by SCpubr’s approach and provides crucial spatial
-context when comparing populations.
-
-  
-
-## `BadranSeq::do_FeaturePlot()` - Gene Expression Overlay
-
-**Why it’s better:** Uses viridis color scale by default (perceptually
-uniform, colorblind-friendly), includes cell borders, and supports
-expression cutoffs.
-
-### Basic Usage
-
-``` r
-BadranSeq::do_FeaturePlot(pbmc3k, features = "CD3D")
-```
-
-![](reference/figures/README-feature-basic-1.png)
-
-### Multiple Features
-
-``` r
-plots <- BadranSeq::do_FeaturePlot(pbmc3k, features = c("CD3D", "CD8A", "CD14"))
-# Returns a list of plots
-patchwork::wrap_plots(plots, ncol = 3)
-```
-
-![](reference/figures/README-feature-multiple-1.png)
-
-### Different Viridis Palettes
-
-``` r
-# Palette options: "A" through "H"
-BadranSeq::do_FeaturePlot(pbmc3k, features = "CD3D", viridis.palette = "C")
-```
-
-![](reference/figures/README-feature-viridis-1.png)
-
-### Expression Cutoffs
-
-``` r
-# Clip to 10th and 90th percentiles
-BadranSeq::do_FeaturePlot(pbmc3k, features = "CD3D", min.cutoff = "q10", max.cutoff = "q90")
-```
-
-![](reference/figures/README-feature-cutoffs-1.png)
-
-### On PCA (with variance labels)
-
-``` r
-BadranSeq::do_FeaturePlot(pbmc3k, features = "CD3D", reduction = "pca")
-```
-
-![](reference/figures/README-feature-pca-1.png)
-
-  
-
-## `BadranSeq::EnhancedElbowPlot()` - PCA Variance Visualization
-
-**Why it’s better:** Shows variance explained (not just standard
-deviation), includes optional cutoff annotation, and has
-publication-ready styling.
-
-### Basic Usage
-
-``` r
-BadranSeq::EnhancedElbowPlot(pbmc3k)
-```
-
-![](reference/figures/README-elbow-basic-1.png)
-
-### With Cutoff Annotation
-
-``` r
-BadranSeq::EnhancedElbowPlot(pbmc3k, cutoff_pc = 10)
-```
-
-![](reference/figures/README-elbow-cutoff-1.png)
-
-### Standard Deviation Mode (like Seurat)
-
-``` r
-BadranSeq::EnhancedElbowPlot(pbmc3k, variance = FALSE)
-```
-
-![](reference/figures/README-elbow-stdev-1.png)
-
-  
-
-## `BadranSeq::get_pca_variance()` - Extract Variance Data
-
-**Why it’s better:** Returns a clean data.frame with PC number, variance
-explained, and cumulative variance - useful for programmatic access or
-custom plots.
-
-``` r
-# Get variance for top 10 PCs
-var_df <- BadranSeq::get_pca_variance(pbmc3k, n_pcs = 10)
-var_df
-#>    PC variance_explained cumulative_variance
-#> 1   1          33.084958            33.08496
-#> 2   2          13.034154            46.11911
-#> 3   3           9.346548            55.46566
-#> 4   4           5.321569            60.78723
-#> 5   5           2.997895            63.78512
-#> 6   6           2.224722            66.00985
-#> 7   7           2.042296            68.05214
-#> 8   8           1.779563            69.83171
-#> 9   9           1.397088            71.22879
-#> 10 10           1.249528            72.47832
-```
-
-### Use for Custom Analysis
-
-``` r
-# Find number of PCs for 80% cumulative variance
-var_df <- BadranSeq::get_pca_variance(pbmc3k)
-min(which(var_df$cumulative_variance >= 80))
-#> [1] 18
-```
-
-  
-
-## `BadranSeq::generate_badranseq_colors()` - Color Palette Generation
-
-**Why it’s better:** Generates vibrant, distinguishable categorical
-colors using the same algorithm as SCpubr (colorspace Dark 3 palette
-with saturation/value adjustments).
-
-``` r
-# Generate 8 colors
-colors <- BadranSeq::generate_badranseq_colors(8)
-colors
-#> [1] "#C83658FF" "#AE6700FF" "#787F00FF" "#008F3BFF" "#009483FF" "#008EBAFF"
-#> [7] "#5E4CCDFF" "#BE34ACFF"
-
-# Visualize
-barplot(rep(1, 8), col = colors, border = NA, axes = FALSE)
-```
-
-![](reference/figures/README-colors-demo-1.png)
-
-### Custom Colors
-
-``` r
-# You can also provide your own colors
-my_colors <- c("red", "blue", "green")
-BadranSeq::generate_badranseq_colors(3, custom.colors = my_colors)
-#> [1] "red"   "blue"  "green"
-```
-
-  
-
-## `BadranSeq::select_cells_interactive()` - Shiny-based Cell Selection
-
-**Why it’s better:** Provides an interactive GUI for selecting cells
-from embeddings with brush selection, additive/subtractive selection,
-and returns either cell names or a subsetted Seurat object.
-
-``` r
-# Launch interactive selector (only works in interactive R sessions)
-selected_cells <- BadranSeq::select_cells_interactive(pbmc3k, reduction = "umap", return_cells = TRUE)
-
-# Or get a subsetted Seurat object directly
-subset_obj <- BadranSeq::select_cells_interactive(pbmc3k, reduction = "umap")
-```
-
-Features: - **Brush selection**: Click and drag to select cells -
-**Additive selection**: Build up selection across multiple brushes -
-**Deselection**: Remove cells from selection - **Clear**: Start over -
-**Returns**: Either cell names (character vector) or subsetted Seurat
-object
-
-  
-
-## `BadranSeq::seurat_sleepwalk()` - Interactive Distance Exploration
-
-**Why it’s better:** Thin wrapper around the excellent `sleepwalk`
-package for exploring how well your 2D embedding preserves
-high-dimensional distances.
-
-``` r
-# Launch interactive distance explorer
-BadranSeq::seurat_sleepwalk(pbmc3k, embedding = "umap", features = "pca")
-```
-
-Hover over cells to see which other cells are nearby in PCA space -
-helps identify whether your UMAP is faithfully representing the data
-structure.
-
-  
-
-## `BadranSeq::theme_badranseq()` - Publication-Ready Theme
-
-All plots use a consistent theme that you can also apply to your own
-ggplots:
-
-``` r
-# Apply to any ggplot
-library(ggplot2)
-
-ggplot(mtcars, aes(mpg, wt, color = factor(cyl))) +
-  geom_point(size = 3) +
-  BadranSeq::theme_badranseq() +
-  scale_color_manual(values = BadranSeq::generate_badranseq_colors(3))
-```
-
-![](reference/figures/README-theme-demo-1.png)
-
-  
-
-# Comparison with Seurat
-
-``` r
 library(Seurat)
-#> Warning: package 'Seurat' was built under R version 4.5.1
-#> Loading required package: SeuratObject
-#> Warning: package 'SeuratObject' was built under R version 4.5.1
-#> Loading required package: sp
-#> 
-#> Attaching package: 'SeuratObject'
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, t
+library(ggplot2)
 library(patchwork)
-#> Warning: package 'patchwork' was built under R version 4.5.1
+data(pbmc3k)
 
-# Seurat default
-p1 <- DimPlot(pbmc3k, reduction = "umap") + ggtitle("Seurat DimPlot")
-
-# BadranSeq
-p2 <- BadranSeq::do_UmapPlot(pbmc3k) + ggtitle("BadranSeq do_UmapPlot")
-
+p1 <- DimPlot(pbmc3k, reduction = "umap") + ggtitle("Seurat::DimPlot()")
+p2 <- do_UmapPlot(pbmc3k) + ggtitle("BadranSeq::do_UmapPlot()")
 p1 + p2
 ```
 
 ![](reference/figures/README-comparison-1.png)
 
-Key differences: - **Labels**: BadranSeq shows labels by default -
-**Cell borders**: BadranSeq adds black borders for clarity - **Theme**:
-BadranSeq uses a cleaner, publication-ready theme - **Colors**:
-BadranSeq uses a more vibrant color palette
+BadranSeq adds cell borders, boxed cluster labels, a vivid colour
+palette, and a clean theme — all with one function call.
 
-  
+### PCA with automatic variance annotation
 
-# Dependencies
+``` r
+p1 <- DimPlot(pbmc3k, reduction = "pca") + ggtitle("Seurat::DimPlot(reduction = 'pca')")
+p2 <- do_PcaPlot(pbmc3k) + ggtitle("BadranSeq::do_PcaPlot()")
+p1 + p2
+```
 
-**Core** (automatically installed): - `ggplot2` - all plotting -
-`Seurat` - scRNA-seq data structures - `colorspace` - color palette
-generation - `magrittr` - pipe operator
+![](reference/figures/README-pca-comparison-1.png)
 
-**Suggested** (install for full functionality): - `patchwork` -
-combining split.by panels - `ggrastr` - rasterization for large
-datasets - `shiny` - interactive cell selection - `sleepwalk` -
-interactive distance exploration
+Seurat’s PCA plot shows “PC_1” and “PC_2” with no indication of how much
+variance each component explains. BadranSeq computes and formats this
+automatically.
 
-  
+### Split-panel silhouettes
 
-# Acknowledgments
+When comparing conditions, Seurat’s `split.by` facets each panel
+independently — you cannot see where a subpopulation sits relative to
+the full dataset. BadranSeq renders all cells as a grey silhouette in
+every panel, overlaying only the current category in colour:
 
-BadranSeq’s aesthetic approach is heavily inspired by
+``` r
+do_UmapPlot(pbmc3k, split.by = "condition")
+```
+
+![](reference/figures/README-split-comparison-1.png)
+
+### Statistical violin plots
+
+[`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md)
+wraps
+[`ggstatsplot::ggbetweenstats()`](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html)
+with Seurat-aware data extraction, automatic colour generation, and a
+`group.levels` argument for comparing specific clusters:
+
+``` r
+do_StatsViolinPlot(pbmc3k, features = "CD3D",
+                   group.by = "seurat_clusters",
+                   group.levels = c("0", "1", "4"))
+```
+
+![](reference/figures/README-stats-violin-1.png)
+
+Set `pairwise.display = "none"` to keep the omnibus test subtitle
+without bracket clutter.
+
+## Installation
+
+``` r
+# pak (recommended)
+pak::pkg_install("wolf5996/BadranSeq")
+
+# devtools
+devtools::install_github("wolf5996/BadranSeq")
+```
+
+## Function reference
+
+| Function                                                                                                     | Purpose                                          |
+|--------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+| [`do_UmapPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_UmapPlot.md)                             | UMAP with borders, labels, silhouette split      |
+| [`do_PcaPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_PcaPlot.md)                               | PCA with automatic variance labels               |
+| [`do_DimPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_DimPlot.md)                               | Unified entry point (routes to UMAP/PCA handler) |
+| [`do_FeaturePlot()`](https://wolf5996.github.io/BadranSeq/reference/do_FeaturePlot.md)                       | Gene expression overlay with viridis scale       |
+| [`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md)               | Statistical violin via ggbetweenstats            |
+| [`do_ViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_ViolinPlot.md)                         | Descriptive violin (no statistics)               |
+| [`EnhancedElbowPlot()`](https://wolf5996.github.io/BadranSeq/reference/EnhancedElbowPlot.md)                 | Variance-explained elbow plot with cutoff        |
+| [`get_pca_variance()`](https://wolf5996.github.io/BadranSeq/reference/get_pca_variance.md)                   | Extract PCA variance as a data.frame             |
+| [`select_cells_interactive()`](https://wolf5996.github.io/BadranSeq/reference/select_cells_interactive.md)   | Shiny brush selection of cells                   |
+| [`seurat_sleepwalk()`](https://wolf5996.github.io/BadranSeq/reference/seurat_sleepwalk.md)                   | Interactive embedding distance explorer          |
+| [`fetch_feature_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_feature_data.md)               | Tidy long-format extraction from Seurat          |
+| [`theme_badranseq()`](https://wolf5996.github.io/BadranSeq/reference/theme_badranseq.md)                     | Publication theme for any ggplot                 |
+| [`generate_badranseq_colors()`](https://wolf5996.github.io/BadranSeq/reference/generate_badranseq_colors.md) | Vivid categorical colour palette                 |
+
+Full documentation and worked examples: **[pkgdown
+site](https://wolf5996.github.io/BadranSeq/)**
+
+## Dependencies
+
+**Core** (automatically installed): ggplot2, Seurat, colorspace, dplyr,
+tidyr, tibble, purrr, rlang, magrittr, SeuratObject, shiny, sleepwalk,
+stats.
+
+**Optional** (install for extended features): patchwork (multi-panel
+layouts), ggrastr (rasterisation), ggstatsplot (statistical violin
+plots).
+
+## Acknowledgements
+
+BadranSeq’s aesthetic design is inspired by
 [SCpubr](https://github.com/enblacar/SCpubr) by Enrique Blanco Carmona.
-Key design elements adopted from SCpubr include:
+Key elements adapted from SCpubr include cell border rendering, colour
+palette generation, and the silhouette split approach. BadranSeq differs
+by providing a lighter-weight native ggplot2 implementation with
+additional features (PCA variance labels, statistical violin plots,
+interactive cell selection).
 
-- Cell border visualization for clarity
-- Color palette generation using colorspace
-- Clean, minimal theme styling
-- The silhouette approach for split.by comparisons
+## Citation
 
-BadranSeq differs by providing a **lighter-weight, native ggplot2
-implementation** without SCpubr as a dependency, while adding features
-like **automatic PCA variance labels**.
+If you use BadranSeq in published work, please cite:
 
-If you need SCpubr’s full feature set (dozens of specialized plot
-types), use SCpubr. If you want the core aesthetics with minimal
-dependencies, use BadranSeq.
-
-  
-
-# Citation
-
-If you use BadranSeq in your research, please cite:
-
-> Elshenawy, B. (2025). BadranSeq: Publication-ready scRNA-Seq
-> visualization. R package version 0.0.0.9000.
+> Elshenawy, B. (2025). BadranSeq: Publication-ready visualisation for
+> single-cell RNA sequencing data in R. R package version 1.0.0.
 > <https://github.com/wolf5996/BadranSeq>
 
-*Author: Dr. Badran Elshenawy, University of Oxford*
+## License
 
-  
-
-# Getting Help
-
-- **Issues**: Report bugs and request features at [GitHub
-  Issues](https://github.com/wolf5996/BadranSeq/issues)
-- **Documentation**: Use `?function_name` for help with specific
-  functions
-
-  
-
-# License
-
-MIT License - see
-[LICENSE](https://wolf5996.github.io/BadranSeq/LICENSE) for details.
-
-  
-
-# Disclaimer
-
-This package was developed independently by Dr. Badran Elshenawy as a
-personal project. It does not represent the University of Oxford, the
-Nuffield Department of Medicine, or any affiliated institution. Use at
-your own discretion.
-
-*Developed by Dr. Badran Elshenawy*
+MIT

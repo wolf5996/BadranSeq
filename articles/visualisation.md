@@ -204,3 +204,151 @@ do_UmapPlot(pbmc3k, group.by = "seurat_annotations", split.by = "condition")
 ```
 
 ![](visualisation_files/figure-html/split-annotations-1.png)
+
+## Violin plots
+
+BadranSeq provides two violin plot functions built on
+[`fetch_feature_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_feature_data.md):
+
+- **[`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md)**
+  — wraps
+  [`ggstatsplot::ggbetweenstats()`](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html)
+  for between-group comparisons with built-in statistical testing.
+- **[`do_ViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_ViolinPlot.md)**
+  — a pure ggplot2 violin with boxplot overlay, jittered points, and
+  centrality markers (no statistical testing).
+
+The primary function is
+[`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md).
+If you want the same aesthetic without statistics, use
+[`do_ViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_ViolinPlot.md)
+or set `pairwise.display = "none"` in
+[`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md).
+
+### Statistical violin plots
+
+[`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md)
+runs a nonparametric omnibus test (Kruskal–Wallis) and pairwise
+comparisons (Dunn’s test) by default, annotating the plot with p-values:
+
+``` r
+do_StatsViolinPlot(pbmc3k, features = "CD3D",
+                   group.by = "seurat_clusters")
+```
+
+    ## Warning: ✖ Number of labels is greater than default palette color count.
+    ## ℹ Select another color `palette` (and/or `package`).
+
+    ## Scale for colour is already present.
+    ## Adding another scale for colour, which will replace the existing scale.
+
+![](visualisation_files/figure-html/stats-violin-basic-1.png)
+
+### Controlling pairwise comparisons
+
+With many groups, pairwise brackets quickly clutter the plot. The
+`pairwise.display` argument controls which comparisons are drawn:
+
+| Value               | Behaviour                        |
+|---------------------|----------------------------------|
+| `"significant"`     | Only significant pairs (default) |
+| `"non-significant"` | Only non-significant pairs       |
+| `"all"`             | Every pairwise comparison        |
+| `"none"`            | Omnibus test only, no brackets   |
+
+Setting `pairwise.display = "none"` keeps the subtitle showing the
+overall test statistic while removing all bracket annotations — useful
+for publication figures where the brackets would overlap:
+
+``` r
+do_StatsViolinPlot(pbmc3k, features = "CD3D",
+                   group.by = "seurat_clusters",
+                   pairwise.display = "none")
+```
+
+    ## Warning: ✖ Number of labels is greater than default palette color count.
+    ## ℹ Select another color `palette` (and/or `package`).
+
+    ## Scale for colour is already present.
+    ## Adding another scale for colour, which will replace the existing scale.
+
+![](visualisation_files/figure-html/stats-violin-no-pairwise-1.png)
+
+### Comparing specific groups with `group.levels`
+
+Often you do not want to compare all clusters — perhaps only a few are
+biologically relevant. The `group.levels` argument filters the grouping
+variable to a specified subset *before* the statistical test is run, so
+the test is performed only on the groups you care about:
+
+``` r
+do_StatsViolinPlot(pbmc3k, features = "CD3D",
+                   group.by = "seurat_clusters",
+                   group.levels = c("0", "1", "4"))
+```
+
+    ## Scale for colour is already present.
+    ## Adding another scale for colour, which will replace the existing scale.
+
+![](visualisation_files/figure-html/stats-violin-group-levels-1.png)
+
+This is cleaner than subsetting the Seurat object manually and avoids
+the need to drop unused factor levels.
+
+### Parametric and Bayesian alternatives
+
+The default nonparametric test is appropriate for most scRNA-seq data,
+but you can switch to parametric (ANOVA / *t*-test), robust, or Bayesian
+tests via the `type` argument:
+
+``` r
+do_StatsViolinPlot(pbmc3k, features = "CD3D",
+                   group.by = "seurat_clusters",
+                   type = "parametric")
+```
+
+    ## Warning: ✖ Number of labels is greater than default palette color count.
+    ## ℹ Select another color `palette` (and/or `package`).
+
+    ## Scale for colour is already present.
+    ## Adding another scale for colour, which will replace the existing scale.
+
+![](visualisation_files/figure-html/stats-violin-parametric-1.png)
+
+### Multiple genes
+
+Pass a vector of gene names to get a combined patchwork layout:
+
+``` r
+do_StatsViolinPlot(pbmc3k,
+                   features = c("CD3D", "CD8A"),
+                   group.by = "seurat_clusters",
+                   ncol = 2)
+```
+
+    ## Warning: ✖ Number of labels is greater than default palette color count.
+    ## ℹ Select another color `palette` (and/or `package`).
+
+    ## Scale for colour is already present.
+    ## Adding another scale for colour, which will replace the existing scale.
+
+    ## Warning: ✖ Number of labels is greater than default palette color count.
+    ## ℹ Select another color `palette` (and/or `package`).
+
+    ## Scale for colour is already present.
+    ## Adding another scale for colour, which will replace the existing scale.
+
+![](visualisation_files/figure-html/stats-violin-multi-1.png)
+
+### Plain violin plots
+
+[`do_ViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_ViolinPlot.md)
+produces a violin + boxplot + jitter + centrality marker (median
+diamond) without any statistical annotation. Use this when you want a
+clean descriptive plot:
+
+``` r
+do_ViolinPlot(pbmc3k, features = "CD3D")
+```
+
+![](visualisation_files/figure-html/plain-violin-1.png)

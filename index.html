@@ -55,428 +55,225 @@
 </div>
 <!-- badges: start -->
 
-<p><strong>BadranSeq</strong> provides publication-ready visualization tools for single-cell RNA sequencing (scRNA-Seq) data, built on native ggplot2 with consistent, beautiful defaults.</p>
+<p><strong>BadranSeq</strong> is an R package that produces publication-ready figures from Seurat objects without additional styling. Built on native ggplot2, it closes the gap between exploratory analysis and manuscript-quality visualisation that Seurat’s defaults leave open.</p>
 <div class="section level2">
-<h2 id="why-badranseq">Why BadranSeq?<a class="anchor" aria-label="anchor" href="#why-badranseq"></a>
+<h2 id="the-problem">The problem<a class="anchor" aria-label="anchor" href="#the-problem"></a>
 </h2>
-<p>If you’ve ever spent time customizing Seurat plots for publication, you know the pain:</p>
+<p>Seurat’s plotting functions are designed for exploration, not publication. Every project ends with the same boilerplate: computing and formatting PCA variance labels, adding cell borders, styling themes, building split-panel comparisons that preserve spatial context, and wiring up statistical annotations on violin plots. This work is repeated across every analysis, every manuscript, and every lab.</p>
+</div>
+<div class="section level2">
+<h2 id="how-badranseq-solves-it">How BadranSeq solves it<a class="anchor" aria-label="anchor" href="#how-badranseq-solves-it"></a>
+</h2>
 <table class="table">
 <colgroup>
-<col width="33%">
 <col width="26%">
-<col width="40%">
+<col width="30%">
+<col width="42%">
 </colgroup>
 <thead><tr class="header">
-<th>Problem</th>
-<th>Seurat Default</th>
-<th>BadranSeq Solution</th>
+<th>Feature</th>
+<th align="center">Seurat</th>
+<th align="center">BadranSeq</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>PCA plots lack context</td>
-<td>No variance explained</td>
-<td><strong>Automatic variance % on axes</strong></td>
+<td>PCA variance labels on axes</td>
+<td align="center">No</td>
+<td align="center"><strong>Automatic</strong></td>
 </tr>
 <tr class="even">
-<td>Cells blend together</td>
-<td>No borders</td>
-<td><strong>Black cell borders for clarity</strong></td>
+<td>Cell borders</td>
+<td align="center">No</td>
+<td align="center"><strong>On by default</strong></td>
 </tr>
 <tr class="odd">
-<td>Split comparisons lose context</td>
-<td>Facets only show subset</td>
-<td><strong>Grey silhouettes of all cells</strong></td>
+<td>Cluster labels</td>
+<td align="center">Off by default</td>
+<td align="center"><strong>On by default</strong></td>
 </tr>
 <tr class="even">
-<td>Repetitive styling</td>
-<td>Minimal defaults</td>
-<td><strong>Publication-ready out of the box</strong></td>
+<td>Split-panel silhouettes</td>
+<td align="center">No — facets lose spatial context</td>
+<td align="center"><strong>Grey silhouette preserves context</strong></td>
 </tr>
 <tr class="odd">
-<td>No cluster labels</td>
-<td>Must add manually</td>
-<td><strong>Labels shown by default</strong></td>
+<td>Statistical violin plots</td>
+<td align="center">Not built-in</td>
+<td align="center"><strong>Kruskal–Wallis + pairwise via ggstatsplot</strong></td>
+</tr>
+<tr class="even">
+<td>Viridis feature plots</td>
+<td align="center">No</td>
+<td align="center"><strong>Default</strong></td>
+</tr>
+<tr class="odd">
+<td>Interactive cell selection</td>
+<td align="center">Limited (<code>CellSelector</code>)</td>
+<td align="center"><strong>Additive/subtractive brush selection</strong></td>
+</tr>
+<tr class="even">
+<td>Publication theme</td>
+<td align="center">No</td>
+<td align="center"><strong>Consistent across all outputs</strong></td>
+</tr>
+<tr class="odd">
+<td>Automatic rasterisation</td>
+<td align="center">No</td>
+<td align="center"><strong>&gt;50k cells auto-rasterised</strong></td>
 </tr>
 </tbody>
 </table>
-<p>BadranSeq is <strong>lightweight</strong> (native ggplot2, no heavy dependencies) and <strong>opinionated</strong> (sensible defaults so you can focus on biology, not aesthetics).</p>
+</div>
+<div class="section level2">
+<h2 id="visual-comparison">Visual comparison<a class="anchor" aria-label="anchor" href="#visual-comparison"></a>
+</h2>
+<p>The figures below are generated with default settings — no theme adjustments, no manual annotations.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wolf5996/BadranSeq" class="external-link">BadranSeq</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Seurat::DimPlot()"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"BadranSeq::do_UmapPlot()"</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
+<p><img src="reference/figures/README-comparison-1.png" alt="" width="100%"></p>
+<p>BadranSeq adds cell borders, boxed cluster labels, a vivid colour palette, and a clean theme — all with one function call.</p>
+<div class="section level3">
+<h3 id="pca-with-automatic-variance-annotation">PCA with automatic variance annotation<a class="anchor" aria-label="anchor" href="#pca-with-automatic-variance-annotation"></a>
+</h3>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, reduction <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Seurat::DimPlot(reduction = 'pca')"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/do_PcaPlot.html">do_PcaPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"BadranSeq::do_PcaPlot()"</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
+<p><img src="reference/figures/README-pca-comparison-1.png" alt="" width="100%"></p>
+<p>Seurat’s PCA plot shows “PC_1” and “PC_2” with no indication of how much variance each component explains. BadranSeq computes and formats this automatically.</p>
+</div>
+<div class="section level3">
+<h3 id="split-panel-silhouettes">Split-panel silhouettes<a class="anchor" aria-label="anchor" href="#split-panel-silhouettes"></a>
+</h3>
+<p>When comparing conditions, Seurat’s <code>split.by</code> facets each panel independently — you cannot see where a subpopulation sits relative to the full dataset. BadranSeq renders all cells as a grey silhouette in every panel, overlaying only the current category in colour:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, split.by <span class="op">=</span> <span class="st">"condition"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-split-comparison-1.png" alt="" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="statistical-violin-plots">Statistical violin plots<a class="anchor" aria-label="anchor" href="#statistical-violin-plots"></a>
+</h3>
+<p><code><a href="reference/do_StatsViolinPlot.html">do_StatsViolinPlot()</a></code> wraps <code><a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html" class="external-link">ggstatsplot::ggbetweenstats()</a></code> with Seurat-aware data extraction, automatic colour generation, and a <code>group.levels</code> argument for comparing specific clusters:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
+<span>                   group.by <span class="op">=</span> <span class="st">"seurat_clusters"</span>,</span>
+<span>                   group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"0"</span>, <span class="st">"1"</span>, <span class="st">"4"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-stats-violin-1.png" alt="" width="100%"></p>
+<p>Set <code>pairwise.display = "none"</code> to keep the omnibus test subtitle without bracket clutter.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Using pak (recommended)</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://pak.r-lib.org/" class="external-link">pak</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># pak (recommended)</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"wolf5996/BadranSeq"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Or using devtools</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
+<span><span class="co"># devtools</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"wolf5996/BadranSeq"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
+<h2 id="function-reference">Function reference<a class="anchor" aria-label="anchor" href="#function-reference"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wolf5996/BadranSeq" class="external-link">BadranSeq</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Load bundled PBMC3k dataset</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span></code></pre></div>
-<p><br></p>
-</div>
-</div>
-<div class="section level1">
-<h1 id="function-examples">Function Examples<a class="anchor" aria-label="anchor" href="#function-examples"></a>
-</h1>
-<div class="section level2">
-<h2 id="badranseqdo_umapplot---umap-visualization">
-<code>BadranSeq::do_UmapPlot()</code> - UMAP Visualization<a class="anchor" aria-label="anchor" href="#badranseqdo_umapplot---umap-visualization"></a>
-</h2>
-<p><strong>Why it’s better:</strong> Shows cluster labels by default, includes axis labels, and renders cells with black borders for clear visibility even in dense regions.</p>
-<div class="section level3">
-<h3 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
-</h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required namespace: SeuratObject</span></span></code></pre></div>
-<p><img src="reference/figures/README-umap-basic-1.png" alt="" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="customization-options">Customization Options<a class="anchor" aria-label="anchor" href="#customization-options"></a>
-</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Color by a different metadata column</span></span>
-<span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, group.by <span class="op">=</span> <span class="st">"seurat_clusters"</span>, label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-umap-custom-1.png" alt="" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="without-labels-for-cleaner-figures">Without Labels (for cleaner figures)<a class="anchor" aria-label="anchor" href="#without-labels-for-cleaner-figures"></a>
-</h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-umap-no-labels-1.png" alt="" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="without-cell-borders">Without Cell Borders<a class="anchor" aria-label="anchor" href="#without-cell-borders"></a>
-</h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, plot_cell_borders <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-umap-no-borders-1.png" alt="" width="100%"></p>
-<p><br></p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="badranseqdo_pcaplot---pca-with-variance-explained">
-<code>BadranSeq::do_PcaPlot()</code> - PCA with Variance Explained<a class="anchor" aria-label="anchor" href="#badranseqdo_pcaplot---pca-with-variance-explained"></a>
-</h2>
-<p><strong>Why it’s better:</strong> Automatically calculates and displays variance explained percentages on the axes. No more manual calculation of <code>(stdev^2 / sum(stdev^2)) * 100</code>.</p>
-<div class="section level3">
-<h3 id="basic-usage-1">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage-1"></a>
-</h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_PcaPlot.html">do_PcaPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-pca-basic-1.png" alt="" width="100%"></p>
-<p>Notice the axis labels show “PC1 (X.X%)” - this is calculated automatically from the Seurat object’s PCA standard deviations.</p>
-</div>
-<div class="section level3">
-<h3 id="different-pc-dimensions">Different PC Dimensions<a class="anchor" aria-label="anchor" href="#different-pc-dimensions"></a>
-</h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Plot PC2 vs PC3</span></span>
-<span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_PcaPlot.html">do_PcaPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, dims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-pca-dims-1.png" alt="" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="control-variance-decimal-places">Control Variance Decimal Places<a class="anchor" aria-label="anchor" href="#control-variance-decimal-places"></a>
-</h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_PcaPlot.html">do_PcaPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, variance_digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-pca-digits-1.png" alt="" width="100%"></p>
-<p><br></p>
-</div>
+<table class="table">
+<colgroup>
+<col width="38%">
+<col width="61%">
+</colgroup>
+<thead><tr class="header">
+<th>Function</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="reference/do_UmapPlot.html">do_UmapPlot()</a></code></td>
+<td>UMAP with borders, labels, silhouette split</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/do_PcaPlot.html">do_PcaPlot()</a></code></td>
+<td>PCA with automatic variance labels</td>
+</tr>
+<tr class="odd">
+<td><code><a href="reference/do_DimPlot.html">do_DimPlot()</a></code></td>
+<td>Unified entry point (routes to UMAP/PCA handler)</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/do_FeaturePlot.html">do_FeaturePlot()</a></code></td>
+<td>Gene expression overlay with viridis scale</td>
+</tr>
+<tr class="odd">
+<td><code><a href="reference/do_StatsViolinPlot.html">do_StatsViolinPlot()</a></code></td>
+<td>Statistical violin via ggbetweenstats</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/do_ViolinPlot.html">do_ViolinPlot()</a></code></td>
+<td>Descriptive violin (no statistics)</td>
+</tr>
+<tr class="odd">
+<td><code><a href="reference/EnhancedElbowPlot.html">EnhancedElbowPlot()</a></code></td>
+<td>Variance-explained elbow plot with cutoff</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/get_pca_variance.html">get_pca_variance()</a></code></td>
+<td>Extract PCA variance as a data.frame</td>
+</tr>
+<tr class="odd">
+<td><code><a href="reference/select_cells_interactive.html">select_cells_interactive()</a></code></td>
+<td>Shiny brush selection of cells</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/seurat_sleepwalk.html">seurat_sleepwalk()</a></code></td>
+<td>Interactive embedding distance explorer</td>
+</tr>
+<tr class="odd">
+<td><code><a href="reference/fetch_feature_data.html">fetch_feature_data()</a></code></td>
+<td>Tidy long-format extraction from Seurat</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/theme_badranseq.html">theme_badranseq()</a></code></td>
+<td>Publication theme for any ggplot</td>
+</tr>
+<tr class="odd">
+<td><code><a href="reference/generate_badranseq_colors.html">generate_badranseq_colors()</a></code></td>
+<td>Vivid categorical colour palette</td>
+</tr>
+</tbody>
+</table>
+<p>Full documentation and worked examples: <strong><a href="https://wolf5996.github.io/BadranSeq/">pkgdown site</a></strong></p>
 </div>
 <div class="section level2">
-<h2 id="badranseqdo_dimplot---universal-dimensionality-reduction">
-<code>BadranSeq::do_DimPlot()</code> - Universal Dimensionality Reduction<a class="anchor" aria-label="anchor" href="#badranseqdo_dimplot---universal-dimensionality-reduction"></a>
+<h2 id="dependencies">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"></a>
 </h2>
-<p><strong>Why it’s better:</strong> Single entry point that automatically routes to the appropriate specialized function (PCA gets variance labels, UMAP gets standard labels).</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Automatically uses UMAP</span></span>
-<span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_DimPlot.html">do_DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-dimplot-examples-1.png" alt="" width="100%"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Routes to BadranSeq::do_PcaPlot() with variance labels</span></span>
-<span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_DimPlot.html">do_DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, reduction <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-dimplot-pca-1.png" alt="" width="100%"></p>
+<p><strong>Core</strong> (automatically installed): ggplot2, Seurat, colorspace, dplyr, tidyr, tibble, purrr, rlang, magrittr, SeuratObject, shiny, sleepwalk, stats.</p>
+<p><strong>Optional</strong> (install for extended features): patchwork (multi-panel layouts), ggrastr (rasterisation), ggstatsplot (statistical violin plots).</p>
 </div>
 <div class="section level2">
-<h2 id="splitby-with-silhouettes">Split.by with Silhouettes<a class="anchor" aria-label="anchor" href="#splitby-with-silhouettes"></a>
+<h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
 </h2>
-<p><strong>Why it’s better:</strong> When comparing populations across conditions, standard faceting only shows cells in each category. You lose spatial context. BadranSeq’s silhouette approach shows <strong>all cells in grey</strong> as background, with only the current category colored - so you can see where your population sits relative to the whole dataset.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, split.by <span class="op">=</span> <span class="st">"seurat_clusters"</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-split-silhouette-1.png" alt="" width="100%"></p>
-<p>Each panel shows: 1. <strong>Grey silhouette</strong> of ALL cells (background context) 2. <strong>Black borders</strong> for ALL cells (structure) 3. <strong>Colored cells</strong> only for the current split category</p>
-<p>This is inspired by SCpubr’s approach and provides crucial spatial context when comparing populations.</p>
-<p><br></p>
+<p>BadranSeq’s aesthetic design is inspired by <a href="https://github.com/enblacar/SCpubr" class="external-link">SCpubr</a> by Enrique Blanco Carmona. Key elements adapted from SCpubr include cell border rendering, colour palette generation, and the silhouette split approach. BadranSeq differs by providing a lighter-weight native ggplot2 implementation with additional features (PCA variance labels, statistical violin plots, interactive cell selection).</p>
 </div>
 <div class="section level2">
-<h2 id="badranseqdo_featureplot---gene-expression-overlay">
-<code>BadranSeq::do_FeaturePlot()</code> - Gene Expression Overlay<a class="anchor" aria-label="anchor" href="#badranseqdo_featureplot---gene-expression-overlay"></a>
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<p><strong>Why it’s better:</strong> Uses viridis color scale by default (perceptually uniform, colorblind-friendly), includes cell borders, and supports expression cutoffs.</p>
-<div class="section level3">
-<h3 id="basic-usage-2">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage-2"></a>
-</h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_FeaturePlot.html">do_FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-feature-basic-1.png" alt="" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="multiple-features">Multiple Features<a class="anchor" aria-label="anchor" href="#multiple-features"></a>
-</h3>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">plots</span> <span class="op">&lt;-</span> <span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_FeaturePlot.html">do_FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3D"</span>, <span class="st">"CD8A"</span>, <span class="st">"CD14"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># Returns a list of plots</span></span>
-<span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">plots</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-feature-multiple-1.png" alt="" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="different-viridis-palettes">Different Viridis Palettes<a class="anchor" aria-label="anchor" href="#different-viridis-palettes"></a>
-</h3>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Palette options: "A" through "H"</span></span>
-<span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_FeaturePlot.html">do_FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>, viridis.palette <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-feature-viridis-1.png" alt="" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="expression-cutoffs">Expression Cutoffs<a class="anchor" aria-label="anchor" href="#expression-cutoffs"></a>
-</h3>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Clip to 10th and 90th percentiles</span></span>
-<span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_FeaturePlot.html">do_FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>, min.cutoff <span class="op">=</span> <span class="st">"q10"</span>, max.cutoff <span class="op">=</span> <span class="st">"q90"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-feature-cutoffs-1.png" alt="" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="on-pca-with-variance-labels">On PCA (with variance labels)<a class="anchor" aria-label="anchor" href="#on-pca-with-variance-labels"></a>
-</h3>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_FeaturePlot.html">do_FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>, reduction <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-feature-pca-1.png" alt="" width="100%"></p>
-<p><br></p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="badranseqenhancedelbowplot---pca-variance-visualization">
-<code>BadranSeq::EnhancedElbowPlot()</code> - PCA Variance Visualization<a class="anchor" aria-label="anchor" href="#badranseqenhancedelbowplot---pca-variance-visualization"></a>
-</h2>
-<p><strong>Why it’s better:</strong> Shows variance explained (not just standard deviation), includes optional cutoff annotation, and has publication-ready styling.</p>
-<div class="section level3">
-<h3 id="basic-usage-3">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage-3"></a>
-</h3>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/EnhancedElbowPlot.html">EnhancedElbowPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-elbow-basic-1.png" alt="" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="with-cutoff-annotation">With Cutoff Annotation<a class="anchor" aria-label="anchor" href="#with-cutoff-annotation"></a>
-</h3>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/EnhancedElbowPlot.html">EnhancedElbowPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, cutoff_pc <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-elbow-cutoff-1.png" alt="" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="standard-deviation-mode-like-seurat">Standard Deviation Mode (like Seurat)<a class="anchor" aria-label="anchor" href="#standard-deviation-mode-like-seurat"></a>
-</h3>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/EnhancedElbowPlot.html">EnhancedElbowPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, variance <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-elbow-stdev-1.png" alt="" width="100%"></p>
-<p><br></p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="badranseqget_pca_variance---extract-variance-data">
-<code>BadranSeq::get_pca_variance()</code> - Extract Variance Data<a class="anchor" aria-label="anchor" href="#badranseqget_pca_variance---extract-variance-data"></a>
-</h2>
-<p><strong>Why it’s better:</strong> Returns a clean data.frame with PC number, variance explained, and cumulative variance - useful for programmatic access or custom plots.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get variance for top 10 PCs</span></span>
-<span><span class="va">var_df</span> <span class="op">&lt;-</span> <span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/get_pca_variance.html">get_pca_variance</a></span><span class="op">(</span><span class="va">pbmc3k</span>, n_pcs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">var_df</span></span>
-<span><span class="co">#&gt;    PC variance_explained cumulative_variance</span></span>
-<span><span class="co">#&gt; 1   1          33.084958            33.08496</span></span>
-<span><span class="co">#&gt; 2   2          13.034154            46.11911</span></span>
-<span><span class="co">#&gt; 3   3           9.346548            55.46566</span></span>
-<span><span class="co">#&gt; 4   4           5.321569            60.78723</span></span>
-<span><span class="co">#&gt; 5   5           2.997895            63.78512</span></span>
-<span><span class="co">#&gt; 6   6           2.224722            66.00985</span></span>
-<span><span class="co">#&gt; 7   7           2.042296            68.05214</span></span>
-<span><span class="co">#&gt; 8   8           1.779563            69.83171</span></span>
-<span><span class="co">#&gt; 9   9           1.397088            71.22879</span></span>
-<span><span class="co">#&gt; 10 10           1.249528            72.47832</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="use-for-custom-analysis">Use for Custom Analysis<a class="anchor" aria-label="anchor" href="#use-for-custom-analysis"></a>
-</h3>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Find number of PCs for 80% cumulative variance</span></span>
-<span><span class="va">var_df</span> <span class="op">&lt;-</span> <span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/get_pca_variance.html">get_pca_variance</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">var_df</span><span class="op">$</span><span class="va">cumulative_variance</span> <span class="op">&gt;=</span> <span class="fl">80</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 18</span></span></code></pre></div>
-<p><br></p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="badranseqgenerate_badranseq_colors---color-palette-generation">
-<code>BadranSeq::generate_badranseq_colors()</code> - Color Palette Generation<a class="anchor" aria-label="anchor" href="#badranseqgenerate_badranseq_colors---color-palette-generation"></a>
-</h2>
-<p><strong>Why it’s better:</strong> Generates vibrant, distinguishable categorical colors using the same algorithm as SCpubr (colorspace Dark 3 palette with saturation/value adjustments).</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Generate 8 colors</span></span>
-<span><span class="va">colors</span> <span class="op">&lt;-</span> <span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/generate_badranseq_colors.html">generate_badranseq_colors</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span></span>
-<span><span class="va">colors</span></span>
-<span><span class="co">#&gt; [1] "#C83658FF" "#AE6700FF" "#787F00FF" "#008F3BFF" "#009483FF" "#008EBAFF"</span></span>
-<span><span class="co">#&gt; [7] "#5E4CCDFF" "#BE34ACFF"</span></span>
-<span></span>
-<span><span class="co"># Visualize</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html" class="external-link">barplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">8</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">colors</span>, border <span class="op">=</span> <span class="cn">NA</span>, axes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-colors-demo-1.png" alt="" width="100%"></p>
-<div class="section level3">
-<h3 id="custom-colors">Custom Colors<a class="anchor" aria-label="anchor" href="#custom-colors"></a>
-</h3>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># You can also provide your own colors</span></span>
-<span><span class="va">my_colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"green"</span><span class="op">)</span></span>
-<span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/generate_badranseq_colors.html">generate_badranseq_colors</a></span><span class="op">(</span><span class="fl">3</span>, custom.colors <span class="op">=</span> <span class="va">my_colors</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "red"   "blue"  "green"</span></span></code></pre></div>
-<p><br></p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="badranseqselect_cells_interactive---shiny-based-cell-selection">
-<code>BadranSeq::select_cells_interactive()</code> - Shiny-based Cell Selection<a class="anchor" aria-label="anchor" href="#badranseqselect_cells_interactive---shiny-based-cell-selection"></a>
-</h2>
-<p><strong>Why it’s better:</strong> Provides an interactive GUI for selecting cells from embeddings with brush selection, additive/subtractive selection, and returns either cell names or a subsetted Seurat object.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Launch interactive selector (only works in interactive R sessions)</span></span>
-<span><span class="va">selected_cells</span> <span class="op">&lt;-</span> <span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/select_cells_interactive.html">select_cells_interactive</a></span><span class="op">(</span><span class="va">pbmc3k</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, return_cells <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Or get a subsetted Seurat object directly</span></span>
-<span><span class="va">subset_obj</span> <span class="op">&lt;-</span> <span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/select_cells_interactive.html">select_cells_interactive</a></span><span class="op">(</span><span class="va">pbmc3k</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span></span></code></pre></div>
-<p>Features: - <strong>Brush selection</strong>: Click and drag to select cells - <strong>Additive selection</strong>: Build up selection across multiple brushes - <strong>Deselection</strong>: Remove cells from selection - <strong>Clear</strong>: Start over - <strong>Returns</strong>: Either cell names (character vector) or subsetted Seurat object</p>
-<p><br></p>
-</div>
-<div class="section level2">
-<h2 id="badranseqseurat_sleepwalk---interactive-distance-exploration">
-<code>BadranSeq::seurat_sleepwalk()</code> - Interactive Distance Exploration<a class="anchor" aria-label="anchor" href="#badranseqseurat_sleepwalk---interactive-distance-exploration"></a>
-</h2>
-<p><strong>Why it’s better:</strong> Thin wrapper around the excellent <code>sleepwalk</code> package for exploring how well your 2D embedding preserves high-dimensional distances.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Launch interactive distance explorer</span></span>
-<span><span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/seurat_sleepwalk.html">seurat_sleepwalk</a></span><span class="op">(</span><span class="va">pbmc3k</span>, embedding <span class="op">=</span> <span class="st">"umap"</span>, features <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span></span></code></pre></div>
-<p>Hover over cells to see which other cells are nearby in PCA space - helps identify whether your UMAP is faithfully representing the data structure.</p>
-<p><br></p>
-</div>
-<div class="section level2">
-<h2 id="badranseqtheme_badranseq---publication-ready-theme">
-<code>BadranSeq::theme_badranseq()</code> - Publication-Ready Theme<a class="anchor" aria-label="anchor" href="#badranseqtheme_badranseq---publication-ready-theme"></a>
-</h2>
-<p>All plots use a consistent theme that you can also apply to your own ggplots:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Apply to any ggplot</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="va">wt</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/theme_badranseq.html">theme_badranseq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/generate_badranseq_colors.html">generate_badranseq_colors</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-theme-demo-1.png" alt="" width="100%"></p>
-<p><br></p>
-</div>
-</div>
-<div class="section level1">
-<h1 id="comparison-with-seurat">Comparison with Seurat<a class="anchor" aria-label="anchor" href="#comparison-with-seurat"></a>
-</h1>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: package 'Seurat' was built under R version 4.5.1</span></span>
-<span><span class="co">#&gt; Loading required package: SeuratObject</span></span>
-<span><span class="co">#&gt; Warning: package 'SeuratObject' was built under R version 4.5.1</span></span>
-<span><span class="co">#&gt; Loading required package: sp</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'SeuratObject'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, t</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: package 'patchwork' was built under R version 4.5.1</span></span>
-<span></span>
-<span><span class="co"># Seurat default</span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Seurat DimPlot"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># BadranSeq</span></span>
-<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">BadranSeq</span><span class="fu">::</span><span class="fu"><a href="reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"BadranSeq do_UmapPlot"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
-<p><img src="reference/figures/README-comparison-1.png" alt="" width="100%"></p>
-<p>Key differences: - <strong>Labels</strong>: BadranSeq shows labels by default - <strong>Cell borders</strong>: BadranSeq adds black borders for clarity - <strong>Theme</strong>: BadranSeq uses a cleaner, publication-ready theme - <strong>Colors</strong>: BadranSeq uses a more vibrant color palette</p>
-<p><br></p>
-</div>
-<div class="section level1">
-<h1 id="dependencies">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"></a>
-</h1>
-<p><strong>Core</strong> (automatically installed): - <code>ggplot2</code> - all plotting - <code>Seurat</code> - scRNA-seq data structures - <code>colorspace</code> - color palette generation - <code>magrittr</code> - pipe operator</p>
-<p><strong>Suggested</strong> (install for full functionality): - <code>patchwork</code> - combining split.by panels - <code>ggrastr</code> - rasterization for large datasets - <code>shiny</code> - interactive cell selection - <code>sleepwalk</code> - interactive distance exploration</p>
-<p><br></p>
-</div>
-<div class="section level1">
-<h1 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>
-</h1>
-<p>BadranSeq’s aesthetic approach is heavily inspired by <a href="https://github.com/enblacar/SCpubr" class="external-link">SCpubr</a> by Enrique Blanco Carmona. Key design elements adopted from SCpubr include:</p>
-<ul>
-<li>Cell border visualization for clarity</li>
-<li>Color palette generation using colorspace</li>
-<li>Clean, minimal theme styling</li>
-<li>The silhouette approach for split.by comparisons</li>
-</ul>
-<p>BadranSeq differs by providing a <strong>lighter-weight, native ggplot2 implementation</strong> without SCpubr as a dependency, while adding features like <strong>automatic PCA variance labels</strong>.</p>
-<p>If you need SCpubr’s full feature set (dozens of specialized plot types), use SCpubr. If you want the core aesthetics with minimal dependencies, use BadranSeq.</p>
-<p><br></p>
-</div>
-<div class="section level1">
-<h1 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
-</h1>
-<p>If you use BadranSeq in your research, please cite:</p>
+<p>If you use BadranSeq in published work, please cite:</p>
 <blockquote>
-<p>Elshenawy, B. (2025). BadranSeq: Publication-ready scRNA-Seq visualization. R package version 0.0.0.9000. <a href="https://github.com/wolf5996/BadranSeq" class="external-link uri">https://github.com/wolf5996/BadranSeq</a></p>
+<p>Elshenawy, B. (2025). BadranSeq: Publication-ready visualisation for single-cell RNA sequencing data in R. R package version 1.0.0. <a href="https://github.com/wolf5996/BadranSeq" class="external-link uri">https://github.com/wolf5996/BadranSeq</a></p>
 </blockquote>
-<p><em>Author: Dr. Badran Elshenawy, University of Oxford</em></p>
-<p><br></p>
 </div>
-<div class="section level1">
-<h1 id="getting-help">Getting Help<a class="anchor" aria-label="anchor" href="#getting-help"></a>
-</h1>
-<ul>
-<li>
-<strong>Issues</strong>: Report bugs and request features at <a href="https://github.com/wolf5996/BadranSeq/issues" class="external-link">GitHub Issues</a>
-</li>
-<li>
-<strong>Documentation</strong>: Use <code>?function_name</code> for help with specific functions</li>
-</ul>
-<p><br></p>
+<div class="section level2">
+<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h2>
+<p>MIT</p>
 </div>
-<div class="section level1">
-<h1 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
-</h1>
-<p>MIT License - see <a href="LICENSE">LICENSE</a> for details.</p>
-<p><br></p>
 </div>
-<div class="section level1">
-<h1 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
-</h1>
-<p>This package was developed independently by Dr. Badran Elshenawy as a personal project. It does not represent the University of Oxford, the Nuffield Department of Medicine, or any affiliated institution. Use at your own discretion.</p>
-<p><em>Developed by Dr. Badran Elshenawy</em></p>
-</div>
-
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -513,6 +310,7 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/wolf5996/BadranSeq" class="external-link"><img src="https://img.shields.io/badge/R--CMD--check-passing-brightgreen" alt="R-CMD-check"></a></li>
 <li><a href="https://opensource.org/licenses/MIT" class="external-link"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></li>
+<li><a href="https://wolf5996.github.io/BadranSeq/"><img src="https://img.shields.io/badge/docs-pkgdown-blue" alt="pkgdown"></a></li>
 </ul>
 </div>
 
