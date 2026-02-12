@@ -87,8 +87,8 @@ with Seurat-aware data extraction, automatic colour generation, and a
 
 ``` r
 do_StatsViolinPlot(pbmc3k, features = "CD3D",
-                   group.by = "seurat_clusters",
-                   group.levels = c("0", "1", "4"))
+                   group.by = "seurat_annotations",
+                   group.levels = c("Naive CD4 T", "Memory CD4 T", "CD8 T"))
 ```
 
 ![](reference/figures/README-stats-violin-1.png)

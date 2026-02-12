@@ -233,7 +233,8 @@ comparisons (Dunn’s test) by default, annotating the plot with p-values:
 
 ``` r
 do_StatsViolinPlot(pbmc3k, features = "CD3D",
-                   group.by = "seurat_clusters")
+                   group.by = "seurat_annotations",
+                   pairwise.display = "none")
 ```
 
     ## Warning: ✖ Number of labels is greater than default palette color count.
@@ -244,10 +245,10 @@ do_StatsViolinPlot(pbmc3k, features = "CD3D",
 
 ![](visualisation_files/figure-html/stats-violin-basic-1.png)
 
-### Controlling pairwise comparisons
+With nine annotation groups, pairwise brackets would overwhelm the
+figure. The `pairwise.display` argument controls this:
 
-With many groups, pairwise brackets quickly clutter the plot. The
-`pairwise.display` argument controls which comparisons are drawn:
+### Controlling pairwise comparisons
 
 | Value               | Behaviour                        |
 |---------------------|----------------------------------|
@@ -258,33 +259,21 @@ With many groups, pairwise brackets quickly clutter the plot. The
 
 Setting `pairwise.display = "none"` keeps the subtitle showing the
 overall test statistic while removing all bracket annotations — useful
-for publication figures where the brackets would overlap:
-
-``` r
-do_StatsViolinPlot(pbmc3k, features = "CD3D",
-                   group.by = "seurat_clusters",
-                   pairwise.display = "none")
-```
-
-    ## Warning: ✖ Number of labels is greater than default palette color count.
-    ## ℹ Select another color `palette` (and/or `package`).
-
-    ## Scale for colour is already present.
-    ## Adding another scale for colour, which will replace the existing scale.
-
-![](visualisation_files/figure-html/stats-violin-no-pairwise-1.png)
+for publication figures where the brackets would overlap.
 
 ### Comparing specific groups with `group.levels`
 
-Often you do not want to compare all clusters — perhaps only a few are
+Often you do not want to compare all cell types — perhaps only a few are
 biologically relevant. The `group.levels` argument filters the grouping
 variable to a specified subset *before* the statistical test is run, so
-the test is performed only on the groups you care about:
+the test is performed only on the groups you care about.
+
+With fewer groups, pairwise brackets become readable again:
 
 ``` r
 do_StatsViolinPlot(pbmc3k, features = "CD3D",
-                   group.by = "seurat_clusters",
-                   group.levels = c("0", "1", "4"))
+                   group.by = "seurat_annotations",
+                   group.levels = c("Naive CD4 T", "Memory CD4 T", "CD8 T"))
 ```
 
     ## Scale for colour is already present.
@@ -303,12 +292,10 @@ tests via the `type` argument:
 
 ``` r
 do_StatsViolinPlot(pbmc3k, features = "CD3D",
-                   group.by = "seurat_clusters",
+                   group.by = "seurat_annotations",
+                   group.levels = c("Naive CD4 T", "Memory CD4 T", "CD8 T"),
                    type = "parametric")
 ```
-
-    ## Warning: ✖ Number of labels is greater than default palette color count.
-    ## ℹ Select another color `palette` (and/or `package`).
 
     ## Scale for colour is already present.
     ## Adding another scale for colour, which will replace the existing scale.
@@ -322,7 +309,8 @@ Pass a vector of gene names to get a combined patchwork layout:
 ``` r
 do_StatsViolinPlot(pbmc3k,
                    features = c("CD3D", "CD8A"),
-                   group.by = "seurat_clusters",
+                   group.by = "seurat_annotations",
+                   pairwise.display = "none",
                    ncol = 2)
 ```
 
@@ -348,7 +336,8 @@ diamond) without any statistical annotation. Use this when you want a
 clean descriptive plot:
 
 ``` r
-do_ViolinPlot(pbmc3k, features = "CD3D")
+do_ViolinPlot(pbmc3k, features = "CD3D",
+              group.by = "seurat_annotations")
 ```
 
 ![](visualisation_files/figure-html/plain-violin-1.png)

@@ -282,19 +282,19 @@ want the same aesthetic without statistics, use
 annotating the plot with p-values:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
-<span>                   group.by <span class="op">=</span> <span class="st">"seurat_clusters"</span><span class="op">)</span></span></code></pre></div>
+<span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
+<span>                   pairwise.display <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: <span style="color: #BB0000;">✖</span> Number of labels is greater than default palette color count.</span></span>
 <span><span class="co">## <span style="color: #0000BB;">ℹ</span> Select another color `palette` (and/or `package`).</span></span></code></pre>
 <pre><code><span><span class="co">## Scale for <span style="color: #00BB00;">colour</span> is already present.</span></span>
 <span><span class="co">## Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span></span></code></pre>
 <p><img src="visualisation_files/figure-html/stats-violin-basic-1.png" class="r-plt" alt="" width="672"></p>
+<p>With nine annotation groups, pairwise brackets would overwhelm the
+figure. The <code>pairwise.display</code> argument controls this:</p>
 </div>
 <div class="section level3">
 <h3 id="controlling-pairwise-comparisons">Controlling pairwise comparisons<a class="anchor" aria-label="anchor" href="#controlling-pairwise-comparisons"></a>
 </h3>
-<p>With many groups, pairwise brackets quickly clutter the plot. The
-<code>pairwise.display</code> argument controls which comparisons are
-drawn:</p>
 <table class="table">
 <thead><tr class="header">
 <th>Value</th>
@@ -322,29 +322,21 @@ drawn:</p>
 <p>Setting <code>pairwise.display = "none"</code> keeps the subtitle
 showing the overall test statistic while removing all bracket
 annotations — useful for publication figures where the brackets would
-overlap:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
-<span>                   group.by <span class="op">=</span> <span class="st">"seurat_clusters"</span>,</span>
-<span>                   pairwise.display <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: <span style="color: #BB0000;">✖</span> Number of labels is greater than default palette color count.</span></span>
-<span><span class="co">## <span style="color: #0000BB;">ℹ</span> Select another color `palette` (and/or `package`).</span></span></code></pre>
-<pre><code><span><span class="co">## Scale for <span style="color: #00BB00;">colour</span> is already present.</span></span>
-<span><span class="co">## Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span></span></code></pre>
-<p><img src="visualisation_files/figure-html/stats-violin-no-pairwise-1.png" class="r-plt" alt="" width="672"></p>
+overlap.</p>
 </div>
 <div class="section level3">
 <h3 id="comparing-specific-groups-with-group-levels">Comparing specific groups with <code>group.levels</code><a class="anchor" aria-label="anchor" href="#comparing-specific-groups-with-group-levels"></a>
 </h3>
-<p>Often you do not want to compare all clusters — perhaps only a few
+<p>Often you do not want to compare all cell types — perhaps only a few
 are biologically relevant. The <code>group.levels</code> argument
 filters the grouping variable to a specified subset <em>before</em> the
 statistical test is run, so the test is performed only on the groups you
-care about:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+care about.</p>
+<p>With fewer groups, pairwise brackets become readable again:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
-<span>                   group.by <span class="op">=</span> <span class="st">"seurat_clusters"</span>,</span>
-<span>                   group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"0"</span>, <span class="st">"1"</span>, <span class="st">"4"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
+<span>                   group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Naive CD4 T"</span>, <span class="st">"Memory CD4 T"</span>, <span class="st">"CD8 T"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Scale for <span style="color: #00BB00;">colour</span> is already present.</span></span>
 <span><span class="co">## Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span></span></code></pre>
 <p><img src="visualisation_files/figure-html/stats-violin-group-levels-1.png" class="r-plt" alt="" width="672"></p>
@@ -357,12 +349,11 @@ the need to drop unused factor levels.</p>
 <p>The default nonparametric test is appropriate for most scRNA-seq
 data, but you can switch to parametric (ANOVA / <em>t</em>-test),
 robust, or Bayesian tests via the <code>type</code> argument:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
-<span>                   group.by <span class="op">=</span> <span class="st">"seurat_clusters"</span>,</span>
+<span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
+<span>                   group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Naive CD4 T"</span>, <span class="st">"Memory CD4 T"</span>, <span class="st">"CD8 T"</span><span class="op">)</span>,</span>
 <span>                   type <span class="op">=</span> <span class="st">"parametric"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: <span style="color: #BB0000;">✖</span> Number of labels is greater than default palette color count.</span></span>
-<span><span class="co">## <span style="color: #0000BB;">ℹ</span> Select another color `palette` (and/or `package`).</span></span></code></pre>
 <pre><code><span><span class="co">## Scale for <span style="color: #00BB00;">colour</span> is already present.</span></span>
 <span><span class="co">## Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span></span></code></pre>
 <p><img src="visualisation_files/figure-html/stats-violin-parametric-1.png" class="r-plt" alt="" width="672"></p>
@@ -371,10 +362,11 @@ robust, or Bayesian tests via the <code>type</code> argument:</p>
 <h3 id="multiple-genes">Multiple genes<a class="anchor" aria-label="anchor" href="#multiple-genes"></a>
 </h3>
 <p>Pass a vector of gene names to get a combined patchwork layout:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>                   features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3D"</span>, <span class="st">"CD8A"</span><span class="op">)</span>,</span>
-<span>                   group.by <span class="op">=</span> <span class="st">"seurat_clusters"</span>,</span>
+<span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
+<span>                   pairwise.display <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>                   ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: <span style="color: #BB0000;">✖</span> Number of labels is greater than default palette color count.</span></span>
 <span><span class="co">## <span style="color: #0000BB;">ℹ</span> Select another color `palette` (and/or `package`).</span></span></code></pre>
@@ -392,8 +384,9 @@ robust, or Bayesian tests via the <code>type</code> argument:</p>
 <p><code><a href="../reference/do_ViolinPlot.html">do_ViolinPlot()</a></code> produces a violin + boxplot + jitter +
 centrality marker (median diamond) without any statistical annotation.
 Use this when you want a clean descriptive plot:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_ViolinPlot.html">do_ViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_ViolinPlot.html">do_ViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
+<span>              group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/plain-violin-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 </div>

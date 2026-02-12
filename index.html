@@ -164,8 +164,8 @@
 <p><code><a href="reference/do_StatsViolinPlot.html">do_StatsViolinPlot()</a></code> wraps <code><a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html" class="external-link">ggstatsplot::ggbetweenstats()</a></code> with Seurat-aware data extraction, automatic colour generation, and a <code>group.levels</code> argument for comparing specific clusters:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
-<span>                   group.by <span class="op">=</span> <span class="st">"seurat_clusters"</span>,</span>
-<span>                   group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"0"</span>, <span class="st">"1"</span>, <span class="st">"4"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
+<span>                   group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Naive CD4 T"</span>, <span class="st">"Memory CD4 T"</span>, <span class="st">"CD8 T"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-stats-violin-1.png" alt="" width="100%"></p>
 <p>Set <code>pairwise.display = "none"</code> to keep the omnibus test subtitle without bracket clutter.</p>
 </div>
