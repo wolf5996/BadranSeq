@@ -21,6 +21,17 @@
   coloured cells for the current category against a grey silhouette of all
   cells, preserving spatial context across panels.
 
+* `do_StatsViolinPlot()` creates statistical violin plots via
+  `ggstatsplot::ggbetweenstats()` with Seurat-aware data extraction, automatic
+  colour generation, and nonparametric testing (Kruskal–Wallis + Dunn's) by
+  default. The `group.levels` argument allows comparing a subset of groups
+  without manually subsetting the Seurat object. The `pairwise.display`
+  argument controls bracket visibility.
+
+* `do_ViolinPlot()` creates descriptive violin plots with boxplot overlay,
+  jittered raw data points, and centrality markers (median/mean diamond with
+  numeric label). Pure ggplot2, no statistical testing.
+
 ## Data extraction
 
 * `fetch_cell_data()` extracts cell-level data from Seurat objects as a tidy
@@ -58,4 +69,5 @@
 ## Data
 
 * Bundled `pbmc3k` dataset: 3000 PBMCs preprocessed with SCTransform, PCA,
-  UMAP, and clustered at resolution 0.5.
+  UMAP, and clustered at resolution 0.5. Includes `seurat_annotations` with
+  biological cell type labels.
