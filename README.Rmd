@@ -45,6 +45,7 @@ Seurat's plotting functions are designed for exploration, not publication. Every
 | Interactive cell selection | Limited (`CellSelector`) | **Additive/subtractive brush selection** |
 | Publication theme | No | **Consistent across all outputs** |
 | Automatic rasterisation | No | **>50k cells auto-rasterised** |
+| Sankey / alluvial diagrams | No | **Metadata relationship flows** |
 
 ## Visual comparison
 
@@ -99,6 +100,16 @@ do_StatsViolinPlot(pbmc3k, features = "CD3D",
 
 Set `pairwise.display = "none"` to keep the omnibus test subtitle without bracket clutter.
 
+### Sankey diagrams
+
+`do_SankeyPlot()` visualises how categorical metadata variables relate to each other — for example, how clusters map to cell type annotations:
+
+```{r sankey, fig.width=8, fig.height=6, message=FALSE, warning=FALSE}
+do_SankeyPlot(pbmc3k, columns = c("seurat_clusters", "seurat_annotations"))
+```
+
+Each stratum is labelled; flows show how cells distribute across categories. Powered by ggalluvial.
+
 ## Installation
 
 ```{r eval=FALSE}
@@ -119,10 +130,12 @@ devtools::install_github("wolf5996/BadranSeq")
 | `do_FeaturePlot()` | Gene expression overlay with viridis scale |
 | `do_StatsViolinPlot()` | Statistical violin via ggbetweenstats |
 | `do_ViolinPlot()` | Descriptive violin (no statistics) |
+| `do_SankeyPlot()` | Sankey/alluvial diagram for metadata relationships |
 | `EnhancedElbowPlot()` | Variance-explained elbow plot with cutoff |
 | `get_pca_variance()` | Extract PCA variance as a data.frame |
 | `select_cells_interactive()` | Shiny brush selection of cells |
 | `seurat_sleepwalk()` | Interactive embedding distance explorer |
+| `fetch_cell_data()` | Tidy cell-level metadata/embedding extraction |
 | `fetch_feature_data()` | Tidy long-format extraction from Seurat |
 | `theme_badranseq()` | Publication theme for any ggplot |
 | `generate_badranseq_colors()` | Vivid categorical colour palette |
@@ -133,7 +146,7 @@ Full documentation and worked examples: **[pkgdown site](https://wolf5996.github
 
 **Core** (automatically installed): ggplot2, Seurat, colorspace, dplyr, tidyr, tibble, purrr, rlang, magrittr, SeuratObject, shiny, sleepwalk, stats.
 
-**Optional** (install for extended features): patchwork (multi-panel layouts), ggrastr (rasterisation), ggstatsplot (statistical violin plots).
+**Optional** (install for extended features): patchwork (multi-panel layouts), ggrastr (rasterisation), ggstatsplot (statistical violin plots), ggalluvial (Sankey diagrams).
 
 ## Acknowledgements
 
