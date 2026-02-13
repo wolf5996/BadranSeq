@@ -15,6 +15,7 @@ Suggests:
     patchwork,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Config/testthat/parallel: true
 URL: https://github.com/wolf5996/BadranSeq, https://wolf5996.github.io/BadranSeq/
 BugReports: https://github.com/wolf5996/BadranSeq/issues
 Imports:
