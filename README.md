@@ -122,8 +122,25 @@ categories. Powered by ggalluvial.
 
 ## Installation
 
+### Stable release (recommended)
+
+Install the latest tagged release:
+
 ``` r
 # pak (recommended)
+pak::pkg_install("wolf5996/BadranSeq@v1.0.0")
+
+# devtools
+devtools::install_github("wolf5996/BadranSeq", ref = "v1.0.0")
+```
+
+### Development version
+
+Install from the `main` branch for the latest changes (may include
+unreleased features):
+
+``` r
+# pak
 pak::pkg_install("wolf5996/BadranSeq")
 
 # devtools
