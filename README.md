@@ -38,6 +38,7 @@ across every analysis, every manuscript, and every lab.
 | Interactive cell selection  |     Limited (`CellSelector`)     |   **Additive/subtractive brush selection**    |
 | Publication theme           |                No                |       **Consistent across all outputs**       |
 | Automatic rasterisation     |                No                |        **\>50k cells auto-rasterised**        |
+| Sankey / alluvial diagrams  |                No                |        **Metadata relationship flows**        |
 
 ## Visual comparison
 
@@ -105,6 +106,20 @@ do_StatsViolinPlot(pbmc3k, features = "CD3D",
 Set `pairwise.display = "none"` to keep the omnibus test subtitle
 without bracket clutter.
 
+### Sankey diagrams
+
+`do_SankeyPlot()` visualises how categorical metadata variables relate
+to each other — for example, how clusters map to cell type annotations:
+
+``` r
+do_SankeyPlot(pbmc3k, columns = c("seurat_clusters", "seurat_annotations"))
+```
+
+<img src="man/figures/README-sankey-1.png" alt="" width="100%" />
+
+Each stratum is labelled; flows show how cells distribute across
+categories. Powered by ggalluvial.
+
 ## Installation
 
 ``` r
@@ -117,21 +132,23 @@ devtools::install_github("wolf5996/BadranSeq")
 
 ## Function reference
 
-| Function                      | Purpose                                          |
-|-------------------------------|--------------------------------------------------|
-| `do_UmapPlot()`               | UMAP with borders, labels, silhouette split      |
-| `do_PcaPlot()`                | PCA with automatic variance labels               |
-| `do_DimPlot()`                | Unified entry point (routes to UMAP/PCA handler) |
-| `do_FeaturePlot()`            | Gene expression overlay with viridis scale       |
-| `do_StatsViolinPlot()`        | Statistical violin via ggbetweenstats            |
-| `do_ViolinPlot()`             | Descriptive violin (no statistics)               |
-| `EnhancedElbowPlot()`         | Variance-explained elbow plot with cutoff        |
-| `get_pca_variance()`          | Extract PCA variance as a data.frame             |
-| `select_cells_interactive()`  | Shiny brush selection of cells                   |
-| `seurat_sleepwalk()`          | Interactive embedding distance explorer          |
-| `fetch_feature_data()`        | Tidy long-format extraction from Seurat          |
-| `theme_badranseq()`           | Publication theme for any ggplot                 |
-| `generate_badranseq_colors()` | Vivid categorical colour palette                 |
+| Function                      | Purpose                                            |
+|-------------------------------|----------------------------------------------------|
+| `do_UmapPlot()`               | UMAP with borders, labels, silhouette split        |
+| `do_PcaPlot()`                | PCA with automatic variance labels                 |
+| `do_DimPlot()`                | Unified entry point (routes to UMAP/PCA handler)   |
+| `do_FeaturePlot()`            | Gene expression overlay with viridis scale         |
+| `do_StatsViolinPlot()`        | Statistical violin via ggbetweenstats              |
+| `do_ViolinPlot()`             | Descriptive violin (no statistics)                 |
+| `do_SankeyPlot()`             | Sankey/alluvial diagram for metadata relationships |
+| `EnhancedElbowPlot()`         | Variance-explained elbow plot with cutoff          |
+| `get_pca_variance()`          | Extract PCA variance as a data.frame               |
+| `select_cells_interactive()`  | Shiny brush selection of cells                     |
+| `seurat_sleepwalk()`          | Interactive embedding distance explorer            |
+| `fetch_cell_data()`           | Tidy cell-level metadata/embedding extraction      |
+| `fetch_feature_data()`        | Tidy long-format extraction from Seurat            |
+| `theme_badranseq()`           | Publication theme for any ggplot                   |
+| `generate_badranseq_colors()` | Vivid categorical colour palette                   |
 
 Full documentation and worked examples: **[pkgdown
 site](https://wolf5996.github.io/BadranSeq/)**
@@ -144,7 +161,7 @@ stats.
 
 **Optional** (install for extended features): patchwork (multi-panel
 layouts), ggrastr (rasterisation), ggstatsplot (statistical violin
-plots).
+plots), ggalluvial (Sankey diagrams).
 
 ## Acknowledgements
 
