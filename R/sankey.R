@@ -31,7 +31,6 @@ utils::globalVariables(c("alluvium", "x", "stratum"))
 #'               columns = c("seurat_annotations", "condition", "Phase"))
 #' }
 #'
-#' @importFrom ggalluvial StatStratum
 #' @export
 do_SankeyPlot <- function(
     object,
