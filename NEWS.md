@@ -1,14 +1,3 @@
-# BadranSeq 1.1.0
-
-## New features
-
-* `do_SankeyPlot()` creates Sankey (alluvial) diagrams showing the relationship
-  between 2–3 categorical metadata variables from a Seurat object. Each
-  stratum is labelled and coloured; flows connect cells across variables.
-  Powered by ggalluvial.
-
----
-
 # BadranSeq 1.0.0
 
 ## Visualisation
@@ -42,6 +31,11 @@
 * `do_ViolinPlot()` creates descriptive violin plots with boxplot overlay,
   jittered raw data points, and centrality markers (median/mean diamond with
   numeric label). Pure ggplot2, no statistical testing.
+
+* `do_SankeyPlot()` creates Sankey (alluvial) diagrams showing the relationship
+  between 2–3 categorical metadata variables from a Seurat object. Each
+  stratum is labelled and coloured; flows connect cells across variables.
+  Powered by ggalluvial.
 
 ## Data extraction
 
