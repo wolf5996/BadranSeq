@@ -26,8 +26,6 @@
   : Get PCA Variance Explained Summary
 - [`pbmc3k`](https://wolf5996.github.io/BadranSeq/reference/pbmc3k.md) :
   PBMC 3K Dataset
-- [`run_scvi()`](https://wolf5996.github.io/BadranSeq/reference/run_scvi.md)
-  : Run scVI Batch Correction
 - [`select_cells_interactive()`](https://wolf5996.github.io/BadranSeq/reference/select_cells_interactive.md)
   : Interactive Cell Selection for Seurat Objects
 - [`seurat_sleepwalk()`](https://wolf5996.github.io/BadranSeq/reference/seurat_sleepwalk.md)
