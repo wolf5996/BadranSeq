@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BadranSeq</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,14 +33,6 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.0" id="badranseq-110">BadranSeq 1.1.0<a class="anchor" aria-label="anchor" href="#badranseq-110"></a></h2>
-<div class="section level3">
-<h3 id="new-features-1-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0"></a></h3>
-<ul><li>
-<code><a href="../reference/do_SankeyPlot.html">do_SankeyPlot()</a></code> creates Sankey (alluvial) diagrams showing the relationship between 2–3 categorical metadata variables from a Seurat object. Each stratum is labelled and coloured; flows connect cells across variables. Powered by ggalluvial.</li>
-</ul><hr></div>
-</div>
-    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="badranseq-100">BadranSeq 1.0.0<a class="anchor" aria-label="anchor" href="#badranseq-100"></a></h2>
 <div class="section level3">
 <h3 id="visualisation-1-0-0">Visualisation<a class="anchor" aria-label="anchor" href="#visualisation-1-0-0"></a></h3>
@@ -52,6 +44,7 @@
 <li><p>Split-panel silhouette feature: when <code>split.by</code> is used, each panel shows coloured cells for the current category against a grey silhouette of all cells, preserving spatial context across panels.</p></li>
 <li><p><code><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot()</a></code> creates statistical violin plots via <code><a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html" class="external-link">ggstatsplot::ggbetweenstats()</a></code> with Seurat-aware data extraction, automatic colour generation, and nonparametric testing (Kruskal–Wallis + Dunn’s) by default. The <code>group.levels</code> argument allows comparing a subset of groups without manually subsetting the Seurat object. The <code>pairwise.display</code> argument controls bracket visibility.</p></li>
 <li><p><code><a href="../reference/do_ViolinPlot.html">do_ViolinPlot()</a></code> creates descriptive violin plots with boxplot overlay, jittered raw data points, and centrality markers (median/mean diamond with numeric label). Pure ggplot2, no statistical testing.</p></li>
+<li><p><code><a href="../reference/do_SankeyPlot.html">do_SankeyPlot()</a></code> creates Sankey (alluvial) diagrams showing the relationship between 2–3 categorical metadata variables from a Seurat object. Each stratum is labelled and coloured; flows connect cells across variables. Powered by ggalluvial.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="data-extraction-1-0-0">Data extraction<a class="anchor" aria-label="anchor" href="#data-extraction-1-0-0"></a></h3>

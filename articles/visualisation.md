@@ -341,3 +341,26 @@ do_ViolinPlot(pbmc3k, features = "CD3D",
 ```
 
 ![](visualisation_files/figure-html/plain-violin-1.png)
+
+## Sankey / alluvial diagrams
+
+[`do_SankeyPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_SankeyPlot.md)
+visualises relationships between categorical metadata variables using an
+alluvial (Sankey) diagram. Each stratum is labelled and coloured; flows
+connect cells across variables.
+
+### Clusters to cell types
+
+A common use case — mapping cluster IDs to biological annotations:
+
+``` r
+do_SankeyPlot(pbmc3k,
+              columns = c("seurat_clusters", "seurat_annotations"))
+```
+
+    ## 62 cell(s) with NA values excluded from plot.
+
+![](visualisation_files/figure-html/sankey-basic-1.png)
+
+This immediately shows which clusters map cleanly to a single cell type
+and which are split across multiple annotations.

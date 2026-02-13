@@ -27,6 +27,7 @@ across every analysis, every manuscript, and every lab.
 | Interactive cell selection  |     Limited (`CellSelector`)     |   **Additive/subtractive brush selection**    |
 | Publication theme           |                No                |       **Consistent across all outputs**       |
 | Automatic rasterisation     |                No                |        **\>50k cells auto-rasterised**        |
+| Sankey / alluvial diagrams  |                No                |        **Metadata relationship flows**        |
 
 ## Visual comparison
 
@@ -96,6 +97,21 @@ do_StatsViolinPlot(pbmc3k, features = "CD3D",
 Set `pairwise.display = "none"` to keep the omnibus test subtitle
 without bracket clutter.
 
+### Sankey diagrams
+
+[`do_SankeyPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_SankeyPlot.md)
+visualises how categorical metadata variables relate to each other — for
+example, how clusters map to cell type annotations:
+
+``` r
+do_SankeyPlot(pbmc3k, columns = c("seurat_clusters", "seurat_annotations"))
+```
+
+![](reference/figures/README-sankey-1.png)
+
+Each stratum is labelled; flows show how cells distribute across
+categories. Powered by ggalluvial.
+
 ## Installation
 
 ``` r
@@ -108,21 +124,23 @@ devtools::install_github("wolf5996/BadranSeq")
 
 ## Function reference
 
-| Function                                                                                                     | Purpose                                          |
-|--------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
-| [`do_UmapPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_UmapPlot.md)                             | UMAP with borders, labels, silhouette split      |
-| [`do_PcaPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_PcaPlot.md)                               | PCA with automatic variance labels               |
-| [`do_DimPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_DimPlot.md)                               | Unified entry point (routes to UMAP/PCA handler) |
-| [`do_FeaturePlot()`](https://wolf5996.github.io/BadranSeq/reference/do_FeaturePlot.md)                       | Gene expression overlay with viridis scale       |
-| [`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md)               | Statistical violin via ggbetweenstats            |
-| [`do_ViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_ViolinPlot.md)                         | Descriptive violin (no statistics)               |
-| [`EnhancedElbowPlot()`](https://wolf5996.github.io/BadranSeq/reference/EnhancedElbowPlot.md)                 | Variance-explained elbow plot with cutoff        |
-| [`get_pca_variance()`](https://wolf5996.github.io/BadranSeq/reference/get_pca_variance.md)                   | Extract PCA variance as a data.frame             |
-| [`select_cells_interactive()`](https://wolf5996.github.io/BadranSeq/reference/select_cells_interactive.md)   | Shiny brush selection of cells                   |
-| [`seurat_sleepwalk()`](https://wolf5996.github.io/BadranSeq/reference/seurat_sleepwalk.md)                   | Interactive embedding distance explorer          |
-| [`fetch_feature_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_feature_data.md)               | Tidy long-format extraction from Seurat          |
-| [`theme_badranseq()`](https://wolf5996.github.io/BadranSeq/reference/theme_badranseq.md)                     | Publication theme for any ggplot                 |
-| [`generate_badranseq_colors()`](https://wolf5996.github.io/BadranSeq/reference/generate_badranseq_colors.md) | Vivid categorical colour palette                 |
+| Function                                                                                                     | Purpose                                            |
+|--------------------------------------------------------------------------------------------------------------|----------------------------------------------------|
+| [`do_UmapPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_UmapPlot.md)                             | UMAP with borders, labels, silhouette split        |
+| [`do_PcaPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_PcaPlot.md)                               | PCA with automatic variance labels                 |
+| [`do_DimPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_DimPlot.md)                               | Unified entry point (routes to UMAP/PCA handler)   |
+| [`do_FeaturePlot()`](https://wolf5996.github.io/BadranSeq/reference/do_FeaturePlot.md)                       | Gene expression overlay with viridis scale         |
+| [`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md)               | Statistical violin via ggbetweenstats              |
+| [`do_ViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_ViolinPlot.md)                         | Descriptive violin (no statistics)                 |
+| [`do_SankeyPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_SankeyPlot.md)                         | Sankey/alluvial diagram for metadata relationships |
+| [`EnhancedElbowPlot()`](https://wolf5996.github.io/BadranSeq/reference/EnhancedElbowPlot.md)                 | Variance-explained elbow plot with cutoff          |
+| [`get_pca_variance()`](https://wolf5996.github.io/BadranSeq/reference/get_pca_variance.md)                   | Extract PCA variance as a data.frame               |
+| [`select_cells_interactive()`](https://wolf5996.github.io/BadranSeq/reference/select_cells_interactive.md)   | Shiny brush selection of cells                     |
+| [`seurat_sleepwalk()`](https://wolf5996.github.io/BadranSeq/reference/seurat_sleepwalk.md)                   | Interactive embedding distance explorer            |
+| [`fetch_cell_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_cell_data.md)                     | Tidy cell-level metadata/embedding extraction      |
+| [`fetch_feature_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_feature_data.md)               | Tidy long-format extraction from Seurat            |
+| [`theme_badranseq()`](https://wolf5996.github.io/BadranSeq/reference/theme_badranseq.md)                     | Publication theme for any ggplot                   |
+| [`generate_badranseq_colors()`](https://wolf5996.github.io/BadranSeq/reference/generate_badranseq_colors.md) | Vivid categorical colour palette                   |
 
 Full documentation and worked examples: **[pkgdown
 site](https://wolf5996.github.io/BadranSeq/)**
@@ -135,7 +153,7 @@ stats.
 
 **Optional** (install for extended features): patchwork (multi-panel
 layouts), ggrastr (rasterisation), ggstatsplot (statistical violin
-plots).
+plots), ggalluvial (Sankey diagrams).
 
 ## Acknowledgements
 

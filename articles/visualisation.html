@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BadranSeq</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -388,6 +388,27 @@ Use this when you want a clean descriptive plot:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_ViolinPlot.html">do_ViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
 <span>              group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/plain-violin-1.png" class="r-plt" alt="" width="672"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="sankey-alluvial-diagrams">Sankey / alluvial diagrams<a class="anchor" aria-label="anchor" href="#sankey-alluvial-diagrams"></a>
+</h2>
+<p><code><a href="../reference/do_SankeyPlot.html">do_SankeyPlot()</a></code> visualises relationships between
+categorical metadata variables using an alluvial (Sankey) diagram. Each
+stratum is labelled and coloured; flows connect cells across
+variables.</p>
+<div class="section level3">
+<h3 id="clusters-to-cell-types">Clusters to cell types<a class="anchor" aria-label="anchor" href="#clusters-to-cell-types"></a>
+</h3>
+<p>A common use case — mapping cluster IDs to biological
+annotations:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_SankeyPlot.html">do_SankeyPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
+<span>              columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"seurat_clusters"</span>, <span class="st">"seurat_annotations"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## 62 cell(s) with NA values excluded from plot.</span></span></code></pre>
+<p><img src="visualisation_files/figure-html/sankey-basic-1.png" class="r-plt" alt="" width="768"></p>
+<p>This immediately shows which clusters map cleanly to a single cell
+type and which are split across multiple annotations.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

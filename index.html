@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">BadranSeq</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,6 +121,11 @@
 <td align="center">No</td>
 <td align="center"><strong>&gt;50k cells auto-rasterised</strong></td>
 </tr>
+<tr class="even">
+<td>Sankey / alluvial diagrams</td>
+<td align="center">No</td>
+<td align="center"><strong>Metadata relationship flows</strong></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -169,11 +174,20 @@
 <p><img src="reference/figures/README-stats-violin-1.png" alt="" width="100%"></p>
 <p>Set <code>pairwise.display = "none"</code> to keep the omnibus test subtitle without bracket clutter.</p>
 </div>
+<div class="section level3">
+<h3 id="sankey-diagrams">Sankey diagrams<a class="anchor" aria-label="anchor" href="#sankey-diagrams"></a>
+</h3>
+<p><code><a href="reference/do_SankeyPlot.html">do_SankeyPlot()</a></code> visualises how categorical metadata variables relate to each other — for example, how clusters map to cell type annotations:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/do_SankeyPlot.html">do_SankeyPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"seurat_clusters"</span>, <span class="st">"seurat_annotations"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-sankey-1.png" alt="" width="100%"></p>
+<p>Each stratum is labelled; flows show how cells distribute across categories. Powered by ggalluvial.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># pak (recommended)</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"wolf5996/BadranSeq"</span><span class="op">)</span></span>
 <span></span>
@@ -185,8 +199,8 @@
 </h2>
 <table class="table">
 <colgroup>
-<col width="38%">
-<col width="61%">
+<col width="37%">
+<col width="62%">
 </colgroup>
 <thead><tr class="header">
 <th>Function</th>
@@ -218,20 +232,28 @@
 <td>Descriptive violin (no statistics)</td>
 </tr>
 <tr class="odd">
+<td><code><a href="reference/do_SankeyPlot.html">do_SankeyPlot()</a></code></td>
+<td>Sankey/alluvial diagram for metadata relationships</td>
+</tr>
+<tr class="even">
 <td><code><a href="reference/EnhancedElbowPlot.html">EnhancedElbowPlot()</a></code></td>
 <td>Variance-explained elbow plot with cutoff</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code><a href="reference/get_pca_variance.html">get_pca_variance()</a></code></td>
 <td>Extract PCA variance as a data.frame</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code><a href="reference/select_cells_interactive.html">select_cells_interactive()</a></code></td>
 <td>Shiny brush selection of cells</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code><a href="reference/seurat_sleepwalk.html">seurat_sleepwalk()</a></code></td>
 <td>Interactive embedding distance explorer</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/fetch_cell_data.html">fetch_cell_data()</a></code></td>
+<td>Tidy cell-level metadata/embedding extraction</td>
 </tr>
 <tr class="odd">
 <td><code><a href="reference/fetch_feature_data.html">fetch_feature_data()</a></code></td>
@@ -253,7 +275,7 @@
 <h2 id="dependencies">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"></a>
 </h2>
 <p><strong>Core</strong> (automatically installed): ggplot2, Seurat, colorspace, dplyr, tidyr, tibble, purrr, rlang, magrittr, SeuratObject, shiny, sleepwalk, stats.</p>
-<p><strong>Optional</strong> (install for extended features): patchwork (multi-panel layouts), ggrastr (rasterisation), ggstatsplot (statistical violin plots).</p>
+<p><strong>Optional</strong> (install for extended features): patchwork (multi-panel layouts), ggrastr (rasterisation), ggstatsplot (statistical violin plots), ggalluvial (Sankey diagrams).</p>
 </div>
 <div class="section level2">
 <h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
