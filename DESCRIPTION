@@ -13,6 +13,7 @@ Suggests:
     ggalluvial,
     ggrastr,
     ggstatsplot,
+    msigdbr (>= 10.0.0),
     patchwork,
     reticulate,
     testthat (>= 3.0.0)

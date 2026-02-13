@@ -13,6 +13,12 @@
   sceasy, which does not support Seurat v5. Requires `anndata` and
   `reticulate` (both in Suggests).
 
+* `score_signatures()` scores cells against MSigDB gene sets (Hallmark, KEGG,
+  Reactome, GO, etc.) via `Seurat::AddModuleScore()`. Validates gene name format
+  against the Seurat object (detects Ensembl/Entrez IDs vs HGNC symbols),
+  filters to present genes, and supports a `report_only` mode that returns a
+  tibble of matched/missing genes per set. Requires `msigdbr` (in Suggests).
+
 ---
 
 # BadranSeq 1.0.0
