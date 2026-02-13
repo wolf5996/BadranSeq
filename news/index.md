@@ -10,22 +10,6 @@
   is labelled and coloured; flows connect cells across variables.
   Powered by ggalluvial.
 
-- [`seurat_to_h5ad()`](https://wolf5996.github.io/BadranSeq/reference/seurat_to_h5ad.md)
-  converts a Seurat object to a Python AnnData object (and optionally
-  writes an .h5ad file). The first requested layer becomes AnnData.X;
-  additional layers and all reductions are transferred. Replaces sceasy,
-  which does not support Seurat v5. Requires `anndata` and `reticulate`
-  (both in Suggests).
-
-- [`score_signatures()`](https://wolf5996.github.io/BadranSeq/reference/score_signatures.md)
-  scores cells against MSigDB gene sets (Hallmark, KEGG, Reactome, GO,
-  etc.) via
-  [`Seurat::AddModuleScore()`](https://satijalab.org/seurat/reference/AddModuleScore.html).
-  Validates gene name format against the Seurat object (detects
-  Ensembl/Entrez IDs vs HGNC symbols), filters to present genes, and
-  supports a `report_only` mode that returns a tibble of matched/missing
-  genes per set. Requires `msigdbr` (in Suggests).
-
 ------------------------------------------------------------------------
 
 ## BadranSeq 1.0.0

@@ -187,14 +187,10 @@ MIT
   : Get PCA Variance Explained Summary
 - [`pbmc3k`](https://wolf5996.github.io/BadranSeq/reference/pbmc3k.md) :
   PBMC 3K Dataset
-- [`score_signatures()`](https://wolf5996.github.io/BadranSeq/reference/score_signatures.md)
-  : Score Gene Set Signatures
 - [`select_cells_interactive()`](https://wolf5996.github.io/BadranSeq/reference/select_cells_interactive.md)
   : Interactive Cell Selection for Seurat Objects
 - [`seurat_sleepwalk()`](https://wolf5996.github.io/BadranSeq/reference/seurat_sleepwalk.md)
   : SleepWalk Wrapper for Seurat Objects
-- [`seurat_to_h5ad()`](https://wolf5996.github.io/BadranSeq/reference/seurat_to_h5ad.md)
-  : Convert a Seurat Object to AnnData
 - [`theme_badranseq()`](https://wolf5996.github.io/BadranSeq/reference/theme_badranseq.md)
   : BadranSeq Publication-Ready Theme
 
