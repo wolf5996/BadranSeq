@@ -38,6 +38,7 @@
 <h3 id="new-features-1-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0"></a></h3>
 <ul><li><p><code><a href="../reference/do_SankeyPlot.html">do_SankeyPlot()</a></code> creates Sankey (alluvial) diagrams showing the relationship between 2–3 categorical metadata variables from a Seurat object. Each stratum is labelled and coloured; flows connect cells across variables. Powered by ggalluvial.</p></li>
 <li><p><code><a href="../reference/seurat_to_h5ad.html">seurat_to_h5ad()</a></code> converts a Seurat object to a Python AnnData object (and optionally writes an .h5ad file). The first requested layer becomes AnnData.X; additional layers and all reductions are transferred. Replaces sceasy, which does not support Seurat v5. Requires <code>anndata</code> and <code>reticulate</code> (both in Suggests).</p></li>
+<li><p><code><a href="../reference/score_signatures.html">score_signatures()</a></code> scores cells against MSigDB gene sets (Hallmark, KEGG, Reactome, GO, etc.) via <code><a href="https://satijalab.org/seurat/reference/AddModuleScore.html" class="external-link">Seurat::AddModuleScore()</a></code>. Validates gene name format against the Seurat object (detects Ensembl/Entrez IDs vs HGNC symbols), filters to present genes, and supports a <code>report_only</code> mode that returns a tibble of matched/missing genes per set. Requires <code>msigdbr</code> (in Suggests).</p></li>
 </ul><hr></div>
 </div>
     <div class="section level2">

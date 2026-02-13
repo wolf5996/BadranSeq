@@ -26,6 +26,8 @@
   : Get PCA Variance Explained Summary
 - [`pbmc3k`](https://wolf5996.github.io/BadranSeq/reference/pbmc3k.md) :
   PBMC 3K Dataset
+- [`score_signatures()`](https://wolf5996.github.io/BadranSeq/reference/score_signatures.md)
+  : Score Gene Set Signatures
 - [`select_cells_interactive()`](https://wolf5996.github.io/BadranSeq/reference/select_cells_interactive.md)
   : Interactive Cell Selection for Seurat Objects
 - [`seurat_sleepwalk()`](https://wolf5996.github.io/BadranSeq/reference/seurat_sleepwalk.md)
