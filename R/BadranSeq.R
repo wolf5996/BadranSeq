@@ -95,6 +95,7 @@ get_pca_variance <- function(object, n_pcs = NULL) {
 #' @param border.size numeric. Border size multiplier (default: 2).
 #' @param border.color character. Border color (default: "black").
 #' @param legend.title character. Custom legend title (NULL for default).
+#' @param show.legend logical. Show the colour legend (default: TRUE).
 #' @param ncol numeric. Number of columns for split panels (default: NULL, auto).
 #'
 #' @return ggplot2 object or list of ggplot2 objects when split.by is used.
@@ -122,6 +123,7 @@ get_pca_variance <- function(object, n_pcs = NULL) {
     border.size = 2,
     border.color = "black",
     legend.title = NULL,
+    show.legend = TRUE,
     ncol = NULL
 ) {
 
@@ -205,6 +207,7 @@ get_pca_variance <- function(object, n_pcs = NULL) {
       plot_cell_borders = plot_cell_borders,
       border.size = border.size,
       border.color = border.color,
+      show.legend = show.legend,
       ncol = ncol
     ))
   }
@@ -291,6 +294,10 @@ get_pca_variance <- function(object, n_pcs = NULL) {
       )
     )
 
+  if (!show.legend) {
+    p <- p + ggplot2::theme(legend.position = "none")
+  }
+
   return(p)
 }
 
@@ -319,6 +326,7 @@ get_pca_variance <- function(object, n_pcs = NULL) {
     plot_cell_borders,
     border.size,
     border.color,
+    show.legend = TRUE,
     ncol
 ) {
 
@@ -486,10 +494,11 @@ get_pca_variance <- function(object, n_pcs = NULL) {
   names(plot_list) <- split_levels
 
   # Combine plots using patchwork if available
-if (requireNamespace("patchwork", quietly = TRUE)) {
+  legend_pos <- if (show.legend) "bottom" else "none"
+  if (requireNamespace("patchwork", quietly = TRUE)) {
     combined <- patchwork::wrap_plots(plot_list, ncol = ncol, guides = "collect") +
       patchwork::plot_layout(guides = "collect") &
-      ggplot2::theme(legend.position = "bottom")
+      ggplot2::theme(legend.position = legend_pos)
     return(combined)
   } else {
     # Return list if patchwork not available
@@ -526,6 +535,7 @@ if (requireNamespace("patchwork", quietly = TRUE)) {
 #' @param border.size numeric. Border size multiplier (default: 2).
 #' @param border.color character. Border color (default: "black").
 #' @param legend.title character. Custom legend title (NULL removes title).
+#' @param show.legend logical. Show the colour legend (default: TRUE). Set to FALSE to hide the legend entirely.
 #' @param ncol numeric. Number of columns for split panels (default: NULL, auto).
 #' @param ... Additional arguments (currently unused).
 #'
@@ -558,6 +568,7 @@ do_PcaPlot <- function(
     border.size = 2,
     border.color = "black",
     legend.title = NULL,
+    show.legend = TRUE,
     ncol = NULL,
     ...
 ) {
@@ -611,6 +622,7 @@ do_PcaPlot <- function(
     border.size = border.size,
     border.color = border.color,
     legend.title = legend.title,
+    show.legend = show.legend,
     ncol = ncol
   )
 
@@ -656,6 +668,7 @@ do_UmapPlot <- function(
     border.size = 2,
     border.color = "black",
     legend.title = NULL,
+    show.legend = TRUE,
     ncol = NULL,
     ...
 ) {
@@ -698,6 +711,7 @@ do_UmapPlot <- function(
     border.size = border.size,
     border.color = border.color,
     legend.title = legend.title,
+    show.legend = show.legend,
     ncol = ncol
   )
 
@@ -750,6 +764,7 @@ do_DimPlot <- function(
     border.size = 2,
     border.color = "black",
     legend.title = NULL,
+    show.legend = TRUE,
     ncol = NULL,
     ...
 ) {
@@ -785,6 +800,7 @@ do_DimPlot <- function(
       border.size = border.size,
       border.color = border.color,
       legend.title = legend.title,
+      show.legend = show.legend,
       ncol = ncol,
       ...
     ))
@@ -807,6 +823,7 @@ do_DimPlot <- function(
       border.size = border.size,
       border.color = border.color,
       legend.title = legend.title,
+      show.legend = show.legend,
       ncol = ncol,
       ...
     ))
@@ -832,6 +849,7 @@ do_DimPlot <- function(
     border.size = border.size,
     border.color = border.color,
     legend.title = legend.title,
+    show.legend = show.legend,
     ncol = ncol
   )
 
