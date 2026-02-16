@@ -41,7 +41,9 @@ do_StatsViolinPlot(
 
 - features:
 
-  character. Gene names to plot (required). Must be non-empty.
+  character. Gene names or numeric metadata column names to plot
+  (required). Can mix both types freely — each gets its own panel.
+  Examples: `c("CD3D", "nCount_RNA", "percent.mt")`.
 
 - group.by:
 
@@ -56,7 +58,8 @@ do_StatsViolinPlot(
 
 - layer:
 
-  character. Layer to extract expression from (default: "data").
+  character. Layer to extract expression from (default: "data"). Only
+  applies to gene features.
 
 - assay:
 

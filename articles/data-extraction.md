@@ -58,18 +58,18 @@ fetch_feature_data(
 ```
 
     ## # A tibble: 2,700 × 5
-    ##    cell_id        feature  data UMAP1  UMAP2
-    ##    <chr>          <fct>   <dbl> <dbl>  <dbl>
-    ##  1 AAACATACAACCAC CD3D    1.61   4.21   3.64
-    ##  2 AAACATTGAGCTAC CD3D    0      1.63 -12.7 
-    ##  3 AAACATTGATCAGC CD3D    2.20   4.91   6.23
-    ##  4 AAACCGTGCTTCCG CD3D    0     -9.58  -5.63
-    ##  5 AAACCGTGTATGCG CD3D    0      4.86  -3.57
-    ##  6 AAACGCACTGGTAC CD3D    0.693  5.63   7.29
-    ##  7 AAACGCTGACCAGT CD3D    1.10   5.53   3.74
-    ##  8 AAACGCTGGTTCTT CD3D    1.39   5.47   3.79
-    ##  9 AAACGCTGTAGCCA CD3D    1.10  -1.51 -12.6 
-    ## 10 AAACGCTGTTTCTG CD3D    0     -9.39  -2.97
+    ##    cell_id        features  data UMAP1  UMAP2
+    ##    <chr>          <fct>    <dbl> <dbl>  <dbl>
+    ##  1 AAACATACAACCAC CD3D     1.61   4.21   3.64
+    ##  2 AAACATTGAGCTAC CD3D     0      1.63 -12.7 
+    ##  3 AAACATTGATCAGC CD3D     2.20   4.91   6.23
+    ##  4 AAACCGTGCTTCCG CD3D     0     -9.58  -5.63
+    ##  5 AAACCGTGTATGCG CD3D     0      4.86  -3.57
+    ##  6 AAACGCACTGGTAC CD3D     0.693  5.63   7.29
+    ##  7 AAACGCTGACCAGT CD3D     1.10   5.53   3.74
+    ##  8 AAACGCTGGTTCTT CD3D     1.39   5.47   3.79
+    ##  9 AAACGCTGTAGCCA CD3D     1.10  -1.51 -12.6 
+    ## 10 AAACGCTGTTTCTG CD3D     0     -9.39  -2.97
     ## # ℹ 2,690 more rows
 
 `cell_id` is a column. The feature name is explicit. The layer is
@@ -187,25 +187,25 @@ fetch_feature_data(pbmc3k, features = "CD3D")
 ```
 
     ## # A tibble: 2,700 × 11
-    ##    cell_id   feature  data orig.ident nCount_RNA nFeature_RNA seurat_annotations
-    ##    <chr>     <fct>   <dbl> <fct>           <dbl>        <int> <fct>             
-    ##  1 AAACATAC… CD3D    1.61  pbmc3k           2419          779 Memory CD4 T      
-    ##  2 AAACATTG… CD3D    0     pbmc3k           4903         1352 B                 
-    ##  3 AAACATTG… CD3D    2.20  pbmc3k           3147         1129 Memory CD4 T      
-    ##  4 AAACCGTG… CD3D    0     pbmc3k           2639          960 CD14+ Mono        
-    ##  5 AAACCGTG… CD3D    0     pbmc3k            980          521 NK                
-    ##  6 AAACGCAC… CD3D    0.693 pbmc3k           2163          781 Memory CD4 T      
-    ##  7 AAACGCTG… CD3D    1.10  pbmc3k           2175          782 CD8 T             
-    ##  8 AAACGCTG… CD3D    1.39  pbmc3k           2260          790 CD8 T             
-    ##  9 AAACGCTG… CD3D    1.10  pbmc3k           1275          532 Naive CD4 T       
-    ## 10 AAACGCTG… CD3D    0     pbmc3k           1103          550 FCGR3A+ Mono      
+    ##    cell_id  features  data orig.ident nCount_RNA nFeature_RNA seurat_annotations
+    ##    <chr>    <fct>    <dbl> <fct>           <dbl>        <int> <fct>             
+    ##  1 AAACATA… CD3D     1.61  pbmc3k           2419          779 Memory CD4 T      
+    ##  2 AAACATT… CD3D     0     pbmc3k           4903         1352 B                 
+    ##  3 AAACATT… CD3D     2.20  pbmc3k           3147         1129 Memory CD4 T      
+    ##  4 AAACCGT… CD3D     0     pbmc3k           2639          960 CD14+ Mono        
+    ##  5 AAACCGT… CD3D     0     pbmc3k            980          521 NK                
+    ##  6 AAACGCA… CD3D     0.693 pbmc3k           2163          781 Memory CD4 T      
+    ##  7 AAACGCT… CD3D     1.10  pbmc3k           2175          782 CD8 T             
+    ##  8 AAACGCT… CD3D     1.39  pbmc3k           2260          790 CD8 T             
+    ##  9 AAACGCT… CD3D     1.10  pbmc3k           1275          532 Naive CD4 T       
+    ## 10 AAACGCT… CD3D     0     pbmc3k           1103          550 FCGR3A+ Mono      
     ## # ℹ 2,690 more rows
     ## # ℹ 4 more variables: nCount_SCT <dbl>, nFeature_SCT <int>,
     ## #   SCT_snn_res.0.5 <fct>, seurat_clusters <fct>
 
 ### Multiple genes
 
-The `feature` column is a factor preserving your input order — useful
+The `features` column is a factor preserving your input order — useful
 for controlling facet ordering in plots:
 
 ``` r
@@ -217,18 +217,18 @@ fetch_feature_data(
 ```
 
     ## # A tibble: 10,800 × 4
-    ##    cell_id        feature  data seurat_clusters
-    ##    <chr>          <fct>   <dbl> <fct>          
-    ##  1 AAACATACAACCAC CD3D    1.61  4              
-    ##  2 AAACATACAACCAC CD8A    0.693 4              
-    ##  3 AAACATACAACCAC CD14    0     4              
-    ##  4 AAACATACAACCAC MS4A1   0     4              
-    ##  5 AAACATTGAGCTAC CD3D    0     3              
-    ##  6 AAACATTGAGCTAC CD8A    0     3              
-    ##  7 AAACATTGAGCTAC CD14    0     3              
-    ##  8 AAACATTGAGCTAC MS4A1   1.61  3              
-    ##  9 AAACATTGATCAGC CD3D    2.20  1              
-    ## 10 AAACATTGATCAGC CD8A    0     1              
+    ##    cell_id        features  data seurat_clusters
+    ##    <chr>          <fct>    <dbl> <fct>          
+    ##  1 AAACATACAACCAC CD3D     1.61  4              
+    ##  2 AAACATACAACCAC CD8A     0.693 4              
+    ##  3 AAACATACAACCAC CD14     0     4              
+    ##  4 AAACATACAACCAC MS4A1    0     4              
+    ##  5 AAACATTGAGCTAC CD3D     0     3              
+    ##  6 AAACATTGAGCTAC CD8A     0     3              
+    ##  7 AAACATTGAGCTAC CD14     0     3              
+    ##  8 AAACATTGAGCTAC MS4A1    1.61  3              
+    ##  9 AAACATTGATCAGC CD3D     2.20  1              
+    ## 10 AAACATTGATCAGC CD8A     0     1              
     ## # ℹ 10,790 more rows
 
 ### Multiple layers side-by-side
@@ -246,18 +246,18 @@ fetch_feature_data(
 ```
 
     ## # A tibble: 2,700 × 4
-    ##    cell_id        feature counts  data
-    ##    <chr>          <fct>    <dbl> <dbl>
-    ##  1 AAACATACAACCAC CD3D         4 1.61 
-    ##  2 AAACATTGAGCTAC CD3D         0 0    
-    ##  3 AAACATTGATCAGC CD3D         8 2.20 
-    ##  4 AAACCGTGCTTCCG CD3D         0 0    
-    ##  5 AAACCGTGTATGCG CD3D         0 0    
-    ##  6 AAACGCACTGGTAC CD3D         1 0.693
-    ##  7 AAACGCTGACCAGT CD3D         2 1.10 
-    ##  8 AAACGCTGGTTCTT CD3D         3 1.39 
-    ##  9 AAACGCTGTAGCCA CD3D         2 1.10 
-    ## 10 AAACGCTGTTTCTG CD3D         0 0    
+    ##    cell_id        features counts  data
+    ##    <chr>          <fct>     <dbl> <dbl>
+    ##  1 AAACATACAACCAC CD3D          4 1.61 
+    ##  2 AAACATTGAGCTAC CD3D          0 0    
+    ##  3 AAACATTGATCAGC CD3D          8 2.20 
+    ##  4 AAACCGTGCTTCCG CD3D          0 0    
+    ##  5 AAACCGTGTATGCG CD3D          0 0    
+    ##  6 AAACGCACTGGTAC CD3D          1 0.693
+    ##  7 AAACGCTGACCAGT CD3D          2 1.10 
+    ##  8 AAACGCTGGTTCTT CD3D          3 1.39 
+    ##  9 AAACGCTGTAGCCA CD3D          2 1.10 
+    ## 10 AAACGCTGTTTCTG CD3D          0 0    
     ## # ℹ 2,690 more rows
 
 ### With embeddings for custom plots
@@ -364,7 +364,7 @@ markers <- fetch_feature_data(
 
 ggplot(markers, aes(x = seurat_clusters, y = data, fill = seurat_clusters)) +
   geom_violin(scale = "width", trim = TRUE) +
-  facet_wrap(~feature, scales = "free_y") +
+  facet_wrap(~features, scales = "free_y") +
   theme_minimal() +
   theme(legend.position = "none") +
   labs(x = "Cluster", y = "Normalised expression")
@@ -372,5 +372,5 @@ ggplot(markers, aes(x = seurat_clusters, y = data, fill = seurat_clusters)) +
 
 ![](data-extraction_files/figure-html/workflow-1.png)
 
-Because `feature` is a factor in input order, the facet panels appear in
-the biologically meaningful order you specified — not alphabetically.
+Because `features` is a factor in input order, the facet panels appear
+in the biologically meaningful order you specified — not alphabetically.

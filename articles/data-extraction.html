@@ -132,18 +132,18 @@ requested through separate, explicit arguments:</p>
 <span>  metadata <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2,700 × 5</span></span></span>
-<span><span class="co">##    cell_id        feature  data UMAP1  UMAP2</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> AAACATACAACCAC CD3D    1.61   4.21   3.64</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> AAACATTGAGCTAC CD3D    0      1.63 -<span style="color: #BB0000;">12.7</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> AAACATTGATCAGC CD3D    2.20   4.91   6.23</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> AAACCGTGCTTCCG CD3D    0     -<span style="color: #BB0000;">9.58</span>  -<span style="color: #BB0000;">5.63</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> AAACCGTGTATGCG CD3D    0      4.86  -<span style="color: #BB0000;">3.57</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> AAACGCACTGGTAC CD3D    0.693  5.63   7.29</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> AAACGCTGACCAGT CD3D    1.10   5.53   3.74</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> AAACGCTGGTTCTT CD3D    1.39   5.47   3.79</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> AAACGCTGTAGCCA CD3D    1.10  -<span style="color: #BB0000;">1.51</span> -<span style="color: #BB0000;">12.6</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> AAACGCTGTTTCTG CD3D    0     -<span style="color: #BB0000;">9.39</span>  -<span style="color: #BB0000;">2.97</span></span></span>
+<span><span class="co">##    cell_id        features  data UMAP1  UMAP2</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> AAACATACAACCAC CD3D     1.61   4.21   3.64</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> AAACATTGAGCTAC CD3D     0      1.63 -<span style="color: #BB0000;">12.7</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> AAACATTGATCAGC CD3D     2.20   4.91   6.23</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> AAACCGTGCTTCCG CD3D     0     -<span style="color: #BB0000;">9.58</span>  -<span style="color: #BB0000;">5.63</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> AAACCGTGTATGCG CD3D     0      4.86  -<span style="color: #BB0000;">3.57</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> AAACGCACTGGTAC CD3D     0.693  5.63   7.29</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> AAACGCTGACCAGT CD3D     1.10   5.53   3.74</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> AAACGCTGGTTCTT CD3D     1.39   5.47   3.79</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> AAACGCTGTAGCCA CD3D     1.10  -<span style="color: #BB0000;">1.51</span> -<span style="color: #BB0000;">12.6</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> AAACGCTGTTTCTG CD3D     0     -<span style="color: #BB0000;">9.39</span>  -<span style="color: #BB0000;">2.97</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 2,690 more rows</span></span></span></code></pre>
 <p><code>cell_id</code> is a column. The feature name is explicit. The
 layer is explicit. The output is a tibble ready for <code>ggplot2</code>
@@ -256,18 +256,18 @@ requested layers.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fetch_feature_data.html">fetch_feature_data</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2,700 × 11</span></span></span>
-<span><span class="co">##    cell_id   feature  data orig.ident nCount_RNA nFeature_RNA seurat_annotations</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> AAACATAC… CD3D    1.61  pbmc3k           <span style="text-decoration: underline;">2</span>419          779 Memory CD4 T      </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> AAACATTG… CD3D    0     pbmc3k           <span style="text-decoration: underline;">4</span>903         <span style="text-decoration: underline;">1</span>352 B                 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> AAACATTG… CD3D    2.20  pbmc3k           <span style="text-decoration: underline;">3</span>147         <span style="text-decoration: underline;">1</span>129 Memory CD4 T      </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> AAACCGTG… CD3D    0     pbmc3k           <span style="text-decoration: underline;">2</span>639          960 CD14+ Mono        </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> AAACCGTG… CD3D    0     pbmc3k            980          521 NK                </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> AAACGCAC… CD3D    0.693 pbmc3k           <span style="text-decoration: underline;">2</span>163          781 Memory CD4 T      </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> AAACGCTG… CD3D    1.10  pbmc3k           <span style="text-decoration: underline;">2</span>175          782 CD8 T             </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> AAACGCTG… CD3D    1.39  pbmc3k           <span style="text-decoration: underline;">2</span>260          790 CD8 T             </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> AAACGCTG… CD3D    1.10  pbmc3k           <span style="text-decoration: underline;">1</span>275          532 Naive CD4 T       </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> AAACGCTG… CD3D    0     pbmc3k           <span style="text-decoration: underline;">1</span>103          550 FCGR3A+ Mono      </span></span>
+<span><span class="co">##    cell_id  features  data orig.ident nCount_RNA nFeature_RNA seurat_annotations</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> AAACATA… CD3D     1.61  pbmc3k           <span style="text-decoration: underline;">2</span>419          779 Memory CD4 T      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> AAACATT… CD3D     0     pbmc3k           <span style="text-decoration: underline;">4</span>903         <span style="text-decoration: underline;">1</span>352 B                 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> AAACATT… CD3D     2.20  pbmc3k           <span style="text-decoration: underline;">3</span>147         <span style="text-decoration: underline;">1</span>129 Memory CD4 T      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> AAACCGT… CD3D     0     pbmc3k           <span style="text-decoration: underline;">2</span>639          960 CD14+ Mono        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> AAACCGT… CD3D     0     pbmc3k            980          521 NK                </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> AAACGCA… CD3D     0.693 pbmc3k           <span style="text-decoration: underline;">2</span>163          781 Memory CD4 T      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> AAACGCT… CD3D     1.10  pbmc3k           <span style="text-decoration: underline;">2</span>175          782 CD8 T             </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> AAACGCT… CD3D     1.39  pbmc3k           <span style="text-decoration: underline;">2</span>260          790 CD8 T             </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> AAACGCT… CD3D     1.10  pbmc3k           <span style="text-decoration: underline;">1</span>275          532 Naive CD4 T       </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> AAACGCT… CD3D     0     pbmc3k           <span style="text-decoration: underline;">1</span>103          550 FCGR3A+ Mono      </span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 2,690 more rows</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 4 more variables: nCount_SCT &lt;dbl&gt;, nFeature_SCT &lt;int&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   SCT_snn_res.0.5 &lt;fct&gt;, seurat_clusters &lt;fct&gt;</span></span></span></code></pre>
@@ -275,7 +275,7 @@ requested layers.</p>
 <div class="section level3">
 <h3 id="multiple-genes">Multiple genes<a class="anchor" aria-label="anchor" href="#multiple-genes"></a>
 </h3>
-<p>The <code>feature</code> column is a factor preserving your input
+<p>The <code>features</code> column is a factor preserving your input
 order — useful for controlling facet ordering in plots:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fetch_feature_data.html">fetch_feature_data</a></span><span class="op">(</span></span>
@@ -284,18 +284,18 @@ order — useful for controlling facet ordering in plots:</p>
 <span>  metadata <span class="op">=</span> <span class="st">"seurat_clusters"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10,800 × 4</span></span></span>
-<span><span class="co">##    cell_id        feature  data seurat_clusters</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>          </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> AAACATACAACCAC CD3D    1.61  4              </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> AAACATACAACCAC CD8A    0.693 4              </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> AAACATACAACCAC CD14    0     4              </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> AAACATACAACCAC MS4A1   0     4              </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> AAACATTGAGCTAC CD3D    0     3              </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> AAACATTGAGCTAC CD8A    0     3              </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> AAACATTGAGCTAC CD14    0     3              </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> AAACATTGAGCTAC MS4A1   1.61  3              </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> AAACATTGATCAGC CD3D    2.20  1              </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> AAACATTGATCAGC CD8A    0     1              </span></span>
+<span><span class="co">##    cell_id        features  data seurat_clusters</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>          </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> AAACATACAACCAC CD3D     1.61  4              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> AAACATACAACCAC CD8A     0.693 4              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> AAACATACAACCAC CD14     0     4              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> AAACATACAACCAC MS4A1    0     4              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> AAACATTGAGCTAC CD3D     0     3              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> AAACATTGAGCTAC CD8A     0     3              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> AAACATTGAGCTAC CD14     0     3              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> AAACATTGAGCTAC MS4A1    1.61  3              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> AAACATTGATCAGC CD3D     2.20  1              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> AAACATTGATCAGC CD8A     0     1              </span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 10,790 more rows</span></span></span></code></pre>
 </div>
 <div class="section level3">
@@ -311,18 +311,18 @@ own column:</p>
 <span>  metadata <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2,700 × 4</span></span></span>
-<span><span class="co">##    cell_id        feature counts  data</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> AAACATACAACCAC CD3D         4 1.61 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> AAACATTGAGCTAC CD3D         0 0    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> AAACATTGATCAGC CD3D         8 2.20 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> AAACCGTGCTTCCG CD3D         0 0    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> AAACCGTGTATGCG CD3D         0 0    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> AAACGCACTGGTAC CD3D         1 0.693</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> AAACGCTGACCAGT CD3D         2 1.10 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> AAACGCTGGTTCTT CD3D         3 1.39 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> AAACGCTGTAGCCA CD3D         2 1.10 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> AAACGCTGTTTCTG CD3D         0 0    </span></span>
+<span><span class="co">##    cell_id        features counts  data</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> AAACATACAACCAC CD3D          4 1.61 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> AAACATTGAGCTAC CD3D          0 0    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> AAACATTGATCAGC CD3D          8 2.20 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> AAACCGTGCTTCCG CD3D          0 0    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> AAACCGTGTATGCG CD3D          0 0    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> AAACGCACTGGTAC CD3D          1 0.693</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> AAACGCTGACCAGT CD3D          2 1.10 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> AAACGCTGGTTCTT CD3D          3 1.39 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> AAACGCTGTAGCCA CD3D          2 1.10 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> AAACGCTGTTTCTG CD3D          0 0    </span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 2,690 more rows</span></span></span></code></pre>
 </div>
 <div class="section level3">
@@ -413,12 +413,12 @@ the tidy tibble.</p>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">markers</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">seurat_clusters</span>, y <span class="op">=</span> <span class="va">data</span>, fill <span class="op">=</span> <span class="va">seurat_clusters</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="st">"width"</span>, trim <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">feature</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">features</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Cluster"</span>, y <span class="op">=</span> <span class="st">"Normalised expression"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="data-extraction_files/figure-html/workflow-1.png" class="r-plt" alt="" width="768"></p>
-<p>Because <code>feature</code> is a factor in input order, the facet
+<p>Because <code>features</code> is a factor in input order, the facet
 panels appear in the biologically meaningful order you specified — not
 alphabetically.</p>
 </div>

@@ -53,7 +53,7 @@ fetch_feature_data(
 
 ## Value
 
-A tibble with columns: cell_id, feature (factor), one column per layer,
+A tibble with columns: cell_id, features (factor), one column per layer,
 optional embedding columns, optional metadata columns.
 
 ## Examples

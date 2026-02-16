@@ -85,7 +85,9 @@ returns a patchwork composition (requires the <span class="pkg">patchwork</span>
 
 
 <dt id="arg-features">features<a class="anchor" aria-label="anchor" href="#arg-features"></a></dt>
-<dd><p>character. Gene names to plot (required). Must be non-empty.</p></dd>
+<dd><p>character. Gene names or numeric metadata column names
+to plot (required). Can mix both types freely — each gets its own panel.
+Examples: <code>c("CD3D", "nCount_RNA", "percent.mt")</code>.</p></dd>
 
 
 <dt id="arg-group-by">group.by<a class="anchor" aria-label="anchor" href="#arg-group-by"></a></dt>
@@ -100,7 +102,8 @@ or conditions, e.g. <code>group.levels = c("0", "2", "5")</code>.</p></dd>
 
 
 <dt id="arg-layer">layer<a class="anchor" aria-label="anchor" href="#arg-layer"></a></dt>
-<dd><p>character. Layer to extract expression from (default: "data").</p></dd>
+<dd><p>character. Layer to extract expression from (default: "data").
+Only applies to gene features.</p></dd>
 
 
 <dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
