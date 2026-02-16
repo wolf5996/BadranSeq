@@ -96,7 +96,8 @@ get_pca_variance <- function(object, n_pcs = NULL) {
 #' @param border.color character. Border color (default: "black").
 #' @param legend.title character. Custom legend title (NULL for default).
 #' @param show.legend logical. Show the colour legend (default: TRUE).
-#' @param ncol numeric. Number of columns for split panels (default: NULL, auto).
+#' @param ncol numeric. Number of columns for panel layout (default: NULL, auto).
+#' @param nrow numeric. Number of rows for panel layout (default: NULL, auto).
 #'
 #' @return ggplot2 object or list of ggplot2 objects when split.by is used.
 #' @keywords internal
@@ -124,7 +125,8 @@ get_pca_variance <- function(object, n_pcs = NULL) {
     border.color = "black",
     legend.title = NULL,
     show.legend = TRUE,
-    ncol = NULL
+    ncol = NULL,
+    nrow = NULL
 ) {
 
   # ---- Data Extraction ----
@@ -208,7 +210,8 @@ get_pca_variance <- function(object, n_pcs = NULL) {
       border.size = border.size,
       border.color = border.color,
       show.legend = show.legend,
-      ncol = ncol
+      ncol = ncol,
+      nrow = nrow
     ))
   }
 
@@ -327,7 +330,8 @@ get_pca_variance <- function(object, n_pcs = NULL) {
     border.size,
     border.color,
     show.legend = TRUE,
-    ncol
+    ncol,
+    nrow = NULL
 ) {
 
   # Get unique split values
@@ -496,7 +500,7 @@ get_pca_variance <- function(object, n_pcs = NULL) {
   # Combine plots using patchwork if available
   legend_pos <- if (show.legend) "bottom" else "none"
   if (requireNamespace("patchwork", quietly = TRUE)) {
-    combined <- patchwork::wrap_plots(plot_list, ncol = ncol, guides = "collect") +
+    combined <- patchwork::wrap_plots(plot_list, ncol = ncol, nrow = nrow, guides = "collect") +
       patchwork::plot_layout(guides = "collect") &
       ggplot2::theme(legend.position = legend_pos)
     return(combined)
@@ -538,7 +542,9 @@ get_pca_variance <- function(object, n_pcs = NULL) {
 #' @param border.color character. Border color (default: "black").
 #' @param legend.title character. Custom legend title (NULL removes title).
 #' @param show.legend logical. Show the colour legend (default: TRUE). Set to FALSE to hide the legend entirely.
-#' @param ncol numeric. Number of columns for split panels (default: NULL, auto).
+#' @param ncol numeric. Number of columns for panel layout (default: NULL, auto).
+#'   Controls layout of both split panels and multi-column group.by panels.
+#' @param nrow numeric. Number of rows for panel layout (default: NULL, auto).
 #' @param ... Additional arguments (currently unused).
 #'
 #' @return ggplot2 object with PCA plot including variance explained in axis labels.
@@ -572,6 +578,7 @@ do_PcaPlot <- function(
     legend.title = NULL,
     show.legend = TRUE,
     ncol = NULL,
+    nrow = NULL,
     ...
 ) {
 
@@ -617,6 +624,7 @@ do_PcaPlot <- function(
         legend.title = legend.title,
         show.legend = show.legend,
         ncol = ncol,
+        nrow = nrow,
         ...
       )
     })
@@ -627,7 +635,7 @@ do_PcaPlot <- function(
            "Install it with: install.packages('patchwork')")
     }
 
-    return(patchwork::wrap_plots(plots, ncol = length(group.by)))
+    return(patchwork::wrap_plots(plots, ncol = ncol, nrow = nrow))
   }
 
   # Calculate variance explained
@@ -662,7 +670,8 @@ do_PcaPlot <- function(
     border.color = border.color,
     legend.title = legend.title,
     show.legend = show.legend,
-    ncol = ncol
+    ncol = ncol,
+    nrow = nrow
   )
 
   # Add variance labels
@@ -709,6 +718,7 @@ do_UmapPlot <- function(
     legend.title = NULL,
     show.legend = TRUE,
     ncol = NULL,
+    nrow = NULL,
     ...
 ) {
 
@@ -753,6 +763,7 @@ do_UmapPlot <- function(
         legend.title = legend.title,
         show.legend = show.legend,
         ncol = ncol,
+        nrow = nrow,
         ...
       )
     })
@@ -763,7 +774,7 @@ do_UmapPlot <- function(
            "Install it with: install.packages('patchwork')")
     }
 
-    return(patchwork::wrap_plots(plots, ncol = length(group.by)))
+    return(patchwork::wrap_plots(plots, ncol = ncol, nrow = nrow))
   }
 
   # Build plot
@@ -787,7 +798,8 @@ do_UmapPlot <- function(
     border.color = border.color,
     legend.title = legend.title,
     show.legend = show.legend,
-    ncol = ncol
+    ncol = ncol,
+    nrow = nrow
   )
 
   # Standard UMAP axis labels
@@ -841,6 +853,7 @@ do_DimPlot <- function(
     legend.title = NULL,
     show.legend = TRUE,
     ncol = NULL,
+    nrow = NULL,
     ...
 ) {
 
@@ -879,6 +892,7 @@ do_DimPlot <- function(
         legend.title = legend.title,
         show.legend = show.legend,
         ncol = ncol,
+        nrow = nrow,
         ...
       )
     })
@@ -889,7 +903,7 @@ do_DimPlot <- function(
            "Install it with: install.packages('patchwork')")
     }
 
-    return(patchwork::wrap_plots(plots, ncol = length(group.by)))
+    return(patchwork::wrap_plots(plots, ncol = ncol, nrow = nrow))
   }
 
   # Route to specialized functions
@@ -915,6 +929,7 @@ do_DimPlot <- function(
       legend.title = legend.title,
       show.legend = show.legend,
       ncol = ncol,
+      nrow = nrow,
       ...
     ))
   } else if (reduction == "umap") {
@@ -938,6 +953,7 @@ do_DimPlot <- function(
       legend.title = legend.title,
       show.legend = show.legend,
       ncol = ncol,
+      nrow = nrow,
       ...
     ))
   }
@@ -963,7 +979,8 @@ do_DimPlot <- function(
     border.color = border.color,
     legend.title = legend.title,
     show.legend = show.legend,
-    ncol = ncol
+    ncol = ncol,
+    nrow = nrow
   )
 
   # Standardized axis labels

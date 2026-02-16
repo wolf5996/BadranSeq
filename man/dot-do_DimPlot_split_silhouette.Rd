@@ -23,7 +23,8 @@
   border.size,
   border.color,
   show.legend = TRUE,
-  ncol
+  ncol,
+  nrow = NULL
 )
 }
 \description{

@@ -66,3 +66,37 @@ test_that("do_DimPlot multi-column group.by returns patchwork", {
   p <- do_DimPlot(pbmc3k, group.by = c("seurat_clusters", "seurat_annotations"))
   expect_s3_class(p, "patchwork")
 })
+
+# --- nrow / ncol layout tests ---
+
+test_that("do_UmapPlot multi-group.by respects ncol = 1", {
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_UmapPlot(pbmc3k,
+                    group.by = c("seurat_clusters", "seurat_annotations"),
+                    ncol = 1)
+  expect_s3_class(p, "patchwork")
+})
+
+test_that("do_UmapPlot multi-group.by respects nrow = 1", {
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_UmapPlot(pbmc3k,
+                    group.by = c("seurat_clusters", "seurat_annotations"),
+                    nrow = 1)
+  expect_s3_class(p, "patchwork")
+})
+
+test_that("do_PcaPlot multi-group.by respects ncol = 1", {
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_PcaPlot(pbmc3k,
+                   group.by = c("seurat_clusters", "seurat_annotations"),
+                   ncol = 1)
+  expect_s3_class(p, "patchwork")
+})
+
+test_that("do_DimPlot multi-group.by respects nrow = 1", {
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_DimPlot(pbmc3k,
+                   group.by = c("seurat_clusters", "seurat_annotations"),
+                   nrow = 1)
+  expect_s3_class(p, "patchwork")
+})

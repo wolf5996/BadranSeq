@@ -81,6 +81,20 @@ Pass a vector of column names to create side-by-side panels:
 do_UmapPlot(pbmc3k, group.by = c("seurat_clusters", "seurat_annotations"))
 ```
 
+### Control panel layout
+
+When combining multiple panels, use `ncol` and `nrow` to control the
+patchwork layout. For example, stack the panels vertically with `ncol = 1`:
+
+```{r}
+#| label: umap-layout-control
+#| fig.width: 7
+#| fig.height: 10
+do_UmapPlot(pbmc3k,
+            group.by = c("seurat_clusters", "seurat_annotations"),
+            ncol = 1)
+```
+
 ### Hide the legend
 
 ```{r}

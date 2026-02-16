@@ -26,6 +26,7 @@ do_DimPlot(
   legend.title = NULL,
   show.legend = TRUE,
   ncol = NULL,
+  nrow = NULL,
   ...
 )
 }
@@ -72,7 +73,10 @@ each gets its own panel combined via patchwork.}
 
 \item{show.legend}{logical. Show the colour legend (default: TRUE). Set to FALSE to hide the legend entirely.}
 
-\item{ncol}{numeric. Number of columns for split panels (default: NULL, auto).}
+\item{ncol}{numeric. Number of columns for panel layout (default: NULL, auto).
+Controls layout of both split panels and multi-column group.by panels.}
+
+\item{nrow}{numeric. Number of rows for panel layout (default: NULL, auto).}
 
 \item{...}{Additional arguments (currently unused).}
 }
