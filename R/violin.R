@@ -2,7 +2,7 @@
 # Violin plot with ggbetweenstats-style aesthetics
 
 # Suppress R CMD check notes for dplyr/ggplot2 NSE variables
-utils::globalVariables(c("centrality_label"))
+utils::globalVariables(c("centrality_label", ".value"))
 
 # ============================================================================
 # Internal: Build a single violin panel
