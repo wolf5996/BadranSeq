@@ -231,6 +231,22 @@ test_that("do_StatsViolinPlot errors on invalid group.levels", {
   )
 })
 
+test_that("do_StatsViolinPlot works with metadata column", {
+  skip_if_not_installed("ggstatsplot")
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_StatsViolinPlot(pbmc3k, features = "nCount_RNA",
+                           group.by = "seurat_clusters")
+  expect_s3_class(p, "gg")
+})
+
+test_that("do_StatsViolinPlot works with mixed gene + metadata", {
+  skip_if_not_installed("ggstatsplot")
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_StatsViolinPlot(pbmc3k, features = c("CD3D", "nCount_RNA"),
+                           group.by = "seurat_clusters")
+  expect_s3_class(p, "patchwork")
+})
+
 # --- .classify_features() tests ---
 
 test_that(".classify_features separates genes from metadata columns", {
