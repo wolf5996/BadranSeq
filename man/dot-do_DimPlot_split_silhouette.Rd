@@ -22,6 +22,7 @@
   plot_cell_borders,
   border.size,
   border.color,
+  show.legend = TRUE,
   ncol
 )
 }

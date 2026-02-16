@@ -27,6 +27,7 @@
   border.size = 2,
   border.color = "black",
   legend.title = NULL,
+  show.legend = TRUE,
   ncol = NULL
 )
 }
@@ -75,6 +76,8 @@ panels with silhouettes of other cells).}
 \item{border.color}{character. Border color (default: "black").}
 
 \item{legend.title}{character. Custom legend title (NULL for default).}
+
+\item{show.legend}{logical. Show the colour legend (default: TRUE).}
 
 \item{ncol}{numeric. Number of columns for split panels (default: NULL, auto).}
 }

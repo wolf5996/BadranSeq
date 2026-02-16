@@ -70,6 +70,26 @@ do_UmapPlot(pbmc3k)
 do_UmapPlot(pbmc3k, group.by = "seurat_annotations")
 ```
 
+### Group by multiple metadata columns
+
+Pass a vector of column names to create side-by-side panels:
+
+```{r}
+#| label: umap-multi-groupby
+#| fig.width: 14
+#| fig.height: 5
+do_UmapPlot(pbmc3k, group.by = c("seurat_clusters", "seurat_annotations"))
+```
+
+### Hide the legend
+
+```{r}
+#| label: umap-no-legend
+#| fig.width: 7
+#| fig.height: 5
+do_UmapPlot(pbmc3k, show.legend = FALSE)
+```
+
 ### Adjust point size and remove labels
 
 ```{r}
