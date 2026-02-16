@@ -22,7 +22,9 @@
   plot_cell_borders,
   border.size,
   border.color,
-  ncol
+  show.legend = TRUE,
+  ncol,
+  nrow = NULL
 )
 }
 \description{

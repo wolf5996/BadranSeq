@@ -27,7 +27,9 @@
   border.size = 2,
   border.color = "black",
   legend.title = NULL,
-  ncol = NULL
+  show.legend = TRUE,
+  ncol = NULL,
+  nrow = NULL
 )
 }
 \arguments{
@@ -76,7 +78,11 @@ panels with silhouettes of other cells).}
 
 \item{legend.title}{character. Custom legend title (NULL for default).}
 
-\item{ncol}{numeric. Number of columns for split panels (default: NULL, auto).}
+\item{show.legend}{logical. Show the colour legend (default: TRUE).}
+
+\item{ncol}{numeric. Number of columns for panel layout (default: NULL, auto).}
+
+\item{nrow}{numeric. Number of rows for panel layout (default: NULL, auto).}
 }
 \value{
 ggplot2 object or list of ggplot2 objects when split.by is used.

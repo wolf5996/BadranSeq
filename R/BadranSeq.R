@@ -95,7 +95,9 @@ get_pca_variance <- function(object, n_pcs = NULL) {
 #' @param border.size numeric. Border size multiplier (default: 2).
 #' @param border.color character. Border color (default: "black").
 #' @param legend.title character. Custom legend title (NULL for default).
-#' @param ncol numeric. Number of columns for split panels (default: NULL, auto).
+#' @param show.legend logical. Show the colour legend (default: TRUE).
+#' @param ncol numeric. Number of columns for panel layout (default: NULL, auto).
+#' @param nrow numeric. Number of rows for panel layout (default: NULL, auto).
 #'
 #' @return ggplot2 object or list of ggplot2 objects when split.by is used.
 #' @keywords internal
@@ -122,7 +124,9 @@ get_pca_variance <- function(object, n_pcs = NULL) {
     border.size = 2,
     border.color = "black",
     legend.title = NULL,
-    ncol = NULL
+    show.legend = TRUE,
+    ncol = NULL,
+    nrow = NULL
 ) {
 
   # ---- Data Extraction ----
@@ -205,7 +209,9 @@ get_pca_variance <- function(object, n_pcs = NULL) {
       plot_cell_borders = plot_cell_borders,
       border.size = border.size,
       border.color = border.color,
-      ncol = ncol
+      show.legend = show.legend,
+      ncol = ncol,
+      nrow = nrow
     ))
   }
 
@@ -291,6 +297,10 @@ get_pca_variance <- function(object, n_pcs = NULL) {
       )
     )
 
+  if (!show.legend) {
+    p <- p + ggplot2::theme(legend.position = "none")
+  }
+
   return(p)
 }
 
@@ -319,7 +329,9 @@ get_pca_variance <- function(object, n_pcs = NULL) {
     plot_cell_borders,
     border.size,
     border.color,
-    ncol
+    show.legend = TRUE,
+    ncol,
+    nrow = NULL
 ) {
 
   # Get unique split values
@@ -486,10 +498,11 @@ get_pca_variance <- function(object, n_pcs = NULL) {
   names(plot_list) <- split_levels
 
   # Combine plots using patchwork if available
-if (requireNamespace("patchwork", quietly = TRUE)) {
-    combined <- patchwork::wrap_plots(plot_list, ncol = ncol, guides = "collect") +
+  legend_pos <- if (show.legend) "bottom" else "none"
+  if (requireNamespace("patchwork", quietly = TRUE)) {
+    combined <- patchwork::wrap_plots(plot_list, ncol = ncol, nrow = nrow, guides = "collect") +
       patchwork::plot_layout(guides = "collect") &
-      ggplot2::theme(legend.position = "bottom")
+      ggplot2::theme(legend.position = legend_pos)
     return(combined)
   } else {
     # Return list if patchwork not available
@@ -510,7 +523,9 @@ if (requireNamespace("patchwork", quietly = TRUE)) {
 #'
 #' @param object Seurat object.
 #' @param dims numeric. Vector of 2 PC dimensions to plot (default: c(1, 2)).
-#' @param group.by character. Metadata column for grouping (default: active identity).
+#' @param group.by character. One or more metadata columns for grouping.
+#'   If NULL (default), uses active Idents. When multiple columns are provided,
+#'   each gets its own panel combined via patchwork.
 #' @param split.by character. Metadata column for splitting (creates panels with silhouettes).
 #' @param colors.use Named vector of colors for groups.
 #' @param label logical. Show cluster labels (default: TRUE).
@@ -526,7 +541,10 @@ if (requireNamespace("patchwork", quietly = TRUE)) {
 #' @param border.size numeric. Border size multiplier (default: 2).
 #' @param border.color character. Border color (default: "black").
 #' @param legend.title character. Custom legend title (NULL removes title).
-#' @param ncol numeric. Number of columns for split panels (default: NULL, auto).
+#' @param show.legend logical. Show the colour legend (default: TRUE). Set to FALSE to hide the legend entirely.
+#' @param ncol numeric. Number of columns for panel layout (default: NULL, auto).
+#'   Controls layout of both split panels and multi-column group.by panels.
+#' @param nrow numeric. Number of rows for panel layout (default: NULL, auto).
 #' @param ... Additional arguments (currently unused).
 #'
 #' @return ggplot2 object with PCA plot including variance explained in axis labels.
@@ -558,7 +576,9 @@ do_PcaPlot <- function(
     border.size = 2,
     border.color = "black",
     legend.title = NULL,
+    show.legend = TRUE,
     ncol = NULL,
+    nrow = NULL,
     ...
 ) {
 
@@ -578,6 +598,44 @@ do_PcaPlot <- function(
   max_pc <- ncol(object@reductions$pca@cell.embeddings)
   if (any(dims > max_pc)) {
     stop(paste("Requested PC dimensions exceed available PCs. Maximum PC:", max_pc))
+  }
+
+  # --- Multi-column group.by ---
+  if (!is.null(group.by) && length(group.by) > 1) {
+    plots <- lapply(group.by, function(gb) {
+      do_PcaPlot(
+        object = object,
+        dims = dims,
+        group.by = gb,
+        split.by = split.by,
+        colors.use = colors.use,
+        label = label,
+        label.size = label.size,
+        label.color = label.color,
+        label.fill = label.fill,
+        pt.size = pt.size,
+        pt.alpha = pt.alpha,
+        plot.axes = plot.axes,
+        variance_digits = variance_digits,
+        shuffle = shuffle,
+        plot_cell_borders = plot_cell_borders,
+        border.size = border.size,
+        border.color = border.color,
+        legend.title = legend.title,
+        show.legend = show.legend,
+        ncol = ncol,
+        nrow = nrow,
+        ...
+      )
+    })
+    names(plots) <- group.by
+
+    if (!requireNamespace("patchwork", quietly = TRUE)) {
+      stop("Package 'patchwork' is required for multi-column group.by. ",
+           "Install it with: install.packages('patchwork')")
+    }
+
+    return(patchwork::wrap_plots(plots, ncol = ncol, nrow = nrow))
   }
 
   # Calculate variance explained
@@ -611,7 +669,9 @@ do_PcaPlot <- function(
     border.size = border.size,
     border.color = border.color,
     legend.title = legend.title,
-    ncol = ncol
+    show.legend = show.legend,
+    ncol = ncol,
+    nrow = nrow
   )
 
   # Add variance labels
@@ -656,7 +716,9 @@ do_UmapPlot <- function(
     border.size = 2,
     border.color = "black",
     legend.title = NULL,
+    show.legend = TRUE,
     ncol = NULL,
+    nrow = NULL,
     ...
 ) {
 
@@ -676,6 +738,43 @@ do_UmapPlot <- function(
   max_dim <- ncol(object@reductions$umap@cell.embeddings)
   if (any(dims > max_dim)) {
     stop(paste("Requested UMAP dimensions exceed available dimensions. Maximum:", max_dim))
+  }
+
+  # --- Multi-column group.by ---
+  if (!is.null(group.by) && length(group.by) > 1) {
+    plots <- lapply(group.by, function(gb) {
+      do_UmapPlot(
+        object = object,
+        dims = dims,
+        group.by = gb,
+        split.by = split.by,
+        colors.use = colors.use,
+        label = label,
+        label.size = label.size,
+        label.color = label.color,
+        label.fill = label.fill,
+        pt.size = pt.size,
+        pt.alpha = pt.alpha,
+        plot.axes = plot.axes,
+        shuffle = shuffle,
+        plot_cell_borders = plot_cell_borders,
+        border.size = border.size,
+        border.color = border.color,
+        legend.title = legend.title,
+        show.legend = show.legend,
+        ncol = ncol,
+        nrow = nrow,
+        ...
+      )
+    })
+    names(plots) <- group.by
+
+    if (!requireNamespace("patchwork", quietly = TRUE)) {
+      stop("Package 'patchwork' is required for multi-column group.by. ",
+           "Install it with: install.packages('patchwork')")
+    }
+
+    return(patchwork::wrap_plots(plots, ncol = ncol, nrow = nrow))
   }
 
   # Build plot
@@ -698,7 +797,9 @@ do_UmapPlot <- function(
     border.size = border.size,
     border.color = border.color,
     legend.title = legend.title,
-    ncol = ncol
+    show.legend = show.legend,
+    ncol = ncol,
+    nrow = nrow
   )
 
   # Standard UMAP axis labels
@@ -750,7 +851,9 @@ do_DimPlot <- function(
     border.size = 2,
     border.color = "black",
     legend.title = NULL,
+    show.legend = TRUE,
     ncol = NULL,
+    nrow = NULL,
     ...
 ) {
 
@@ -762,6 +865,45 @@ do_DimPlot <- function(
   if (!reduction %in% names(object@reductions)) {
     stop(paste0("'", reduction, "' not found. Available reductions: ",
                 paste(names(object@reductions), collapse = ", ")))
+  }
+
+  # --- Multi-column group.by ---
+  if (!is.null(group.by) && length(group.by) > 1) {
+    plots <- lapply(group.by, function(gb) {
+      do_DimPlot(
+        object = object,
+        reduction = reduction,
+        dims = dims,
+        group.by = gb,
+        split.by = split.by,
+        colors.use = colors.use,
+        label = label,
+        label.size = label.size,
+        label.color = label.color,
+        label.fill = label.fill,
+        pt.size = pt.size,
+        pt.alpha = pt.alpha,
+        plot.axes = plot.axes,
+        variance_digits = variance_digits,
+        shuffle = shuffle,
+        plot_cell_borders = plot_cell_borders,
+        border.size = border.size,
+        border.color = border.color,
+        legend.title = legend.title,
+        show.legend = show.legend,
+        ncol = ncol,
+        nrow = nrow,
+        ...
+      )
+    })
+    names(plots) <- group.by
+
+    if (!requireNamespace("patchwork", quietly = TRUE)) {
+      stop("Package 'patchwork' is required for multi-column group.by. ",
+           "Install it with: install.packages('patchwork')")
+    }
+
+    return(patchwork::wrap_plots(plots, ncol = ncol, nrow = nrow))
   }
 
   # Route to specialized functions
@@ -785,7 +927,9 @@ do_DimPlot <- function(
       border.size = border.size,
       border.color = border.color,
       legend.title = legend.title,
+      show.legend = show.legend,
       ncol = ncol,
+      nrow = nrow,
       ...
     ))
   } else if (reduction == "umap") {
@@ -807,7 +951,9 @@ do_DimPlot <- function(
       border.size = border.size,
       border.color = border.color,
       legend.title = legend.title,
+      show.legend = show.legend,
       ncol = ncol,
+      nrow = nrow,
       ...
     ))
   }
@@ -832,7 +978,9 @@ do_DimPlot <- function(
     border.size = border.size,
     border.color = border.color,
     legend.title = legend.title,
-    ncol = ncol
+    show.legend = show.legend,
+    ncol = ncol,
+    nrow = nrow
   )
 
   # Standardized axis labels
