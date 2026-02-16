@@ -285,7 +285,7 @@ fetch_feature_data <- function(
     }
   }
 
-  # Convert feature to factor preserving input order ----------
+  # Convert features to factor preserving input order ----------
 
   expr_tbl <- dplyr::mutate(
     expr_tbl,
@@ -296,7 +296,7 @@ fetch_feature_data <- function(
 
   result <- dplyr::left_join(expr_tbl, scaffold, by = "cell_id")
 
-  # Reorder: cell_id, feature, layers, embeddings, metadata ----------
+  # Reorder: cell_id, features, layers, embeddings, metadata ----------
 
   layer_cols <- intersect(layer, colnames(result))
   other_cols <- setdiff(

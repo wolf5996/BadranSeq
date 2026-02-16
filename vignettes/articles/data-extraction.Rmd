@@ -116,7 +116,7 @@ fetch_feature_data(pbmc3k, features = "CD3D")
 
 ### Multiple genes
 
-The `feature` column is a factor preserving your input order — useful for
+The `features` column is a factor preserving your input order — useful for
 controlling facet ordering in plots:
 
 ```{r}
@@ -227,11 +227,11 @@ markers <- fetch_feature_data(
 
 ggplot(markers, aes(x = seurat_clusters, y = data, fill = seurat_clusters)) +
   geom_violin(scale = "width", trim = TRUE) +
-  facet_wrap(~feature, scales = "free_y") +
+  facet_wrap(~features, scales = "free_y") +
   theme_minimal() +
   theme(legend.position = "none") +
   labs(x = "Cluster", y = "Normalised expression")
 ```
 
-Because `feature` is a factor in input order, the facet panels appear in the
+Because `features` is a factor in input order, the facet panels appear in the
 biologically meaningful order you specified — not alphabetically.
