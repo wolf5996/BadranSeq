@@ -109,6 +109,27 @@ test_that("do_ViolinPlot ncol controls patchwork layout", {
   expect_equal(p$patches$layout$ncol, 1)
 })
 
+test_that("do_ViolinPlot works with metadata column", {
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_ViolinPlot(pbmc3k, features = "nCount_RNA")
+  expect_s3_class(p, "gg")
+})
+
+test_that("do_ViolinPlot works with mixed gene + metadata features", {
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_ViolinPlot(pbmc3k, features = c("CD3D", "nCount_RNA"))
+  expect_s3_class(p, "patchwork")
+})
+
+test_that("do_ViolinPlot warns on unknown features in mixed input", {
+  data(pbmc3k, package = "BadranSeq")
+  expect_warning(
+    p <- do_ViolinPlot(pbmc3k, features = c("CD3D", "nCount_RNA", "FAKEGENE")),
+    "not found"
+  )
+  expect_s3_class(p, "patchwork")
+})
+
 # --- do_StatsViolinPlot() tests ---
 
 test_that("do_StatsViolinPlot returns ggplot for single gene", {

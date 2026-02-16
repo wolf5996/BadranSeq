@@ -187,10 +187,13 @@ utils::globalVariables(c("centrality_label"))
 #' returns a patchwork composition.
 #'
 #' @param object Seurat object.
-#' @param features character. Gene names to plot (required). Must be non-empty.
+#' @param features character. Gene names or numeric metadata column names
+#'   to plot (required). Can mix both types freely — each gets its own panel.
+#'   Examples: \code{c("CD3D", "nCount_RNA", "percent.mt")}.
 #' @param group.by character. Metadata column for grouping. If NULL (default),
 #'   uses active Idents.
 #' @param layer character. Layer to extract expression from (default: "data").
+#'   Only applies to gene features.
 #' @param assay character. Assay to use (default: NULL = DefaultAssay).
 #' @param colors.use character. Named vector of colors for groups. If NULL,
 #'   generates colors automatically with \code{\link{generate_badranseq_colors}}.
@@ -276,15 +279,73 @@ do_ViolinPlot <- function(
     inject_idents <- FALSE
   }
 
-  # --- Fetch data ---
+  # --- Classify and fetch data ---
 
-  df <- fetch_feature_data(
-    object = object,
-    features = features,
-    layer = layer,
-    assay = assay,
-    metadata = if (inject_idents) FALSE else group_col
-  )
+  classified <- .classify_features(object, features, assay = assay)
+
+  if (length(classified$unknown) > 0) {
+    warning(
+      "Features not found in assay or metadata: ",
+      paste(classified$unknown, collapse = ", "), ". Skipping."
+    )
+  }
+
+  # Preserve user's input order for valid features
+  valid_features <- features[features %in% c(classified$genes, classified$metadata)]
+
+  if (length(valid_features) == 0) {
+    stop("No valid features found in assay or metadata.")
+  }
+
+  # Determine metadata columns to fetch (group column + any metadata features)
+  meta_cols_needed <- if (inject_idents) {
+    classified$metadata
+  } else {
+    unique(c(group_col, classified$metadata))
+  }
+  meta_arg <- if (length(meta_cols_needed) > 0) meta_cols_needed else FALSE
+
+  # Fetch gene data
+  gene_df <- NULL
+  if (length(classified$genes) > 0) {
+    gene_df <- fetch_feature_data(
+      object = object,
+      features = classified$genes,
+      layer = layer,
+      assay = assay,
+      metadata = meta_arg
+    )
+    gene_df$.value <- gene_df[[layer]]
+  }
+
+  # Fetch metadata-as-feature data
+  meta_df <- NULL
+  if (length(classified$metadata) > 0) {
+    scaffold <- fetch_cell_data(object, metadata = meta_arg)
+
+    meta_df <- tidyr::pivot_longer(
+      scaffold,
+      cols = dplyr::all_of(classified$metadata),
+      names_to = "features",
+      values_to = ".value"
+    )
+  }
+
+  # Combine gene and metadata tibbles
+  if (!is.null(gene_df) && !is.null(meta_df)) {
+    keep_cols <- c("cell_id", "features", ".value",
+                   if (!inject_idents) group_col)
+    gene_slim <- gene_df[, intersect(keep_cols, colnames(gene_df))]
+    meta_slim <- meta_df[, intersect(keep_cols, colnames(meta_df))]
+    df <- dplyr::bind_rows(gene_slim, meta_slim)
+  } else if (!is.null(gene_df)) {
+    df <- gene_df
+    df$features <- as.character(df$features)
+  } else {
+    df <- meta_df
+  }
+
+  df$features <- factor(df$features, levels = valid_features)
 
   # Inject Idents into tibble (avoids mutating the Seurat object)
   if (inject_idents) {
@@ -294,9 +355,6 @@ do_ViolinPlot <- function(
     )
     df[[group_col]] <- ident_lookup[df$cell_id]
   }
-
-  # valid features are those that survived fetch_feature_data
-  valid_features <- levels(df$feature)
 
   # --- Generate colors ---
 
@@ -312,11 +370,11 @@ do_ViolinPlot <- function(
   # --- Build one panel per feature ---
 
   plots <- lapply(valid_features, function(feat) {
-    feat_df <- df[df$feature == feat, ]
+    feat_df <- df[df$features == feat, ]
 
     .build_violin_panel(
       df = feat_df,
-      y_col = layer,
+      y_col = ".value",
       group_col = group_col,
       title = feat,
       colors = colors.use,
