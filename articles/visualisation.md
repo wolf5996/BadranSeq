@@ -171,11 +171,7 @@ when you know the reduction type.
 overlays gene expression on the embedding using a viridis colour scale.
 
 ``` r
-p1 <- do_FeaturePlot(pbmc3k, features = "CD3D")
-p2 <- do_FeaturePlot(pbmc3k, features = "CD14")
-p3 <- do_FeaturePlot(pbmc3k, features = "MS4A1")
-
-p1 + p2 + p3
+do_FeaturePlot(pbmc3k, features = c("CD3D", "CD14", "MS4A1"))
 ```
 
 ![](visualisation_files/figure-html/featureplot-1.png)
@@ -183,6 +179,19 @@ p1 + p2 + p3
 Cells are ordered by expression by default (`order = TRUE`), so
 high-expressing cells are plotted on top — avoiding the common problem
 of rare populations being hidden beneath low-expressing cells.
+
+### Control panel layout
+
+Use `ncol` and `nrow` to arrange multi-feature panels. For example,
+stack them vertically:
+
+``` r
+do_FeaturePlot(pbmc3k,
+               features = c("CD3D", "CD14", "MS4A1"),
+               ncol = 1)
+```
+
+![](visualisation_files/figure-html/featureplot-layout-1.png)
 
 ## Split-panel silhouettes
 

@@ -27,6 +27,8 @@ do_FeaturePlot(
   plot_cell_borders = TRUE,
   border.size = 2,
   border.color = "black",
+  ncol = NULL,
+  nrow = NULL,
   ...
 )
 ```
@@ -115,13 +117,22 @@ do_FeaturePlot(
 
   character. Border color (default: "black").
 
+- ncol:
+
+  numeric. Number of columns for panel layout (default: NULL, auto).
+
+- nrow:
+
+  numeric. Number of rows for panel layout (default: NULL, auto).
+
 - ...:
 
   Additional arguments (currently unused).
 
 ## Value
 
-ggplot2 object or list of ggplot2 objects for multiple features.
+ggplot2 object for a single feature, or a patchwork object for multiple
+features.
 
 ## Examples
 
