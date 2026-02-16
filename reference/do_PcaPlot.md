@@ -26,7 +26,9 @@ do_PcaPlot(
   border.size = 2,
   border.color = "black",
   legend.title = NULL,
+  show.legend = TRUE,
   ncol = NULL,
+  nrow = NULL,
   ...
 )
 ```
@@ -43,7 +45,9 @@ do_PcaPlot(
 
 - group.by:
 
-  character. Metadata column for grouping (default: active identity).
+  character. One or more metadata columns for grouping. If NULL
+  (default), uses active Idents. When multiple columns are provided,
+  each gets its own panel combined via patchwork.
 
 - split.by:
 
@@ -106,9 +110,19 @@ do_PcaPlot(
 
   character. Custom legend title (NULL removes title).
 
+- show.legend:
+
+  logical. Show the colour legend (default: TRUE). Set to FALSE to hide
+  the legend entirely.
+
 - ncol:
 
-  numeric. Number of columns for split panels (default: NULL, auto).
+  numeric. Number of columns for panel layout (default: NULL, auto).
+  Controls layout of both split panels and multi-column group.by panels.
+
+- nrow:
+
+  numeric. Number of rows for panel layout (default: NULL, auto).
 
 - ...:
 

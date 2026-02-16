@@ -65,7 +65,9 @@ is used, shows each split category with a grey silhouette of all other cells.</p
 <span>  border.size <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  border.color <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>  legend.title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show.legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nrow <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -87,7 +89,9 @@ is used, shows each split category with a grey silhouette of all other cells.</p
 
 
 <dt id="arg-group-by">group.by<a class="anchor" aria-label="anchor" href="#arg-group-by"></a></dt>
-<dd><p>character. Metadata column for grouping (default: active identity).</p></dd>
+<dd><p>character. One or more metadata columns for grouping.
+If NULL (default), uses active Idents. When multiple columns are provided,
+each gets its own panel combined via patchwork.</p></dd>
 
 
 <dt id="arg-split-by">split.by<a class="anchor" aria-label="anchor" href="#arg-split-by"></a></dt>
@@ -150,8 +154,17 @@ is used, shows each split category with a grey silhouette of all other cells.</p
 <dd><p>character. Custom legend title (NULL removes title).</p></dd>
 
 
+<dt id="arg-show-legend">show.legend<a class="anchor" aria-label="anchor" href="#arg-show-legend"></a></dt>
+<dd><p>logical. Show the colour legend (default: TRUE). Set to FALSE to hide the legend entirely.</p></dd>
+
+
 <dt id="arg-ncol">ncol<a class="anchor" aria-label="anchor" href="#arg-ncol"></a></dt>
-<dd><p>numeric. Number of columns for split panels (default: NULL, auto).</p></dd>
+<dd><p>numeric. Number of columns for panel layout (default: NULL, auto).
+Controls layout of both split panels and multi-column group.by panels.</p></dd>
+
+
+<dt id="arg-nrow">nrow<a class="anchor" aria-label="anchor" href="#arg-nrow"></a></dt>
+<dd><p>numeric. Number of rows for panel layout (default: NULL, auto).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

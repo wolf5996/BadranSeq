@@ -113,16 +113,43 @@ visualisation.</p>
 <p><img src="visualisation_files/figure-html/umap-groupby-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level3">
+<h3 id="group-by-multiple-metadata-columns">Group by multiple metadata columns<a class="anchor" aria-label="anchor" href="#group-by-multiple-metadata-columns"></a>
+</h3>
+<p>Pass a vector of column names to create side-by-side panels:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, group.by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"seurat_clusters"</span>, <span class="st">"seurat_annotations"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="visualisation_files/figure-html/umap-multi-groupby-1.png" class="r-plt" alt="" width="1344"></p>
+</div>
+<div class="section level3">
+<h3 id="control-panel-layout">Control panel layout<a class="anchor" aria-label="anchor" href="#control-panel-layout"></a>
+</h3>
+<p>When combining multiple panels, use <code>ncol</code> and
+<code>nrow</code> to control the patchwork layout. For example, stack
+the panels vertically with <code>ncol = 1</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
+<span>            group.by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"seurat_clusters"</span>, <span class="st">"seurat_annotations"</span><span class="op">)</span>,</span>
+<span>            ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="visualisation_files/figure-html/umap-layout-control-1.png" class="r-plt" alt="" width="672"></p>
+</div>
+<div class="section level3">
+<h3 id="hide-the-legend">Hide the legend<a class="anchor" aria-label="anchor" href="#hide-the-legend"></a>
+</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="visualisation_files/figure-html/umap-no-legend-1.png" class="r-plt" alt="" width="672"></p>
+</div>
+<div class="section level3">
 <h3 id="adjust-point-size-and-remove-labels">Adjust point size and remove labels<a class="anchor" aria-label="anchor" href="#adjust-point-size-and-remove-labels"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, pt.size <span class="op">=</span> <span class="fl">0.3</span>, label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/umap-customise-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="remove-cell-borders">Remove cell borders<a class="anchor" aria-label="anchor" href="#remove-cell-borders"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, plot_cell_borders <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/umap-no-borders-1.png" class="r-plt" alt="" width="672"></p>
 </div>
@@ -133,7 +160,7 @@ visualisation.</p>
 <p><code><a href="../reference/do_PcaPlot.html">do_PcaPlot()</a></code> does what Seurat’s PCA plot does not — it
 calculates variance explained per PC and formats the axis labels as “PC1
 (X.X%)”.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, reduction <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Seurat::DimPlot(reduction = 'pca')"</span><span class="op">)</span></span>
 <span></span>
@@ -148,7 +175,7 @@ formatting required.</p>
 <h3 id="different-dimension-pairs">Different dimension pairs<a class="anchor" aria-label="anchor" href="#different-dimension-pairs"></a>
 </h3>
 <p>Explore PC2 vs PC3:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_PcaPlot.html">do_PcaPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, dims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/pca-dims-1.png" class="r-plt" alt="" width="672"></p>
 </div>
@@ -182,7 +209,7 @@ the <code>reduction</code> argument:</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/do_DimPlot.html">do_DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"reduction = 'umap'"</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/do_DimPlot.html">do_DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, reduction <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"reduction = 'pca'"</span><span class="op">)</span></span>
 <span></span>
@@ -198,7 +225,7 @@ the reduction type.</p>
 </h2>
 <p><code><a href="../reference/do_FeaturePlot.html">do_FeaturePlot()</a></code> overlays gene expression on the
 embedding using a viridis colour scale.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/do_FeaturePlot.html">do_FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/do_FeaturePlot.html">do_FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD14"</span><span class="op">)</span></span>
 <span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/do_FeaturePlot.html">do_FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"MS4A1"</span><span class="op">)</span></span>
@@ -227,7 +254,7 @@ category</li>
 <p>This preserves the spatial layout across panels, making it easy to
 see where a subpopulation sits relative to the full dataset.</p>
 <p>First, add a synthetic condition to demonstrate:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">pbmc3k</span><span class="op">$</span><span class="va">condition</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Control"</span>, <span class="st">"Treatment"</span><span class="op">)</span>,</span>
@@ -236,13 +263,13 @@ see where a subpopulation sits relative to the full dataset.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Now compare Seurat’s default split with BadranSeq’s silhouette
 approach:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, split.by <span class="op">=</span> <span class="st">"condition"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Seurat::DimPlot(split.by)"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p1</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/split-comparison-1.png" class="r-plt" alt="" width="1344"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, split.by <span class="op">=</span> <span class="st">"condition"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/split-silhouette-1.png" class="r-plt" alt="" width="1344"></p>
 <p>In the Seurat version, each panel only shows its own cells — you lose
@@ -250,7 +277,7 @@ the sense of where those cells sit in the overall structure. In
 BadranSeq’s version, the grey background preserves this context: you can
 immediately see which clusters are enriched in each condition.</p>
 <p>The silhouette approach works with any grouping:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_UmapPlot.html">do_UmapPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>, split.by <span class="op">=</span> <span class="st">"condition"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/split-annotations-1.png" class="r-plt" alt="" width="1344"></p>
 </div>
@@ -280,7 +307,7 @@ want the same aesthetic without statistics, use
 <p><code><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot()</a></code> runs a nonparametric omnibus test
 (Kruskal–Wallis) and pairwise comparisons (Dunn’s test) by default,
 annotating the plot with p-values:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
 <span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
 <span>                   pairwise.display <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
@@ -333,7 +360,7 @@ filters the grouping variable to a specified subset <em>before</em> the
 statistical test is run, so the test is performed only on the groups you
 care about.</p>
 <p>With fewer groups, pairwise brackets become readable again:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
 <span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
 <span>                   group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Naive CD4 T"</span>, <span class="st">"Memory CD4 T"</span>, <span class="st">"CD8 T"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -349,7 +376,7 @@ the need to drop unused factor levels.</p>
 <p>The default nonparametric test is appropriate for most scRNA-seq
 data, but you can switch to parametric (ANOVA / <em>t</em>-test),
 robust, or Bayesian tests via the <code>type</code> argument:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
 <span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
 <span>                   group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Naive CD4 T"</span>, <span class="st">"Memory CD4 T"</span>, <span class="st">"CD8 T"</span><span class="op">)</span>,</span>
@@ -362,7 +389,7 @@ robust, or Bayesian tests via the <code>type</code> argument:</p>
 <h3 id="multiple-genes">Multiple genes<a class="anchor" aria-label="anchor" href="#multiple-genes"></a>
 </h3>
 <p>Pass a vector of gene names to get a combined patchwork layout:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>                   features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3D"</span>, <span class="st">"CD8A"</span><span class="op">)</span>,</span>
 <span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
@@ -384,7 +411,7 @@ robust, or Bayesian tests via the <code>type</code> argument:</p>
 <p><code><a href="../reference/do_ViolinPlot.html">do_ViolinPlot()</a></code> produces a violin + boxplot + jitter +
 centrality marker (median diamond) without any statistical annotation.
 Use this when you want a clean descriptive plot:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_ViolinPlot.html">do_ViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
 <span>              group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/plain-violin-1.png" class="r-plt" alt="" width="672"></p>
@@ -402,7 +429,7 @@ variables.</p>
 </h3>
 <p>A common use case — mapping cluster IDs to biological
 annotations:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_SankeyPlot.html">do_SankeyPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>              columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"seurat_clusters"</span>, <span class="st">"seurat_annotations"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 62 cell(s) with NA values excluded from plot.</span></span></code></pre>

@@ -24,6 +24,8 @@ color with a grey silhouette of all other cells in the background.
   plot_cell_borders,
   border.size,
   border.color,
-  ncol
+  show.legend = TRUE,
+  ncol,
+  nrow = NULL
 )
 ```

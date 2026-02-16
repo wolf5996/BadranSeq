@@ -58,6 +58,38 @@ do_UmapPlot(pbmc3k, group.by = "seurat_annotations")
 
 ![](visualisation_files/figure-html/umap-groupby-1.png)
 
+### Group by multiple metadata columns
+
+Pass a vector of column names to create side-by-side panels:
+
+``` r
+do_UmapPlot(pbmc3k, group.by = c("seurat_clusters", "seurat_annotations"))
+```
+
+![](visualisation_files/figure-html/umap-multi-groupby-1.png)
+
+### Control panel layout
+
+When combining multiple panels, use `ncol` and `nrow` to control the
+patchwork layout. For example, stack the panels vertically with
+`ncol = 1`:
+
+``` r
+do_UmapPlot(pbmc3k,
+            group.by = c("seurat_clusters", "seurat_annotations"),
+            ncol = 1)
+```
+
+![](visualisation_files/figure-html/umap-layout-control-1.png)
+
+### Hide the legend
+
+``` r
+do_UmapPlot(pbmc3k, show.legend = FALSE)
+```
+
+![](visualisation_files/figure-html/umap-no-legend-1.png)
+
 ### Adjust point size and remove labels
 
 ``` r

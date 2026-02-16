@@ -68,7 +68,9 @@ silhouette of all other cells in the background (SCpubr-style).</p>
 <span>  border.size <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  border.color <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>  legend.title <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  ncol <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  show.legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nrow <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -165,8 +167,16 @@ panels with silhouettes of other cells).</p></dd>
 <dd><p>character. Custom legend title (NULL for default).</p></dd>
 
 
+<dt id="arg-show-legend">show.legend<a class="anchor" aria-label="anchor" href="#arg-show-legend"></a></dt>
+<dd><p>logical. Show the colour legend (default: TRUE).</p></dd>
+
+
 <dt id="arg-ncol">ncol<a class="anchor" aria-label="anchor" href="#arg-ncol"></a></dt>
-<dd><p>numeric. Number of columns for split panels (default: NULL, auto).</p></dd>
+<dd><p>numeric. Number of columns for panel layout (default: NULL, auto).</p></dd>
+
+
+<dt id="arg-nrow">nrow<a class="anchor" aria-label="anchor" href="#arg-nrow"></a></dt>
+<dd><p>numeric. Number of rows for panel layout (default: NULL, auto).</p></dd>
 
 </dl></div>
     <div class="section level2">

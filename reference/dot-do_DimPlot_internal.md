@@ -30,7 +30,9 @@ a grey silhouette of all other cells in the background (SCpubr-style).
   border.size = 2,
   border.color = "black",
   legend.title = NULL,
-  ncol = NULL
+  show.legend = TRUE,
+  ncol = NULL,
+  nrow = NULL
 )
 ```
 
@@ -125,9 +127,17 @@ a grey silhouette of all other cells in the background (SCpubr-style).
 
   character. Custom legend title (NULL for default).
 
+- show.legend:
+
+  logical. Show the colour legend (default: TRUE).
+
 - ncol:
 
-  numeric. Number of columns for split panels (default: NULL, auto).
+  numeric. Number of columns for panel layout (default: NULL, auto).
+
+- nrow:
+
+  numeric. Number of rows for panel layout (default: NULL, auto).
 
 ## Value
 
