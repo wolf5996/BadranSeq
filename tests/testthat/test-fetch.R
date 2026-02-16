@@ -113,7 +113,7 @@ test_that("fetch_feature_data returns tibble with correct structure", {
   data(pbmc3k, package = "BadranSeq")
   result <- fetch_feature_data(pbmc3k, features = c("CD3D", "CD8A"))
   expect_s3_class(result, "tbl_df")
-  expect_true(all(c("cell_id", "feature", "data") %in% colnames(result)))
+  expect_true(all(c("cell_id", "features", "data") %in% colnames(result)))
   # One row per cell per feature
   expect_equal(nrow(result), ncol(pbmc3k) * 2)
 })
@@ -121,8 +121,8 @@ test_that("fetch_feature_data returns tibble with correct structure", {
 test_that("fetch_feature_data feature column is a factor with correct order", {
   data(pbmc3k, package = "BadranSeq")
   result <- fetch_feature_data(pbmc3k, features = c("CD8A", "CD3D"))
-  expect_s3_class(result$feature, "factor")
-  expect_equal(levels(result$feature), c("CD8A", "CD3D"))
+  expect_s3_class(result$features, "factor")
+  expect_equal(levels(result$features), c("CD8A", "CD3D"))
 })
 
 test_that("fetch_feature_data handles single layer", {
@@ -185,7 +185,7 @@ test_that("fetch_feature_data warns on missing features and drops them", {
     ),
     "not found"
   )
-  expect_equal(levels(result$feature), "CD3D")
+  expect_equal(levels(result$features), "CD3D")
 })
 
 test_that("fetch_feature_data errors when all features missing", {

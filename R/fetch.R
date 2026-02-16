@@ -2,7 +2,7 @@
 # Tidy data extraction from Seurat objects
 
 # Suppress R CMD check notes for dplyr/tidyr NSE variables
-utils::globalVariables(c("feature"))
+utils::globalVariables(c("features"))
 
 #' Build Cell Scaffold Tibble
 #'
@@ -156,7 +156,7 @@ fetch_cell_data <- function(
 #' @param metadata logical or character. TRUE = all metadata columns,
 #'   FALSE = none, or a character vector of specific column names.
 #'
-#' @return A tibble with columns: cell_id, feature (factor), one column per layer,
+#' @return A tibble with columns: cell_id, features (factor), one column per layer,
 #'   optional embedding columns, optional metadata columns.
 #'
 #' @examples
@@ -266,7 +266,7 @@ fetch_feature_data <- function(
     tidyr::pivot_longer(
       df,
       cols = dplyr::all_of(valid_features),
-      names_to = "feature",
+      names_to = "features",
       values_to = lyr
     )
   })
@@ -280,7 +280,7 @@ fetch_feature_data <- function(
       expr_tbl <- dplyr::left_join(
         expr_tbl,
         expression_list[[i]],
-        by = c("cell_id", "feature")
+        by = c("cell_id", "features")
       )
     }
   }
@@ -289,7 +289,7 @@ fetch_feature_data <- function(
 
   expr_tbl <- dplyr::mutate(
     expr_tbl,
-    feature = factor(feature, levels = valid_features)
+    features = factor(features, levels = valid_features)
   )
 
   # Join with scaffold ----------
@@ -301,11 +301,11 @@ fetch_feature_data <- function(
   layer_cols <- intersect(layer, colnames(result))
   other_cols <- setdiff(
     colnames(result),
-    c("cell_id", "feature", layer_cols)
+    c("cell_id", "features", layer_cols)
   )
   result <- dplyr::select(
     result,
-    dplyr::all_of(c("cell_id", "feature", layer_cols, other_cols))
+    dplyr::all_of(c("cell_id", "features", layer_cols, other_cols))
   )
 
   result

@@ -34,7 +34,7 @@ One of "counts", "data", "scale.data", or a combination
 FALSE = none, or a character vector of specific column names.}
 }
 \value{
-A tibble with columns: cell_id, feature (factor), one column per layer,
+A tibble with columns: cell_id, features (factor), one column per layer,
 optional embedding columns, optional metadata columns.
 }
 \description{

@@ -26,12 +26,15 @@ do_ViolinPlot(
 \arguments{
 \item{object}{Seurat object.}
 
-\item{features}{character. Gene names to plot (required). Must be non-empty.}
+\item{features}{character. Gene names or numeric metadata column names
+to plot (required). Can mix both types freely — each gets its own panel.
+Examples: \code{c("CD3D", "nCount_RNA", "percent.mt")}.}
 
 \item{group.by}{character. Metadata column for grouping. If NULL (default),
 uses active Idents.}
 
-\item{layer}{character. Layer to extract expression from (default: "data").}
+\item{layer}{character. Layer to extract expression from (default: "data").
+Only applies to gene features.}
 
 \item{assay}{character. Assay to use (default: NULL = DefaultAssay).}
 
