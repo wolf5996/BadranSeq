@@ -1012,8 +1012,10 @@ do_DimPlot <- function(
 #' @param min.cutoff numeric or "q10". Minimum expression cutoff.
 #' @param max.cutoff numeric or "q90". Maximum expression cutoff.
 #' @param na.value character. Color for NA/zero values (default: "grey90").
+#' @param ncol numeric. Number of columns for panel layout (default: NULL, auto).
+#' @param nrow numeric. Number of rows for panel layout (default: NULL, auto).
 #'
-#' @return ggplot2 object or list of ggplot2 objects for multiple features.
+#' @return ggplot2 object for a single feature, or a patchwork object for multiple features.
 #'
 #' @examples
 #' \dontrun{
@@ -1044,6 +1046,8 @@ do_FeaturePlot <- function(
     plot_cell_borders = TRUE,
     border.size = 2,
     border.color = "black",
+    ncol = NULL,
+    nrow = NULL,
     ...
 ) {
 
@@ -1183,12 +1187,16 @@ do_FeaturePlot <- function(
     stop("No valid features found.")
   }
 
-  # Return single plot or list
+  # Return single plot or patchwork
   if (length(plot_list) == 1) {
     return(plot_list[[1]])
   } else {
+    if (!requireNamespace("patchwork", quietly = TRUE)) {
+      stop("Package 'patchwork' is required for multi-feature plots. ",
+           "Install it with: install.packages('patchwork')")
+    }
     names(plot_list) <- features[features %in% colnames(expr_data)]
-    return(plot_list)
+    return(patchwork::wrap_plots(plot_list, ncol = ncol, nrow = nrow))
   }
 }
 

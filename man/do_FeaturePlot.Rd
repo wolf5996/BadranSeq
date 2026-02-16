@@ -25,6 +25,8 @@ do_FeaturePlot(
   plot_cell_borders = TRUE,
   border.size = 2,
   border.color = "black",
+  ncol = NULL,
+  nrow = NULL,
   ...
 )
 }
@@ -69,10 +71,14 @@ do_FeaturePlot(
 
 \item{border.color}{character. Border color (default: "black").}
 
+\item{ncol}{numeric. Number of columns for panel layout (default: NULL, auto).}
+
+\item{nrow}{numeric. Number of rows for panel layout (default: NULL, auto).}
+
 \item{...}{Additional arguments (currently unused).}
 }
 \value{
-ggplot2 object or list of ggplot2 objects for multiple features.
+ggplot2 object for a single feature, or a patchwork object for multiple features.
 }
 \description{
 Creates feature expression plots overlaid on dimensionality reductions
