@@ -209,3 +209,32 @@ test_that("do_StatsViolinPlot errors on invalid group.levels", {
     "group.levels not found"
   )
 })
+
+# --- .classify_features() tests ---
+
+test_that(".classify_features separates genes from metadata columns", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- BadranSeq:::.classify_features(
+    pbmc3k, c("CD3D", "nCount_RNA", "FAKEGENE")
+  )
+  expect_equal(result$genes, "CD3D")
+  expect_equal(result$metadata, "nCount_RNA")
+  expect_equal(result$unknown, "FAKEGENE")
+})
+
+test_that(".classify_features prioritises genes over metadata", {
+  data(pbmc3k, package = "BadranSeq")
+  # If a feature name existed in both assay and metadata, gene wins
+  result <- BadranSeq:::.classify_features(pbmc3k, c("CD3D"))
+  expect_equal(result$genes, "CD3D")
+  expect_length(result$metadata, 0)
+})
+
+test_that(".classify_features handles all-metadata input", {
+  data(pbmc3k, package = "BadranSeq")
+  result <- BadranSeq:::.classify_features(
+    pbmc3k, c("nCount_RNA", "nFeature_RNA")
+  )
+  expect_length(result$genes, 0)
+  expect_equal(result$metadata, c("nCount_RNA", "nFeature_RNA"))
+})

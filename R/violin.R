@@ -143,6 +143,36 @@ utils::globalVariables(c("centrality_label"))
 }
 
 # ============================================================================
+# Internal: Classify features as genes or metadata columns
+# ============================================================================
+
+#' Classify Features as Genes or Metadata Columns
+#'
+#' @description
+#' Internal helper that splits a character vector of feature names into
+#' gene features (found in the assay rownames) and metadata columns
+#' (found in object metadata). Genes take priority if a name exists in both.
+#'
+#' @param object Seurat object.
+#' @param features character. Feature names to classify.
+#' @param assay character. Assay to check (default: NULL = DefaultAssay).
+#'
+#' @return A list with components: `genes`, `metadata`, `unknown`.
+#' @keywords internal
+.classify_features <- function(object, features, assay = NULL) {
+  assay_name <- assay %||% Seurat::DefaultAssay(object)
+  gene_names <- rownames(object[[assay_name]])
+  meta_names <- colnames(object@meta.data)
+
+  genes <- intersect(features, gene_names)
+  remaining <- setdiff(features, genes)
+  metadata <- intersect(remaining, meta_names)
+  unknown <- setdiff(remaining, metadata)
+
+  list(genes = genes, metadata = metadata, unknown = unknown)
+}
+
+# ============================================================================
 # Exported: do_ViolinPlot
 # ============================================================================
 
