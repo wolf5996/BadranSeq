@@ -39,3 +39,30 @@ test_that("do_UmapPlot split.by + show.legend = FALSE hides legend", {
   p <- do_UmapPlot(pbmc3k, split.by = "condition", show.legend = FALSE)
   expect_s3_class(p, "patchwork")
 })
+
+# --- multi-column group.by tests ---
+
+test_that("do_UmapPlot multi-column group.by returns patchwork", {
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_UmapPlot(pbmc3k, group.by = c("seurat_clusters", "seurat_annotations"))
+  expect_s3_class(p, "patchwork")
+})
+
+test_that("do_UmapPlot single group.by still returns ggplot", {
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_UmapPlot(pbmc3k, group.by = "seurat_clusters")
+  expect_s3_class(p, "gg")
+  expect_false(inherits(p, "patchwork"))
+})
+
+test_that("do_PcaPlot multi-column group.by returns patchwork", {
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_PcaPlot(pbmc3k, group.by = c("seurat_clusters", "seurat_annotations"))
+  expect_s3_class(p, "patchwork")
+})
+
+test_that("do_DimPlot multi-column group.by returns patchwork", {
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_DimPlot(pbmc3k, group.by = c("seurat_clusters", "seurat_annotations"))
+  expect_s3_class(p, "patchwork")
+})

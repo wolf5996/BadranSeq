@@ -519,7 +519,9 @@ get_pca_variance <- function(object, n_pcs = NULL) {
 #'
 #' @param object Seurat object.
 #' @param dims numeric. Vector of 2 PC dimensions to plot (default: c(1, 2)).
-#' @param group.by character. Metadata column for grouping (default: active identity).
+#' @param group.by character. One or more metadata columns for grouping.
+#'   If NULL (default), uses active Idents. When multiple columns are provided,
+#'   each gets its own panel combined via patchwork.
 #' @param split.by character. Metadata column for splitting (creates panels with silhouettes).
 #' @param colors.use Named vector of colors for groups.
 #' @param label logical. Show cluster labels (default: TRUE).
@@ -589,6 +591,43 @@ do_PcaPlot <- function(
   max_pc <- ncol(object@reductions$pca@cell.embeddings)
   if (any(dims > max_pc)) {
     stop(paste("Requested PC dimensions exceed available PCs. Maximum PC:", max_pc))
+  }
+
+  # --- Multi-column group.by ---
+  if (!is.null(group.by) && length(group.by) > 1) {
+    plots <- lapply(group.by, function(gb) {
+      do_PcaPlot(
+        object = object,
+        dims = dims,
+        group.by = gb,
+        split.by = split.by,
+        colors.use = colors.use,
+        label = label,
+        label.size = label.size,
+        label.color = label.color,
+        label.fill = label.fill,
+        pt.size = pt.size,
+        pt.alpha = pt.alpha,
+        plot.axes = plot.axes,
+        variance_digits = variance_digits,
+        shuffle = shuffle,
+        plot_cell_borders = plot_cell_borders,
+        border.size = border.size,
+        border.color = border.color,
+        legend.title = legend.title,
+        show.legend = show.legend,
+        ncol = ncol,
+        ...
+      )
+    })
+    names(plots) <- group.by
+
+    if (!requireNamespace("patchwork", quietly = TRUE)) {
+      stop("Package 'patchwork' is required for multi-column group.by. ",
+           "Install it with: install.packages('patchwork')")
+    }
+
+    return(patchwork::wrap_plots(plots, ncol = length(group.by)))
   }
 
   # Calculate variance explained
@@ -691,6 +730,42 @@ do_UmapPlot <- function(
     stop(paste("Requested UMAP dimensions exceed available dimensions. Maximum:", max_dim))
   }
 
+  # --- Multi-column group.by ---
+  if (!is.null(group.by) && length(group.by) > 1) {
+    plots <- lapply(group.by, function(gb) {
+      do_UmapPlot(
+        object = object,
+        dims = dims,
+        group.by = gb,
+        split.by = split.by,
+        colors.use = colors.use,
+        label = label,
+        label.size = label.size,
+        label.color = label.color,
+        label.fill = label.fill,
+        pt.size = pt.size,
+        pt.alpha = pt.alpha,
+        plot.axes = plot.axes,
+        shuffle = shuffle,
+        plot_cell_borders = plot_cell_borders,
+        border.size = border.size,
+        border.color = border.color,
+        legend.title = legend.title,
+        show.legend = show.legend,
+        ncol = ncol,
+        ...
+      )
+    })
+    names(plots) <- group.by
+
+    if (!requireNamespace("patchwork", quietly = TRUE)) {
+      stop("Package 'patchwork' is required for multi-column group.by. ",
+           "Install it with: install.packages('patchwork')")
+    }
+
+    return(patchwork::wrap_plots(plots, ncol = length(group.by)))
+  }
+
   # Build plot
   plot <- .do_DimPlot_internal(
     object = object,
@@ -777,6 +852,44 @@ do_DimPlot <- function(
   if (!reduction %in% names(object@reductions)) {
     stop(paste0("'", reduction, "' not found. Available reductions: ",
                 paste(names(object@reductions), collapse = ", ")))
+  }
+
+  # --- Multi-column group.by ---
+  if (!is.null(group.by) && length(group.by) > 1) {
+    plots <- lapply(group.by, function(gb) {
+      do_DimPlot(
+        object = object,
+        reduction = reduction,
+        dims = dims,
+        group.by = gb,
+        split.by = split.by,
+        colors.use = colors.use,
+        label = label,
+        label.size = label.size,
+        label.color = label.color,
+        label.fill = label.fill,
+        pt.size = pt.size,
+        pt.alpha = pt.alpha,
+        plot.axes = plot.axes,
+        variance_digits = variance_digits,
+        shuffle = shuffle,
+        plot_cell_borders = plot_cell_borders,
+        border.size = border.size,
+        border.color = border.color,
+        legend.title = legend.title,
+        show.legend = show.legend,
+        ncol = ncol,
+        ...
+      )
+    })
+    names(plots) <- group.by
+
+    if (!requireNamespace("patchwork", quietly = TRUE)) {
+      stop("Package 'patchwork' is required for multi-column group.by. ",
+           "Install it with: install.packages('patchwork')")
+    }
+
+    return(patchwork::wrap_plots(plots, ncol = length(group.by)))
   }
 
   # Route to specialized functions
