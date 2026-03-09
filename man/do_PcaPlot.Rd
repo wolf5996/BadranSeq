@@ -81,6 +81,8 @@ Controls layout of both split panels and multi-column group.by panels.}
 ggplot2 object with PCA plot including variance explained in axis labels.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Creates a PCA dimensionality reduction plot with variance explained
 percentages automatically added to axis labels. When split.by is used,
 shows each split category with a grey silhouette of all other cells.

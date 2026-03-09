@@ -179,6 +179,8 @@ utils::globalVariables(c("centrality_label", ".value"))
 #' Violin Plot with ggbetweenstats-Style Aesthetics
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Creates publication-ready violin plots for one or more features from a
 #' Seurat object, with optional boxplot overlay, jittered raw data points,
 #' and centrality markers (median/mean diamond with numeric label).
@@ -415,6 +417,8 @@ do_ViolinPlot <- function(
 #' Statistical Violin Plot via ggbetweenstats
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Creates statistical violin plots for one or more features from a Seurat
 #' object, using \code{ggstatsplot::ggbetweenstats()} for between-group
 #' comparisons with built-in statistical testing.

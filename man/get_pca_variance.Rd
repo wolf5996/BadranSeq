@@ -15,6 +15,8 @@ get_pca_variance(object, n_pcs = NULL)
 data.frame with PC number, variance explained percentage, and cumulative variance.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Helper function to extract variance explained information from a Seurat object.
 }
 \examples{

@@ -22,6 +22,7 @@ Imports:
     colorspace,
     dplyr,
     ggplot2,
+    lifecycle,
     magrittr,
     purrr,
     rlang,

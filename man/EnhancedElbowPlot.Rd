@@ -45,6 +45,8 @@ EnhancedElbowPlot(
 ggplot2 object.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 An improved version of Seurat's ElbowPlot with enhanced aesthetics,
 customizable titles, optional cutoff lines, and variance explained options.
 }

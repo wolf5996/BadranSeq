@@ -24,7 +24,7 @@ select_cells_interactive(
 Subsetted Seurat object or character vector of cell names.
 }
 \description{
-Interactive Cell Selection for Seurat Objects
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{

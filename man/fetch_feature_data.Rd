@@ -38,6 +38,8 @@ A tibble with columns: cell_id, features (factor), one column per layer,
 optional embedding columns, optional metadata columns.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Extracts a tidy tibble with one row per cell per feature. Expression values
 are provided as one column per requested layer. Optionally includes
 embedding coordinates and metadata, joined by cell_id.
