@@ -84,6 +84,8 @@ Controls layout of both split panels and multi-column group.by panels.}
 ggplot2 object with dimensionality reduction plot.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Unified wrapper for dimensionality reduction plots. Routes to specialized
 functions for PCA and UMAP, handles other reductions directly. When split.by
 is used, shows each split category with a grey silhouette of all other cells.

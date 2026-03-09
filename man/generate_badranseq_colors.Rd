@@ -15,6 +15,8 @@ generate_badranseq_colors(n, custom.colors = NULL)
 Character vector of hex colors.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Internal function to generate publication-ready categorical colors
 matching SCpubr's default palette. Uses colorspace "Dark 3" palette
 with adjusted saturation and value for more vivid, slightly darker colors.

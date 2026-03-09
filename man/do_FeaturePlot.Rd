@@ -81,6 +81,8 @@ do_FeaturePlot(
 ggplot2 object for a single feature, or a patchwork object for multiple features.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Creates feature expression plots overlaid on dimensionality reductions
 with viridis color scales and publication-ready styling.
 }

@@ -8,6 +8,8 @@
 #' Generate Categorical Color Palette
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Internal function to generate publication-ready categorical colors
 #' matching SCpubr's default palette. Uses colorspace "Dark 3" palette
 #' with adjusted saturation and value for more vivid, slightly darker colors.
@@ -60,6 +62,8 @@ generate_badranseq_colors <- function(n, custom.colors = NULL) {
 #' BadranSeq Publication-Ready Theme
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Theme function providing consistent SCpubr-like aesthetics
 #' for publication-ready plots. Can be applied to any ggplot2 object.
 #'

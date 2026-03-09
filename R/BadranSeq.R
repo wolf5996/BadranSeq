@@ -13,6 +13,8 @@ utils::globalVariables(c("Dim1", "Dim2", "group", "PC", "Value",
 #' Get PCA Variance Explained Summary
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Helper function to extract variance explained information from a Seurat object.
 #'
 #' @param object Seurat object with PCA reduction.
@@ -517,6 +519,8 @@ get_pca_variance <- function(object, n_pcs = NULL) {
 #' Enhanced PCA Plot with Variance Explained
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Creates a PCA dimensionality reduction plot with variance explained
 #' percentages automatically added to axis labels. When split.by is used,
 #' shows each split category with a grey silhouette of all other cells.
@@ -683,6 +687,8 @@ do_PcaPlot <- function(
 #' Enhanced UMAP Plot
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Creates a UMAP dimensionality reduction plot with publication-ready styling.
 #' When split.by is used, shows each split category with a grey silhouette of
 #' all other cells.
@@ -814,6 +820,8 @@ do_UmapPlot <- function(
 #' Generalized Dimensionality Reduction Plot
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Unified wrapper for dimensionality reduction plots. Routes to specialized
 #' functions for PCA and UMAP, handles other reductions directly. When split.by
 #' is used, shows each split category with a grey silhouette of all other cells.
@@ -999,6 +1007,8 @@ do_DimPlot <- function(
 #' Enhanced Feature Plot with Viridis Support
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Creates feature expression plots overlaid on dimensionality reductions
 #' with viridis color scales and publication-ready styling.
 #'
@@ -1207,6 +1217,8 @@ do_FeaturePlot <- function(
 #' Enhanced Elbow Plot for PCA Dimensionality
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' An improved version of Seurat's ElbowPlot with enhanced aesthetics,
 #' customizable titles, optional cutoff lines, and variance explained options.
 #'
@@ -1316,6 +1328,9 @@ EnhancedElbowPlot <- function(
 
 #' SleepWalk Wrapper for Seurat Objects
 #'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' @param object Seurat object.
 #' @param embedding character. Reduction for 2D embedding (default: "umap").
 #' @param features character. Reduction for feature space (default: "pca").
@@ -1340,6 +1355,9 @@ seurat_sleepwalk <- function(object, embedding = "umap", features = "pca") {
 # ============================================================================
 
 #' Interactive Cell Selection for Seurat Objects
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
 #'
 #' @param object Seurat object with dimensionality reduction computed.
 #' @param reduction character. Reduction to use ("umap", "tsne", "pca").

@@ -69,6 +69,8 @@ A ggplot2 object (single feature) or patchwork object (multiple
 features).
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Creates publication-ready violin plots for one or more features from a
 Seurat object, with optional boxplot overlay, jittered raw data points,
 and centrality markers (median/mean diamond with numeric label).

@@ -15,6 +15,8 @@ theme_badranseq(base_size = 14, plot.axes = TRUE)
 ggplot2 theme object.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Theme function providing consistent SCpubr-like aesthetics
 for publication-ready plots. Can be applied to any ggplot2 object.
 }

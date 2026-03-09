@@ -22,6 +22,8 @@ A tibble with columns: cell_id, optional embedding columns, and
 optional metadata columns.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Extracts a tidy tibble with one row per cell containing cell identifiers,
 optional dimensionality reduction embeddings, and optional metadata.
 No expression data is included — use \code{\link{fetch_feature_data}} for that.

@@ -78,6 +78,8 @@ Controls layout of both split panels and multi-column group.by panels.}
 ggplot2 object with UMAP plot.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Creates a UMAP dimensionality reduction plot with publication-ready styling.
 When split.by is used, shows each split category with a grey silhouette of
 all other cells.

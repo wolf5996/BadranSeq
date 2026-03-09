@@ -95,6 +95,8 @@ utils::globalVariables(c("features"))
 #' Fetch Cell-Level Data from a Seurat Object
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Extracts a tidy tibble with one row per cell containing cell identifiers,
 #' optional dimensionality reduction embeddings, and optional metadata.
 #' No expression data is included — use \code{\link{fetch_feature_data}} for that.
@@ -140,6 +142,8 @@ fetch_cell_data <- function(
 #' Fetch Feature Expression Data from a Seurat Object
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Extracts a tidy tibble with one row per cell per feature. Expression values
 #' are provided as one column per requested layer. Optionally includes
 #' embedding coordinates and metadata, joined by cell_id.
