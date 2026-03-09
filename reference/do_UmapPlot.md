@@ -1,5 +1,7 @@
 # Enhanced UMAP Plot
 
+**\[stable\]**
+
 Creates a UMAP dimensionality reduction plot with publication-ready
 styling. When split.by is used, shows each split category with a grey
 silhouette of all other cells.

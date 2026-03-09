@@ -1,6 +1,6 @@
 # SleepWalk Wrapper for Seurat Objects
 
-SleepWalk Wrapper for Seurat Objects
+**\[stable\]**
 
 ## Usage
 

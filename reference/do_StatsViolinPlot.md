@@ -1,5 +1,7 @@
 # Statistical Violin Plot via ggbetweenstats
 
+**\[stable\]**
+
 Creates statistical violin plots for one or more features from a Seurat
 object, using
 [`ggstatsplot::ggbetweenstats()`](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html)

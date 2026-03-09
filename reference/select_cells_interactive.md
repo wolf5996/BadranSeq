@@ -1,6 +1,6 @@
 # Interactive Cell Selection for Seurat Objects
 
-Interactive Cell Selection for Seurat Objects
+**\[stable\]**
 
 ## Usage
 

@@ -1,5 +1,7 @@
 # Fetch Feature Expression Data from a Seurat Object
 
+**\[stable\]**
+
 Extracts a tidy tibble with one row per cell per feature. Expression
 values are provided as one column per requested layer. Optionally
 includes embedding coordinates and metadata, joined by cell_id.

@@ -1,5 +1,7 @@
 # Get PCA Variance Explained Summary
 
+**\[stable\]**
+
 Helper function to extract variance explained information from a Seurat
 object.
 

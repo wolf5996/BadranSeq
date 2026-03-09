@@ -1,5 +1,7 @@
 # Sankey Plot for Categorical Metadata
 
+**\[stable\]**
+
 Creates a Sankey (alluvial) diagram showing the relationship between 2–3
 categorical metadata variables from a Seurat object. Each stratum is
 labelled and coloured; flows connect cells across variables.

@@ -1,5 +1,7 @@
 # Enhanced Feature Plot with Viridis Support
 
+**\[stable\]**
+
 Creates feature expression plots overlaid on dimensionality reductions
 with viridis color scales and publication-ready styling.
 

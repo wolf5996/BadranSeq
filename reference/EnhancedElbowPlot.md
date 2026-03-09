@@ -1,5 +1,7 @@
 # Enhanced Elbow Plot for PCA Dimensionality
 
+**\[stable\]**
+
 An improved version of Seurat's ElbowPlot with enhanced aesthetics,
 customizable titles, optional cutoff lines, and variance explained
 options.

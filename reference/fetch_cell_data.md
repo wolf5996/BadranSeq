@@ -1,5 +1,7 @@
 # Fetch Cell-Level Data from a Seurat Object
 
+**\[stable\]**
+
 Extracts a tidy tibble with one row per cell containing cell
 identifiers, optional dimensionality reduction embeddings, and optional
 metadata. No expression data is included — use

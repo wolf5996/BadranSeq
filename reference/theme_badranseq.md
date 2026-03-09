@@ -1,5 +1,7 @@
 # BadranSeq Publication-Ready Theme
 
+**\[stable\]**
+
 Theme function providing consistent SCpubr-like aesthetics for
 publication-ready plots. Can be applied to any ggplot2 object.
 

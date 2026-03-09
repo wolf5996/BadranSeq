@@ -1,5 +1,7 @@
 # Generate Categorical Color Palette
 
+**\[stable\]**
+
 Internal function to generate publication-ready categorical colors
 matching SCpubr's default palette. Uses colorspace "Dark 3" palette with
 adjusted saturation and value for more vivid, slightly darker colors.

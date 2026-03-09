@@ -1,5 +1,7 @@
 # Generalized Dimensionality Reduction Plot
 
+**\[stable\]**
+
 Unified wrapper for dimensionality reduction plots. Routes to
 specialized functions for PCA and UMAP, handles other reductions
 directly. When split.by is used, shows each split category with a grey
