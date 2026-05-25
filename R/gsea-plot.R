@@ -1,6 +1,5 @@
 # BadranSeq - GSEA Results Plotting
 # Publication-ready barplots for Gene Set Enrichment Analysis results
-# Adapted from create_enhanced_plot() in the original .BadranSeq prototype
 
 # ============================================================================
 # Internal Helpers
