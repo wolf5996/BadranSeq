@@ -28,18 +28,19 @@ across every analysis, every manuscript, and every lab.
 
 ## How BadranSeq solves it
 
-| Feature                     |              Seurat              |                   BadranSeq                   |
-|-----------------------------|:--------------------------------:|:---------------------------------------------:|
-| PCA variance labels on axes |                No                |                 **Automatic**                 |
-| Cell borders                |                No                |               **On by default**               |
-| Cluster labels              |          Off by default          |               **On by default**               |
-| Split-panel silhouettes     | No — facets lose spatial context |     **Grey silhouette preserves context**     |
-| Statistical violin plots    |           Not built-in           | **Kruskal–Wallis + pairwise via ggstatsplot** |
-| Viridis feature plots       |                No                |                  **Default**                  |
-| Interactive cell selection  |     Limited (`CellSelector`)     |   **Additive/subtractive brush selection**    |
-| Publication theme           |                No                |       **Consistent across all outputs**       |
-| Automatic rasterisation     |                No                |        **\>50k cells auto-rasterised**        |
-| Sankey / alluvial diagrams  |                No                |        **Metadata relationship flows**        |
+| Feature | Seurat | BadranSeq |
+|----|:--:|:--:|
+| PCA variance labels on axes | No | **Automatic** |
+| Cell borders | No | **On by default** |
+| Cluster labels | Off by default | **On by default** |
+| Split-panel silhouettes | No — facets lose spatial context | **Grey silhouette preserves context** |
+| Statistical violin plots | Not built-in | **Kruskal–Wallis + pairwise via ggstatsplot** |
+| Viridis feature plots | No | **Default** |
+| GSEA barplots with NES | No | **Diverging RdBu with padj labels** |
+| Interactive cell selection | Limited (`CellSelector`) | **Additive/subtractive brush selection** |
+| Publication theme | No | **Consistent across all outputs** |
+| Automatic rasterisation | No | **\>50k cells auto-rasterised** |
+| Sankey / alluvial diagrams | No | **Metadata relationship flows** |
 
 ## Visual comparison
 
@@ -121,6 +122,29 @@ do_SankeyPlot(pbmc3k, columns = c("seurat_clusters", "seurat_annotations"))
 Each stratum is labelled; flows show how cells distribute across
 categories. Powered by ggalluvial.
 
+### GSEA results barplot
+
+`do_GseaPlot()` turns a `clusterProfiler` GSEA result into a
+publication-ready horizontal barplot. Unlike a dotplot, it clearly shows
+the direction and magnitude of NES, and labels each bar with its
+adjusted p-value and leading-edge genes:
+
+``` r
+data(gsea_pbmc3k)
+
+do_GseaPlot(
+  gsea_pbmc3k,
+  analysis_name = "CD14+ Mono vs Others",
+  simplify_go = FALSE
+)
+```
+
+<img src="man/figures/README-gsea-example-1.png" alt="" width="100%" />
+
+The default uses a diverging RdBu fill scale to emphasize that NES is
+signed. Set `fill_scale = "viridis"` for the original sequential style.
+Use `selection` to plot specific pathways by name.
+
 ## Installation
 
 ### Stable release (recommended)
@@ -129,10 +153,10 @@ Install the latest tagged release:
 
 ``` r
 # pak (recommended)
-pak::pkg_install("wolf5996/BadranSeq@v1.3.1")
+pak::pkg_install("wolf5996/BadranSeq@v1.4.0")
 
 # devtools
-devtools::install_github("wolf5996/BadranSeq", ref = "v1.3.1")
+devtools::install_github("wolf5996/BadranSeq", ref = "v1.4.0")
 ```
 
 ### Development version
@@ -150,23 +174,24 @@ devtools::install_github("wolf5996/BadranSeq")
 
 ## Function reference
 
-| Function                      | Purpose                                            |
-|-------------------------------|----------------------------------------------------|
-| `do_UmapPlot()`               | UMAP with borders, labels, silhouette split        |
-| `do_PcaPlot()`                | PCA with automatic variance labels                 |
-| `do_DimPlot()`                | Unified entry point (routes to UMAP/PCA handler)   |
-| `do_FeaturePlot()`            | Gene expression overlay with viridis scale         |
-| `do_StatsViolinPlot()`        | Statistical violin via ggbetweenstats              |
-| `do_ViolinPlot()`             | Descriptive violin (no statistics)                 |
-| `do_SankeyPlot()`             | Sankey/alluvial diagram for metadata relationships |
-| `EnhancedElbowPlot()`         | Variance-explained elbow plot with cutoff          |
-| `get_pca_variance()`          | Extract PCA variance as a data.frame               |
-| `select_cells_interactive()`  | Shiny brush selection of cells                     |
-| `seurat_sleepwalk()`          | Interactive embedding distance explorer            |
-| `fetch_cell_data()`           | Tidy cell-level metadata/embedding extraction      |
-| `fetch_feature_data()`        | Tidy long-format extraction from Seurat            |
-| `theme_badranseq()`           | Publication theme for any ggplot                   |
-| `generate_badranseq_colors()` | Vivid categorical colour palette                   |
+| Function | Purpose |
+|----|----|
+| `do_UmapPlot()` | UMAP with borders, labels, silhouette split |
+| `do_PcaPlot()` | PCA with automatic variance labels |
+| `do_DimPlot()` | Unified entry point (routes to UMAP/PCA handler) |
+| `do_FeaturePlot()` | Gene expression overlay with viridis scale |
+| `do_StatsViolinPlot()` | Statistical violin via ggbetweenstats |
+| `do_ViolinPlot()` | Descriptive violin (no statistics) |
+| `do_SankeyPlot()` | Sankey/alluvial diagram for metadata relationships |
+| `do_GseaPlot()` | GSEA barplot with diverging NES and readable gene labels |
+| `EnhancedElbowPlot()` | Variance-explained elbow plot with cutoff |
+| `get_pca_variance()` | Extract PCA variance as a data.frame |
+| `select_cells_interactive()` | Shiny brush selection of cells |
+| `seurat_sleepwalk()` | Interactive embedding distance explorer |
+| `fetch_cell_data()` | Tidy cell-level metadata/embedding extraction |
+| `fetch_feature_data()` | Tidy long-format extraction from Seurat |
+| `theme_badranseq()` | Publication theme for any ggplot |
+| `generate_badranseq_colors()` | Vivid categorical colour palette |
 
 Full documentation and worked examples: **[pkgdown
 site](https://wolf5996.github.io/BadranSeq/)**
@@ -179,7 +204,8 @@ stats.
 
 **Optional** (install for extended features): patchwork (multi-panel
 layouts), ggrastr (rasterisation), ggstatsplot (statistical violin
-plots), ggalluvial (Sankey diagrams).
+plots), ggalluvial (Sankey diagrams), clusterProfiler + org.Hs.eg.db
+(GSEA barplots).
 
 ## Acknowledgements
 
@@ -196,7 +222,7 @@ interactive cell selection).
 If you use BadranSeq in published work, please cite:
 
 > Elshenawy, B. (2025). BadranSeq: Publication-ready visualisation for
-> single-cell RNA sequencing data in R. R package version 1.3.1.
+> single-cell RNA sequencing data in R. R package version 1.4.0.
 > <https://github.com/wolf5996/BadranSeq>
 
 ## License

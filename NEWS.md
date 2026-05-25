@@ -13,9 +13,14 @@
   - `selection` parameter for plotting specific pathways by name
   - `fill_scale = "viridis"` option for original sequential style
 
-`gsea_pbmc3k` bundled dataset: CD14+ Mono (Cluster 2) vs others GSEA results from
-  `clusterProfiler::gseGO(ont = "BP")` on the `pbmc3k` Seurat object.
+* `gsea_pbmc3k` bundled dataset: CD14+ Mono (Cluster 2) vs others GSEA results
+  from `clusterProfiler::gseGO(ont = "BP")` on the `pbmc3k` Seurat object.
+  Core enrichment genes stored as readable HGNC symbols via `setReadable()`.
   Created via reproducible `data-raw/gsea_pea_pbmc3k.R` script.
+
+* `dea_pbmc3k_mono` bundled dataset: Wilcoxon differential expression results
+  (2,530 genes, Cluster 2 vs others) with `avg_log2FC` column for GSEA ranking.
+  Row names are HGNC gene symbols.
 
 ## Dependencies
 

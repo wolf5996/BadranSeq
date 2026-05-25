@@ -121,7 +121,7 @@ data(gsea_pbmc3k)
 
 do_GseaPlot(
   gsea_pbmc3k,
-  analysis_name = "CD8 T vs Others",
+  analysis_name = "CD14+ Mono vs Others",
   simplify_go = FALSE
 )
 ```
@@ -136,10 +136,10 @@ Install the latest tagged release:
 
 ```{r eval=FALSE}
 # pak (recommended)
-pak::pkg_install("wolf5996/BadranSeq@v1.3.1")
+pak::pkg_install("wolf5996/BadranSeq@v1.4.0")
 
 # devtools
-devtools::install_github("wolf5996/BadranSeq", ref = "v1.3.1")
+devtools::install_github("wolf5996/BadranSeq", ref = "v1.4.0")
 ```
 
 ### Development version
@@ -165,6 +165,7 @@ devtools::install_github("wolf5996/BadranSeq")
 | `do_StatsViolinPlot()` | Statistical violin via ggbetweenstats |
 | `do_ViolinPlot()` | Descriptive violin (no statistics) |
 | `do_SankeyPlot()` | Sankey/alluvial diagram for metadata relationships |
+| `do_GseaPlot()` | GSEA barplot with diverging NES and readable gene labels |
 | `EnhancedElbowPlot()` | Variance-explained elbow plot with cutoff |
 | `get_pca_variance()` | Extract PCA variance as a data.frame |
 | `select_cells_interactive()` | Shiny brush selection of cells |
@@ -180,7 +181,7 @@ Full documentation and worked examples: **[pkgdown site](https://wolf5996.github
 
 **Core** (automatically installed): ggplot2, Seurat, colorspace, dplyr, tidyr, tibble, purrr, rlang, magrittr, SeuratObject, shiny, sleepwalk, stats.
 
-**Optional** (install for extended features): patchwork (multi-panel layouts), ggrastr (rasterisation), ggstatsplot (statistical violin plots), ggalluvial (Sankey diagrams).
+**Optional** (install for extended features): patchwork (multi-panel layouts), ggrastr (rasterisation), ggstatsplot (statistical violin plots), ggalluvial (Sankey diagrams), clusterProfiler + org.Hs.eg.db (GSEA barplots).
 
 ## Acknowledgements
 
@@ -190,7 +191,7 @@ BadranSeq's aesthetic design is inspired by [SCpubr](https://github.com/enblacar
 
 If you use BadranSeq in published work, please cite:
 
-> Elshenawy, B. (2025). BadranSeq: Publication-ready visualisation for single-cell RNA sequencing data in R. R package version 1.3.1. <https://github.com/wolf5996/BadranSeq>
+> Elshenawy, B. (2025). BadranSeq: Publication-ready visualisation for single-cell RNA sequencing data in R. R package version 1.4.0. <https://github.com/wolf5996/BadranSeq>
 
 ## License
 
