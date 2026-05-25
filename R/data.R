@@ -18,12 +18,13 @@
 #' pbmc3k
 "pbmc3k"
 
-#' GSEA Results: CD8 T cells vs all others (PBMC 3K)
+#' GSEA Results: CD14+ Monocytes vs Others (PBMC 3K)
 #'
 #' @description
-#' GSEA results from comparing CD8 T cells against all other cell types
-#' in the `pbmc3k` dataset. Generated via `clusterProfiler::gseGO()` using
-#' biological process ontology on a ranked gene list from Wilcoxon DEA.
+#' GSEA results from comparing Cluster 2 (>97% CD14+ Monocytes) against
+#' all other clusters in the `pbmc3k` dataset. Generated via
+#' `clusterProfiler::gseGO()` using biological process ontology on a ranked
+#' gene list from Wilcoxon differential expression analysis.
 #'
 #' @format A `gseaResult` object from `clusterProfiler` with slots:
 #' \describe{
@@ -32,10 +33,10 @@
 #'     core_enrichment}
 #' }
 #'
-#' @source Differential expression (CD8 T vs others) on `pbmc3k` dataset,
-#'   GSEA via `clusterProfiler::gseGO(ont = "BP")`.
+#' @source Differential expression (Cluster 2 vs others) on `pbmc3k`
+#'   dataset, GSEA via `clusterProfiler::gseGO(ont = "BP")`.
 #'
 #' @examples
-#' data(gsea_pbmc3k_cd8t)
-#' gsea_pbmc3k_cd8t
-"gsea_pbmc3k_cd8t"
+#' data(gsea_pbmc3k)
+#' gsea_pbmc3k
+"gsea_pbmc3k"

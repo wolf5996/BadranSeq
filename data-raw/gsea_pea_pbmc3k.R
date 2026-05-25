@@ -1,8 +1,9 @@
-# Code to prepare `gsea_pbmc3k_cd8t` dataset
+# Code to prepare `gsea_pbmc3k` dataset
 #
 # This script performs differential expression analysis (DEA) on the bundled
-# pbmc3k dataset, comparing CD8 T cells against all other cell types, then
-# runs a pathway enrichment analysis (PEA) using GSEA on the ranked gene list.
+# pbmc3k dataset, comparing Cluster 2 (effectively 100%% CD14+ Monocytes)
+# against all other clusters, then runs a pathway enrichment analysis (PEA)
+# using GSEA on the ranked gene list.
 #
 # The resulting gseaGO object is saved to data/ for use as example input
 # for `do_GseaPlot()`.
@@ -14,20 +15,14 @@ library(org.Hs.eg.db)
 # Load the bundled pbmc3k dataset ------------------------------------------------
 load("data/pbmc3k.rda")
 
-# DEA: Compare CD8 T cells vs all others ----------------------------------------
-# Create a binary grouping: CD8 T vs all other cell types
-pbmc3k$group <- ifelse(
-  pbmc3k$seurat_annotations == "CD8 T",
-  "CD8_T",
-  "Other"
-)
-Idents(pbmc3k) <- "group"
+# DEA: Compare Cluster 2 (CD14+ Mono) vs all other clusters ----------------------
+# Cluster 2 is >97%% CD14+ Monocytes, making it the cleanest mono population
+Seurat::Idents(pbmc3k) <- "seurat_clusters"
 
-# Run differential expression
-markers <- FindMarkers(
+markers <- Seurat::FindMarkers(
   pbmc3k,
-  ident.1 = "CD8_T",
-  ident.2 = "Other",
+  ident.1 = "2",
+  ident.2 = NULL,
   assay = "RNA",
   slot = "data",
   test.use = "wilcox",
@@ -37,17 +32,24 @@ markers <- FindMarkers(
 )
 
 # Prepare ranked gene list for GSEA -------------------------------------------
-# clusterProfiler expects a named numeric vector sorted in descending order
-# Use average log2FC as the ranking metric
-ranked_genes <- markers$avg_log2FC
+ranked_genes <- sort(markers$avg_log2FC, decreasing = TRUE)
 names(ranked_genes) <- rownames(markers)
-ranked_genes <- sort(ranked_genes, decreasing = TRUE)
-
-# Remove NA values if any
 ranked_genes <- ranked_genes[!is.na(ranked_genes)]
 
+# Cap extreme values (prevent NA issues with fgsea)
+u <- stats::quantile(abs(ranked_genes), 0.99, na.rm = TRUE)
+tmp <- pmin(pmax(ranked_genes, -u), u)
+names(tmp) <- names(ranked_genes)
+ranked_genes <- sort(tmp, decreasing = TRUE)
+
+# Break exact ties with negligible random noise
+set.seed(42)
+noise <- stats::runif(length(ranked_genes), -1e-9, 1e-9)
+ranked_genes <- ranked_genes + noise
+ranked_genes <- sort(ranked_genes, decreasing = TRUE)
+
 # Keep only genes that have Entrez IDs for gseGO--------------------------------
-gene_entrez <- bitr(
+gene_entrez <- clusterProfiler::bitr(
   names(ranked_genes),
   fromType = "SYMBOL",
   toType = "ENTREZID",
@@ -62,7 +64,7 @@ ranked_entrez <- sort(ranked_entrez, decreasing = TRUE)
 # Run GSEA with GO Biological Process -------------------------------------------
 set.seed(42)
 
-gsea_pbmc3k_cd8t <- gseGO(
+gsea_pbmc3k <- clusterProfiler::gseGO(
   geneList = ranked_entrez,
   ont = "BP",
   OrgDb = org.Hs.eg.db,
@@ -74,4 +76,4 @@ gsea_pbmc3k_cd8t <- gseGO(
 )
 
 # Save to package data directory ------------------------------------------------
-usethis::use_data(gsea_pbmc3k_cd8t, overwrite = TRUE, compress = "xz")
+usethis::use_data(gsea_pbmc3k, overwrite = TRUE, compress = "xz")
