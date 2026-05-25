@@ -1,10 +1,14 @@
 # BadranSeq - Convenience functions for single-cell RNA-seq visualization
 # Native ggplot2 implementations with publication-ready aesthetics
 
-# Suppress R CMD check notes for ggplot2 NSE variables
+# Suppress R CMD check notes for ggplot2 NSE and tidy eval variables
 utils::globalVariables(c("Dim1", "Dim2", "group", "PC", "Value",
                          "dim1", "dim2", "color_var", "expression",
-                         "split_var", "is_silhouette"))
+                         "split_var", "is_silhouette",
+                         "Description", "p.adjust", "core_enrichment",
+                         "pathway", "padj", "leading_edge_count",
+                         "leading_edge_clean", "pathway_with_genes",
+                         "pos", "padj_formatted", "colortext"))
 
 # ============================================================================
 # PCA Variance Helper
