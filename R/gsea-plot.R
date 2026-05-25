@@ -8,7 +8,8 @@
 
 #' Check if GSEA object contains GO terms
 #'
-#' Detects whether the result table contains GO identifiers (GO:\d{7} pattern).
+  #' Detects whether the result table contains GO identifiers
+  #' (GO: followed by 7 digits, e.g. GO:0000000).
 #'
 #' @param gsea_object A GSEA result object with `@result` slot.
 #' @return Logical.
