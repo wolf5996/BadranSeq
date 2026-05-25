@@ -75,5 +75,17 @@ gsea_pbmc3k <- clusterProfiler::gseGO(
   verbose = TRUE
 )
 
-# Save to package data directory ------------------------------------------------
+# Save DEA results to package data directory ------------------------------------
+# Row names are HGNC gene symbols
+dea_pbmc3k_mono <- markers
+usethis::use_data(dea_pbmc3k_mono, overwrite = TRUE, compress = "xz")
+
+# Save GSEA results to package data directory -----------------------------------
+# Convert ENTREZIDs in core_enrichment to HGNC symbols for readability
+gsea_pbmc3k <- clusterProfiler::setReadable(
+  gsea_pbmc3k,
+  OrgDb = org.Hs.eg.db,
+  keyType = "ENTREZID"
+)
+
 usethis::use_data(gsea_pbmc3k, overwrite = TRUE, compress = "xz")

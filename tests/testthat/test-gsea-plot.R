@@ -5,6 +5,15 @@ test_that("gsea_pbmc3k dataset is available", {
   expect_true(nrow(gsea_pbmc3k@result) >= 1)
 })
 
+test_that("dea_pbmc3k_mono dataset is available", {
+  data(dea_pbmc3k_mono, package = "BadranSeq")
+  expect_true(exists("dea_pbmc3k_mono"))
+  expect_true(is.data.frame(dea_pbmc3k_mono))
+  expect_equal(ncol(dea_pbmc3k_mono), 5)
+  expect_named(dea_pbmc3k_mono, c("p_val", "avg_log2FC", "pct.1", "pct.2", "p_val_adj"))
+  expect_true(nrow(dea_pbmc3k_mono) >= 2500)
+})
+
 test_that("do_GseaPlot returns a ggplot object", {
   data(gsea_pbmc3k, package = "BadranSeq")
 
