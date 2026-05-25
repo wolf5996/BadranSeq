@@ -89,16 +89,16 @@
 #'
 #' @examples
 #' \dontrun{
-#' data(gsea_pbmc3k_cd8t)
-#' do_GseaPlot(gsea_pbmc3k_cd8t, analysis_name = "CD8 T vs Others")
+#' data(gsea_pbmc3k)
+#' do_GseaPlot(gsea_pbmc3k, analysis_name = "CD14+ Mono vs Others")
 #'
 #' # Use viridis (original style)
-#' do_GseaPlot(gsea_pbmc3k_cd8t, fill_scale = "viridis")
+#' do_GseaPlot(gsea_pbmc3k, fill_scale = "viridis")
 #'
 #' # Plot specific pathways
 #' do_GseaPlot(
-#'   gsea_pbmc3k_cd8t,
-#'   selection = c("defense response to Gram-negative bacterium")
+#'   gsea_pbmc3k,
+#'   selection = c("cell chemotaxis")
 #' )
 #' }
 #'

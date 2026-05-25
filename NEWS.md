@@ -13,7 +13,7 @@
   - `selection` parameter for plotting specific pathways by name
   - `fill_scale = "viridis"` option for original sequential style
 
-* `gsea_pbmc3k_cd8t` bundled dataset: CD8 T vs others GSEA results from
+`gsea_pbmc3k` bundled dataset: CD14+ Mono (Cluster 2) vs others GSEA results from
   `clusterProfiler::gseGO(ont = "BP")` on the `pbmc3k` Seurat object.
   Created via reproducible `data-raw/gsea_pea_pbmc3k.R` script.
 
