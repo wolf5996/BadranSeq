@@ -43,6 +43,7 @@ Seurat's plotting functions are designed for exploration, not publication. Every
 | Split-panel silhouettes | No — facets lose spatial context | **Grey silhouette preserves context** |
 | Statistical violin plots | Not built-in | **Kruskal–Wallis + pairwise via ggstatsplot** |
 | Viridis feature plots | No | **Default** |
+| GSEA barplots with NES | No | **Diverging RdBu with padj labels** |
 | Interactive cell selection | Limited (`CellSelector`) | **Additive/subtractive brush selection** |
 | Publication theme | No | **Consistent across all outputs** |
 | Automatic rasterisation | No | **>50k cells auto-rasterised** |
@@ -110,6 +111,22 @@ do_SankeyPlot(pbmc3k, columns = c("seurat_clusters", "seurat_annotations"))
 ```
 
 Each stratum is labelled; flows show how cells distribute across categories. Powered by ggalluvial.
+
+### GSEA results barplot
+
+`do_GseaPlot()` turns a `clusterProfiler` GSEA result into a publication-ready horizontal barplot. Unlike a dotplot, it clearly shows the direction and magnitude of NES, and labels each bar with its adjusted p-value and leading-edge genes:
+
+```{r gsea-example, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
+data(gsea_pbmc3k_cd8t)
+
+do_GseaPlot(
+  gsea_pbmc3k_cd8t,
+  analysis_name = "CD8 T vs Others",
+  simplify_go = FALSE
+)
+```
+
+The default uses a diverging RdBu fill scale to emphasize that NES is signed. Set `fill_scale = "viridis"` for the original sequential style. Use `selection` to plot specific pathways by name.
 
 ## Installation
 

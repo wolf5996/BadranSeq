@@ -1,3 +1,27 @@
+# BadranSeq 1.4.0
+
+## New features
+
+* `do_GseaPlot()` restored from the original `.BadranSeq` prototype with
+  significant improvements. Creates publication-ready horizontal barplots
+  of GSEA results (clusterProfiler / ReactomePA) with:
+  - Diverging RdBu color scale centered at NES = 0 (emphasizes directionality)
+  - `theme_badranseq()` styling for consistency with rest of package
+  - Leading-edge gene count and gene symbols in pathway labels
+  - Adjustable p-value labels centered on bars
+  - `simplify_go` auto-detection and simplification of GO terms
+  - `selection` parameter for plotting specific pathways by name
+  - `fill_scale = "viridis"` option for original sequential style
+
+* `gsea_pbmc3k_cd8t` bundled dataset: CD8 T vs others GSEA results from
+  `clusterProfiler::gseGO(ont = "BP")` on the `pbmc3k` Seurat object.
+  Created via reproducible `data-raw/gsea_pea_pbmc3k.R` script.
+
+## Dependencies
+
+* Added `clusterProfiler` and `org.Hs.eg.db` to `Suggests` for
+  GO simplification and example data generation.
+
 # BadranSeq 1.0.0
 
 ## Visualisation
