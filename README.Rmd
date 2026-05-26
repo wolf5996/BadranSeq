@@ -116,7 +116,7 @@ Each stratum is labelled; flows show how cells distribute across categories. Pow
 
 `do_GseaPlot()` turns a `clusterProfiler` GSEA result into a publication-ready horizontal barplot. Unlike a dotplot, it clearly shows the direction and magnitude of NES, and labels each bar with its adjusted p-value and leading-edge genes:
 
-```{r gsea-example, fig.width=10, fig.height=15, message=FALSE, warning=FALSE}
+```{r gsea-example, fig.width=15, fig.height=10, message=FALSE, warning=FALSE}
 data(gsea_pbmc3k)
 
 do_GseaPlot(
