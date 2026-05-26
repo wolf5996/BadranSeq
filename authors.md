@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/wolf5996/BadranSeq/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/wolf5996/BadranSeq/blob/v1.4.0/DESCRIPTION)
 
 Elshenawy B (2026). *BadranSeq: Make transcriptomic analyses more
 pleasant*. R package version 1.4.0,
