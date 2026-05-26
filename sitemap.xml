@@ -10,8 +10,10 @@
 <url><loc>https://wolf5996.github.io/BadranSeq/news/index.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/BadranSeq-package.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/EnhancedElbowPlot.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/dea_pbmc3k_mono.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/do_DimPlot.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/do_FeaturePlot.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/do_GseaPlot.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/do_PcaPlot.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/do_SankeyPlot.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.html</loc></url>
@@ -22,10 +24,13 @@
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/dot-classify_features.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/dot-do_DimPlot_internal.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/dot-do_DimPlot_split_silhouette.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/dot-is_go_gsea.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/dot-simplify_if_go.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/fetch_cell_data.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/fetch_feature_data.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/generate_badranseq_colors.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/get_pca_variance.html</loc></url>
+<url><loc>https://wolf5996.github.io/BadranSeq/reference/gsea_pbmc3k.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/index.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/pbmc3k.html</loc></url>
 <url><loc>https://wolf5996.github.io/BadranSeq/reference/pipe.html</loc></url>

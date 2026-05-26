@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Publication-Ready Single-Cell Visualisation • BadranSeq</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Publication-Ready Single-Cell Visualisation">
 <meta name="description" content="Generate publication-quality dimensionality reduction plots with sensible defaults — cell borders, cluster labels, variance annotations, and split-panel silhouettes out of the box.">
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BadranSeq</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -296,7 +296,7 @@ immediately see which clusters are enriched in each condition.</p>
 <ul>
 <li>
 <strong><code><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot()</a></code></strong> — wraps
-<code><a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html" class="external-link">ggstatsplot::ggbetweenstats()</a></code> for between-group comparisons
+<code><a href="https://www.indrapatil.com/ggstatsplot/reference/ggbetweenstats.html" class="external-link">ggstatsplot::ggbetweenstats()</a></code> for between-group comparisons
 with built-in statistical testing.</li>
 <li>
 <strong><code><a href="../reference/do_ViolinPlot.html">do_ViolinPlot()</a></code></strong> — a pure ggplot2
@@ -318,8 +318,6 @@ annotating the plot with p-values:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
 <span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
 <span>                   pairwise.display <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: <span style="color: #BB0000;">✖</span> Number of labels is greater than default palette color count.</span></span>
-<span><span class="co">## <span style="color: #0000BB;">ℹ</span> Select another color `palette` (and/or `package`).</span></span></code></pre>
 <pre><code><span><span class="co">## Scale for <span style="color: #00BB00;">colour</span> is already present.</span></span>
 <span><span class="co">## Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span></span></code></pre>
 <p><img src="visualisation_files/figure-html/stats-violin-basic-1.png" class="r-plt" alt="" width="672"></p>
@@ -367,7 +365,7 @@ filters the grouping variable to a specified subset <em>before</em> the
 statistical test is run, so the test is performed only on the groups you
 care about.</p>
 <p>With fewer groups, pairwise brackets become readable again:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
 <span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
 <span>                   group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Naive CD4 T"</span>, <span class="st">"Memory CD4 T"</span>, <span class="st">"CD8 T"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -383,7 +381,7 @@ the need to drop unused factor levels.</p>
 <p>The default nonparametric test is appropriate for most scRNA-seq
 data, but you can switch to parametric (ANOVA / <em>t</em>-test),
 robust, or Bayesian tests via the <code>type</code> argument:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
 <span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
 <span>                   group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Naive CD4 T"</span>, <span class="st">"Memory CD4 T"</span>, <span class="st">"CD8 T"</span><span class="op">)</span>,</span>
@@ -396,19 +394,15 @@ robust, or Bayesian tests via the <code>type</code> argument:</p>
 <h3 id="multiple-genes">Multiple genes<a class="anchor" aria-label="anchor" href="#multiple-genes"></a>
 </h3>
 <p>Pass a vector of gene names to get a combined patchwork layout:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>                   features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3D"</span>, <span class="st">"CD8A"</span><span class="op">)</span>,</span>
 <span>                   group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
 <span>                   pairwise.display <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>                   ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: <span style="color: #BB0000;">✖</span> Number of labels is greater than default palette color count.</span></span>
-<span><span class="co">## <span style="color: #0000BB;">ℹ</span> Select another color `palette` (and/or `package`).</span></span></code></pre>
 <pre><code><span><span class="co">## Scale for <span style="color: #00BB00;">colour</span> is already present.</span></span>
-<span><span class="co">## Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span></span></code></pre>
-<pre><code><span><span class="co">## Warning: <span style="color: #BB0000;">✖</span> Number of labels is greater than default palette color count.</span></span>
-<span><span class="co">## <span style="color: #0000BB;">ℹ</span> Select another color `palette` (and/or `package`).</span></span></code></pre>
-<pre><code><span><span class="co">## Scale for <span style="color: #00BB00;">colour</span> is already present.</span></span>
+<span><span class="co">## Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span></span>
+<span><span class="co">## Scale for <span style="color: #00BB00;">colour</span> is already present.</span></span>
 <span><span class="co">## Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span></span></code></pre>
 <p><img src="visualisation_files/figure-html/stats-violin-multi-1.png" class="r-plt" alt="" width="1344"></p>
 </div>
@@ -418,7 +412,7 @@ robust, or Bayesian tests via the <code>type</code> argument:</p>
 <p><code><a href="../reference/do_ViolinPlot.html">do_ViolinPlot()</a></code> produces a violin + boxplot + jitter +
 centrality marker (median diamond) without any statistical annotation.
 Use this when you want a clean descriptive plot:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_ViolinPlot.html">do_ViolinPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD3D"</span>,</span>
 <span>              group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/plain-violin-1.png" class="r-plt" alt="" width="672"></p>
@@ -436,7 +430,7 @@ variables.</p>
 </h3>
 <p>A common use case — mapping cluster IDs to biological
 annotations:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_SankeyPlot.html">do_SankeyPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>              columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"seurat_clusters"</span>, <span class="st">"seurat_annotations"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 62 cell(s) with NA values excluded from plot.</span></span></code></pre>

@@ -4,7 +4,7 @@
 
 Creates statistical violin plots for one or more features from a Seurat
 object, using
-[`ggstatsplot::ggbetweenstats()`](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html)
+[`ggstatsplot::ggbetweenstats()`](https://www.indrapatil.com/ggstatsplot/reference/ggbetweenstats.html)
 for between-group comparisons with built-in statistical testing.
 
 This function requires the ggstatsplot package to be installed. For
@@ -74,19 +74,19 @@ do_StatsViolinPlot(
   "nonparametric" (Kruskal-Wallis + Dunn's) because single-cell
   expression data is typically non-normally distributed. Passed through
   to
-  [`ggstatsplot::ggbetweenstats()`](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html).
+  [`ggstatsplot::ggbetweenstats()`](https://www.indrapatil.com/ggstatsplot/reference/ggbetweenstats.html).
 
 - p.adjust.method:
 
   character. Method for p-value adjustment (default: "holm"). Passed
   through to
-  [`ggstatsplot::ggbetweenstats()`](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html).
+  [`ggstatsplot::ggbetweenstats()`](https://www.indrapatil.com/ggstatsplot/reference/ggbetweenstats.html).
 
 - pairwise.display:
 
   character. Which pairwise comparisons to display. One of "significant"
   (default), "non-significant", "all", or "none". Passed through to
-  [`ggstatsplot::ggbetweenstats()`](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html).
+  [`ggstatsplot::ggbetweenstats()`](https://www.indrapatil.com/ggstatsplot/reference/ggbetweenstats.html).
 
 - colors.use:
 
@@ -102,7 +102,7 @@ do_StatsViolinPlot(
 - ...:
 
   Additional arguments passed to
-  [`ggstatsplot::ggbetweenstats()`](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html).
+  [`ggstatsplot::ggbetweenstats()`](https://www.indrapatil.com/ggstatsplot/reference/ggbetweenstats.html).
 
 ## Value
 

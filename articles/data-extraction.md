@@ -16,9 +16,9 @@ plotting or downstream analysis. It works, but has a few rough edges:
 
 BadranSeq provides two focused alternatives:
 
-| Function                                                                                       | Returns                    | Use case                                       |
-|------------------------------------------------------------------------------------------------|----------------------------|------------------------------------------------|
-| [`fetch_cell_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_cell_data.md)       | One row per cell           | Metadata, embeddings — no expression           |
+| Function | Returns | Use case |
+|----|----|----|
+| [`fetch_cell_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_cell_data.md) | One row per cell | Metadata, embeddings — no expression |
 | [`fetch_feature_data()`](https://wolf5996.github.io/BadranSeq/reference/fetch_feature_data.md) | One row per cell × feature | Expression data + optional metadata/embeddings |
 
 Both return tibbles with `cell_id` as an explicit column.
@@ -30,6 +30,7 @@ Here is what
 returns for a simple request — UMAP coordinates plus a gene:
 
 ``` r
+
 head(Seurat::FetchData(pbmc3k, vars = c("umap_1", "umap_2", "CD3D")))
 ```
 
@@ -48,6 +49,7 @@ Compare with BadranSeq’s approach — embeddings and expression are
 requested through separate, explicit arguments:
 
 ``` r
+
 fetch_feature_data(
   pbmc3k,
   features = "CD3D",
@@ -85,6 +87,7 @@ tool when you need cell annotations for plotting or filtering.
 ### All metadata (default)
 
 ``` r
+
 fetch_cell_data(pbmc3k)
 ```
 
@@ -108,6 +111,7 @@ fetch_cell_data(pbmc3k)
 ### Add UMAP coordinates
 
 ``` r
+
 fetch_cell_data(pbmc3k, reductions = "umap")
 ```
 
@@ -131,6 +135,7 @@ fetch_cell_data(pbmc3k, reductions = "umap")
 ### Select specific metadata columns
 
 ``` r
+
 fetch_cell_data(
   pbmc3k,
   reductions = "umap",
@@ -156,6 +161,7 @@ fetch_cell_data(
 ### Embeddings only (no metadata)
 
 ``` r
+
 fetch_cell_data(pbmc3k, reductions = c("pca", "umap"), metadata = FALSE)
 ```
 
@@ -183,6 +189,7 @@ are columns named after the requested layers.
 ### Single gene, normalised expression
 
 ``` r
+
 fetch_feature_data(pbmc3k, features = "CD3D")
 ```
 
@@ -209,6 +216,7 @@ The `features` column is a factor preserving your input order — useful
 for controlling facet ordering in plots:
 
 ``` r
+
 fetch_feature_data(
   pbmc3k,
   features = c("CD3D", "CD8A", "CD14", "MS4A1"),
@@ -237,6 +245,7 @@ Request both raw counts and normalised data. Each layer becomes its own
 column:
 
 ``` r
+
 fetch_feature_data(
   pbmc3k,
   features = "CD3D",
@@ -266,6 +275,7 @@ Combine expression with UMAP coordinates for a fully self-contained
 plotting tibble:
 
 ``` r
+
 cd3d <- fetch_feature_data(
   pbmc3k,
   features = "CD3D",
@@ -286,6 +296,7 @@ Compare this with the equivalent using
 [`FetchData()`](https://satijalab.github.io/seurat-object/reference/FetchData.html):
 
 ``` r
+
 fd <- Seurat::FetchData(pbmc3k, vars = c("umap_1", "umap_2", "CD3D"))
 
 ggplot(fd, aes(x = umap_1, y = umap_2, colour = CD3D)) +
@@ -313,6 +324,7 @@ for the visual.
 ### Variance explained table
 
 ``` r
+
 get_pca_variance(pbmc3k, n_pcs = 10)
 ```
 
@@ -340,6 +352,7 @@ by optionally showing a variance percentage axis and a visual cutoff
 line:
 
 ``` r
+
 EnhancedElbowPlot(pbmc3k, ndims = 30, cutoff_pc = 10)
 ```
 
@@ -356,6 +369,7 @@ annotations, then produce a grouped violin plot entirely from the tidy
 tibble.
 
 ``` r
+
 markers <- fetch_feature_data(
   pbmc3k,
   features = c("CD3D", "CD8A", "CD4", "IL7R"),

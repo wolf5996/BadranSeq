@@ -1,5 +1,39 @@
 # Changelog
 
+## BadranSeq 1.4.0
+
+### New features
+
+- [`do_GseaPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_GseaPlot.md)
+  restored from the original `.BadranSeq` prototype with significant
+  improvements. Creates publication-ready horizontal barplots of GSEA
+  results (clusterProfiler / ReactomePA) with:
+
+  - Diverging RdBu color scale centered at NES = 0 (emphasizes
+    directionality)
+  - [`theme_badranseq()`](https://wolf5996.github.io/BadranSeq/reference/theme_badranseq.md)
+    styling for consistency with rest of package
+  - Leading-edge gene count and gene symbols in pathway labels
+  - Adjustable p-value labels centered on bars
+  - `simplify_go` auto-detection and simplification of GO terms
+  - `selection` parameter for plotting specific pathways by name
+  - `fill_scale = "viridis"` option for original sequential style
+
+- `gsea_pbmc3k` bundled dataset: CD14+ Mono (Cluster 2) vs others GSEA
+  results from `clusterProfiler::gseGO(ont = "BP")` on the `pbmc3k`
+  Seurat object. Core enrichment genes stored as readable HGNC symbols
+  via `setReadable()`. Created via reproducible
+  `data-raw/gsea_pea_pbmc3k.R` script.
+
+- `dea_pbmc3k_mono` bundled dataset: Wilcoxon differential expression
+  results (2,530 genes, Cluster 2 vs others) with `avg_log2FC` column
+  for GSEA ranking. Row names are HGNC gene symbols.
+
+### Dependencies
+
+- Added `clusterProfiler` and `org.Hs.eg.db` to `Suggests` for GO
+  simplification and example data generation.
+
 ## BadranSeq 1.0.0
 
 ### Visualisation
@@ -30,7 +64,7 @@
 
 - [`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md)
   creates statistical violin plots via
-  [`ggstatsplot::ggbetweenstats()`](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html)
+  [`ggstatsplot::ggbetweenstats()`](https://www.indrapatil.com/ggstatsplot/reference/ggbetweenstats.html)
   with Seurat-aware data extraction, automatic colour generation, and
   nonparametric testing (Kruskal–Wallis + Dunn’s) by default. The
   `group.levels` argument allows comparing a subset of groups without
