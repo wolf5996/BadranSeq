@@ -5,7 +5,7 @@
 ### New features
 
 - [`do_GseaPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_GseaPlot.md)
-  restored from the original `.BadranSeq` prototype with significant
+  creates publication-ready horizontal barplots significant
   improvements. Creates publication-ready horizontal barplots of GSEA
   results (clusterProfiler / ReactomePA) with:
 
