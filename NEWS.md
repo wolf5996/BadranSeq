@@ -1,4 +1,4 @@
-# BadranSeq (development version)
+# BadranSeq 1.5.0
 
 ## New features
 
