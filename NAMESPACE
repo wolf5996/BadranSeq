@@ -2,6 +2,7 @@
 
 export("%>%")
 export(EnhancedElbowPlot)
+export(do_BoilPlot)
 export(do_DimPlot)
 export(do_FeaturePlot)
 export(do_GseaPlot)

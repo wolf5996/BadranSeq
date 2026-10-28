@@ -182,6 +182,7 @@ devtools::install_github("wolf5996/BadranSeq")
 | `do_FeaturePlot()` | Gene expression overlay with viridis scale |
 | `do_StatsViolinPlot()` | Statistical violin via ggbetweenstats |
 | `do_ViolinPlot()` | Descriptive violin (no statistics) |
+| `do_BoilPlot()` | Zero-inflation-aware violin: detection bar + non-zero distribution |
 | `do_SankeyPlot()` | Sankey/alluvial diagram for metadata relationships |
 | `do_GseaPlot()` | GSEA barplot with diverging NES and readable gene labels |
 | `EnhancedElbowPlot()` | Variance-explained elbow plot with cutoff |
@@ -216,6 +217,12 @@ palette generation, and the silhouette split approach. BadranSeq differs
 by providing a lighter-weight native ggplot2 implementation with
 additional features (PCA variance labels, statistical violin plots,
 interactive cell selection).
+
+`do_BoilPlot()` is inspired by the boil plot from
+[boilplot-r](https://github.com/laraj1/boilplot-r) by Lara Jerman
+(Python original:
+[boilplot-python](https://github.com/laraj1/boilplot-python)).
+BadranSeq reimplements the idea in its own visual style.
 
 ## Citation
 
