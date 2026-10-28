@@ -175,10 +175,10 @@ Install the latest tagged release:
 
 ``` r
 # pak (recommended)
-pak::pkg_install("wolf5996/BadranSeq@v1.5.0")
+pak::pkg_install("wolf5996/BadranSeq@v1.5.1")
 
 # devtools
-devtools::install_github("wolf5996/BadranSeq", ref = "v1.5.0")
+devtools::install_github("wolf5996/BadranSeq", ref = "v1.5.1")
 ```
 
 ### Development version
@@ -251,7 +251,7 @@ reimplements the idea in its own visual style.
 If you use BadranSeq in published work, please cite:
 
 > Elshenawy, B. (2025). BadranSeq: Publication-ready visualisation for
-> single-cell RNA sequencing data in R. R package version 1.5.0.
+> single-cell RNA sequencing data in R. R package version 1.5.1.
 > <https://github.com/wolf5996/BadranSeq>
 
 ## License
