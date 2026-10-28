@@ -212,6 +212,8 @@ utils::globalVariables(c("centrality_label", ".value"))
 #'   default: "median").
 #' @param ncol numeric. Number of columns for patchwork layout when plotting
 #'   multiple features (default: NULL = auto).
+#' @param nrow numeric. Number of rows for patchwork layout when plotting
+#'   multiple features (default: NULL = auto).
 #'
 #' @return A ggplot2 object (single feature) or patchwork object (multiple
 #'   features).
@@ -252,7 +254,8 @@ do_ViolinPlot <- function(
     boxplot.alpha = 0.2,
     centrality = TRUE,
     centrality.fn = "median",
-    ncol = NULL
+    ncol = NULL,
+    nrow = NULL
 ) {
 
   # --- Validation ---
@@ -407,7 +410,7 @@ do_ViolinPlot <- function(
     )
   }
 
-  patchwork::wrap_plots(plots, ncol = ncol)
+  patchwork::wrap_plots(plots, ncol = ncol, nrow = nrow)
 }
 
 # ============================================================================
@@ -456,6 +459,8 @@ do_ViolinPlot <- function(
 #'   generates colors automatically with \code{\link{generate_badranseq_colors}}.
 #' @param ncol numeric. Number of columns for patchwork layout when plotting
 #'   multiple features (default: NULL = auto).
+#' @param nrow numeric. Number of rows for patchwork layout when plotting
+#'   multiple features (default: NULL = auto).
 #' @param ... Additional arguments passed to
 #'   \code{ggstatsplot::ggbetweenstats()}.
 #'
@@ -496,6 +501,7 @@ do_StatsViolinPlot <- function(
     pairwise.display = "significant",
     colors.use = NULL,
     ncol = NULL,
+    nrow = NULL,
     ...
 ) {
 
@@ -683,5 +689,5 @@ do_StatsViolinPlot <- function(
     )
   }
 
-  patchwork::wrap_plots(plots, ncol = ncol)
+  patchwork::wrap_plots(plots, ncol = ncol, nrow = nrow)
 }

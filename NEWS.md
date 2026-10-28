@@ -11,6 +11,11 @@
   drop groups with too few expressing cells. Inspired by the boil plot from boilplot-r by Lara Jerman
   (<https://github.com/laraj1/boilplot-r>).
 
+## Minor improvements
+
+* `do_ViolinPlot()` and `do_StatsViolinPlot()` gain an `nrow` argument for
+  patchwork layout control, matching `ncol`.
+
 # BadranSeq 1.4.0
 
 ## New features

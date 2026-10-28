@@ -16,6 +16,7 @@ do_StatsViolinPlot(
   pairwise.display = "significant",
   colors.use = NULL,
   ncol = NULL,
+  nrow = NULL,
   ...
 )
 }
@@ -55,6 +56,9 @@ Passed through to \code{ggstatsplot::ggbetweenstats()}.}
 generates colors automatically with \code{\link{generate_badranseq_colors}}.}
 
 \item{ncol}{numeric. Number of columns for patchwork layout when plotting
+multiple features (default: NULL = auto).}
+
+\item{nrow}{numeric. Number of rows for patchwork layout when plotting
 multiple features (default: NULL = auto).}
 
 \item{...}{Additional arguments passed to

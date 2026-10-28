@@ -20,7 +20,8 @@ do_ViolinPlot(
   boxplot.alpha = 0.2,
   centrality = TRUE,
   centrality.fn = "median",
-  ncol = NULL
+  ncol = NULL,
+  nrow = NULL
 )
 }
 \arguments{
@@ -62,6 +63,9 @@ generates colors automatically with \code{\link{generate_badranseq_colors}}.}
 default: "median").}
 
 \item{ncol}{numeric. Number of columns for patchwork layout when plotting
+multiple features (default: NULL = auto).}
+
+\item{nrow}{numeric. Number of rows for patchwork layout when plotting
 multiple features (default: NULL = auto).}
 }
 \value{
