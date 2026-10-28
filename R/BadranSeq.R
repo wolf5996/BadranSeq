@@ -8,7 +8,7 @@ utils::globalVariables(c("Dim1", "Dim2", "group", "PC", "Value",
                          "Description", "p.adjust", "core_enrichment",
                          "pathway", "padj", "leading_edge_count",
                          "leading_edge_clean", "pathway_with_genes",
-                         "pos", "padj_formatted", "colortext"))
+                         "pos", "padj_formatted", "colortext", "NES"))
 
 # ============================================================================
 # PCA Variance Helper

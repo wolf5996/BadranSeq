@@ -108,6 +108,28 @@ do_StatsViolinPlot(pbmc3k, features = "CD3D",
 Set `pairwise.display = "none"` to keep the omnibus test subtitle
 without bracket clutter.
 
+### Boil plots for zero-inflated expression
+
+Single-cell expression is mostly zeros, which squash ordinary violins
+against the baseline. `do_BoilPlot()` separates the two questions a
+violin blurs together: a detection bar below zero shows the percentage
+of cells expressing each gene, while the violin and points above zero
+show the distribution among expressing cells only. Groups with fewer
+than `min.nonzero` expressing cells are dropped from the panel:
+
+``` r
+do_BoilPlot(pbmc3k, features = c("GZMA", "NKG7", "PRF1"),
+            group.by = "seurat_annotations")
+```
+
+<img src="man/figures/README-boil-plot-1.png" alt="" width="100%" />
+
+The design follows the boil plot from
+[boilplot-r](https://github.com/laraj1/boilplot-r) by Lara Jerman,
+redrawn with the BadranSeq palette and theme. `centrality`, `boxplot`,
+`group.levels`, `ncol` and `nrow` give the same controls as the violin
+functions.
+
 ### Sankey diagrams
 
 `do_SankeyPlot()` visualises how categorical metadata variables relate
@@ -153,10 +175,10 @@ Install the latest tagged release:
 
 ``` r
 # pak (recommended)
-pak::pkg_install("wolf5996/BadranSeq@v1.5.0")
+pak::pkg_install("wolf5996/BadranSeq@v1.5.1")
 
 # devtools
-devtools::install_github("wolf5996/BadranSeq", ref = "v1.5.0")
+devtools::install_github("wolf5996/BadranSeq", ref = "v1.5.1")
 ```
 
 ### Development version
@@ -221,15 +243,15 @@ interactive cell selection).
 `do_BoilPlot()` is inspired by the boil plot from
 [boilplot-r](https://github.com/laraj1/boilplot-r) by Lara Jerman
 (Python original:
-[boilplot-python](https://github.com/laraj1/boilplot-python)).
-BadranSeq reimplements the idea in its own visual style.
+[boilplot-python](https://github.com/laraj1/boilplot-python)). BadranSeq
+reimplements the idea in its own visual style.
 
 ## Citation
 
 If you use BadranSeq in published work, please cite:
 
 > Elshenawy, B. (2025). BadranSeq: Publication-ready visualisation for
-> single-cell RNA sequencing data in R. R package version 1.5.0.
+> single-cell RNA sequencing data in R. R package version 1.5.1.
 > <https://github.com/wolf5996/BadranSeq>
 
 ## License

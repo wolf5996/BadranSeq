@@ -1,6 +1,6 @@
 Package: BadranSeq
 Title: Make transcriptomic analyses more pleasant
-Version: 1.5.0
+Version: 1.5.1
 Authors@R:
     person("Badran", "Elshenawy", , "badran.elshenawy@ndm.ox.ac.uk", role = c("aut", "cre"))
 Description: Convenience functions to aid visualisation and computation of useful metrics with a focus on scRNA-Seq data.
@@ -17,7 +17,7 @@ Suggests:
     patchwork,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-Config/testthat/parallel: true
+Config/testthat/parallel: false
 URL: https://github.com/wolf5996/BadranSeq, https://wolf5996.github.io/BadranSeq/
 BugReports: https://github.com/wolf5996/BadranSeq/issues
 Imports:
@@ -36,6 +36,6 @@ Imports:
     tibble,
     tidyr
 Depends: 
-    R (>= 3.5)
+    R (>= 4.1)
 LazyData: true
 LazyDataCompression: xz
