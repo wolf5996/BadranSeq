@@ -102,6 +102,17 @@ do_StatsViolinPlot(pbmc3k, features = "CD3D",
 
 Set `pairwise.display = "none"` to keep the omnibus test subtitle without bracket clutter.
 
+### Boil plots for zero-inflated expression
+
+Single-cell expression is mostly zeros, which squash ordinary violins against the baseline. `do_BoilPlot()` separates the two questions a violin blurs together: a detection bar below zero shows the percentage of cells expressing each gene, while the violin and points above zero show the distribution among expressing cells only. Groups with fewer than `min.nonzero` expressing cells are dropped from the panel:
+
+```{r boil-plot, fig.width=9, fig.height=10, message=FALSE, warning=FALSE}
+do_BoilPlot(pbmc3k, features = c("GZMA", "NKG7", "PRF1"),
+            group.by = "seurat_annotations")
+```
+
+The design follows the boil plot from [boilplot-r](https://github.com/laraj1/boilplot-r) by Lara Jerman, redrawn with the BadranSeq palette and theme. `centrality`, `boxplot`, `group.levels`, `ncol` and `nrow` give the same controls as the violin functions.
+
 ### Sankey diagrams
 
 `do_SankeyPlot()` visualises how categorical metadata variables relate to each other — for example, how clusters map to cell type annotations:
