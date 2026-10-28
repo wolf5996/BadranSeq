@@ -152,10 +152,10 @@ Install the latest tagged release:
 ``` r
 
 # pak (recommended)
-pak::pkg_install("wolf5996/BadranSeq@v1.4.0")
+pak::pkg_install("wolf5996/BadranSeq@v1.5.0")
 
 # devtools
-devtools::install_github("wolf5996/BadranSeq", ref = "v1.4.0")
+devtools::install_github("wolf5996/BadranSeq", ref = "v1.5.0")
 ```
 
 ### Development version
@@ -182,6 +182,7 @@ devtools::install_github("wolf5996/BadranSeq")
 | [`do_FeaturePlot()`](https://wolf5996.github.io/BadranSeq/reference/do_FeaturePlot.md) | Gene expression overlay with viridis scale |
 | [`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md) | Statistical violin via ggbetweenstats |
 | [`do_ViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_ViolinPlot.md) | Descriptive violin (no statistics) |
+| [`do_BoilPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_BoilPlot.md) | Zero-inflation-aware violin: detection bar + non-zero distribution |
 | [`do_SankeyPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_SankeyPlot.md) | Sankey/alluvial diagram for metadata relationships |
 | [`do_GseaPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_GseaPlot.md) | GSEA barplot with diverging NES and readable gene labels |
 | [`EnhancedElbowPlot()`](https://wolf5996.github.io/BadranSeq/reference/EnhancedElbowPlot.md) | Variance-explained elbow plot with cutoff |
@@ -217,12 +218,19 @@ by providing a lighter-weight native ggplot2 implementation with
 additional features (PCA variance labels, statistical violin plots,
 interactive cell selection).
 
+[`do_BoilPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_BoilPlot.md)
+is inspired by the boil plot from
+[boilplot-r](https://github.com/laraj1/boilplot-r) by Lara Jerman
+(Python original:
+[boilplot-python](https://github.com/laraj1/boilplot-python)). BadranSeq
+reimplements the idea in its own visual style.
+
 ## Citation
 
 If you use BadranSeq in published work, please cite:
 
 > Elshenawy, B. (2025). BadranSeq: Publication-ready visualisation for
-> single-cell RNA sequencing data in R. R package version 1.4.0.
+> single-cell RNA sequencing data in R. R package version 1.5.0.
 > <https://github.com/wolf5996/BadranSeq>
 
 ## License

@@ -31,6 +31,7 @@ do_StatsViolinPlot(
   pairwise.display = "significant",
   colors.use = NULL,
   ncol = NULL,
+  nrow = NULL,
   ...
 )
 ```
@@ -97,6 +98,11 @@ do_StatsViolinPlot(
 - ncol:
 
   numeric. Number of columns for patchwork layout when plotting multiple
+  features (default: NULL = auto).
+
+- nrow:
+
+  numeric. Number of rows for patchwork layout when plotting multiple
   features (default: NULL = auto).
 
 - ...:

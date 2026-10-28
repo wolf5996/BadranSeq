@@ -28,7 +28,8 @@ do_ViolinPlot(
   boxplot.alpha = 0.2,
   centrality = TRUE,
   centrality.fn = "median",
-  ncol = NULL
+  ncol = NULL,
+  nrow = NULL
 )
 ```
 
@@ -104,6 +105,11 @@ do_ViolinPlot(
 - ncol:
 
   numeric. Number of columns for patchwork layout when plotting multiple
+  features (default: NULL = auto).
+
+- nrow:
+
+  numeric. Number of rows for patchwork layout when plotting multiple
   features (default: NULL = auto).
 
 ## Value

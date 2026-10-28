@@ -6,6 +6,8 @@
   **\[stable\]** : Enhanced Elbow Plot for PCA Dimensionality
 - [`dea_pbmc3k_mono`](https://wolf5996.github.io/BadranSeq/reference/dea_pbmc3k_mono.md)
   : DEA Results: CD14+ Monocytes vs Others (PBMC 3K)
+- [`do_BoilPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_BoilPlot.md)
+  **\[experimental\]** : Boil Plot for Zero-Inflated Gene Expression
 - [`do_DimPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_DimPlot.md)
   **\[stable\]** : Generalized Dimensionality Reduction Plot
 - [`do_FeaturePlot()`](https://wolf5996.github.io/BadranSeq/reference/do_FeaturePlot.md)

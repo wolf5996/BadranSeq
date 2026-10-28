@@ -1,5 +1,27 @@
 # Changelog
 
+## BadranSeq 1.5.0
+
+### New features
+
+- [`do_BoilPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_BoilPlot.md)
+  creates boil plots for zero-inflated gene expression. A detection bar
+  below zero shows the percentage of cells expressing each gene per
+  group; the violin, jittered points, median/mean diamond and optional
+  boxplot (`boxplot = TRUE`) above zero use non-zero cells only.
+  Geometry and colours follow the original boil plot, drawn with
+  BadranSeq’s palette and theme, with `group.levels` to subset and order
+  groups and `min.nonzero` to drop groups with too few expressing cells.
+  Inspired by the boil plot from boilplot-r by Lara Jerman
+  (<https://github.com/laraj1/boilplot-r>).
+
+### Minor improvements
+
+- [`do_ViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_ViolinPlot.md)
+  and
+  [`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md)
+  gain an `nrow` argument for patchwork layout control, matching `ncol`.
+
 ## BadranSeq 1.4.0
 
 ### New features

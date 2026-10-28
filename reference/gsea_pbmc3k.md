@@ -55,6 +55,4 @@ gsea_pbmc3k
 #>  $ leading_edge   : chr  "tags=33%, list=12%, signal=30%" "tags=36%, list=9%, signal=34%" "tags=33%, list=10%, signal=30%" "tags=38%, list=8%, signal=35%" ...
 #>  $ core_enrichment: chr  "S100A8/S100A9/AIF1/GSTP1/FCER1G/LGALS3/CSF3R/SPI1/RAC1/S100A12/BST1/CXCR4/CCL3/IL1B/RPS19/RPL13A/C5AR1/CD74/LGA"| __truncated__ "TYROBP/FCER1G/SPI1/CEBPB/ANXA2/CCL3/MAFB/OSCAR" "S100A8/S100A9/AIF1/FCER1G/LGALS3/CSF3R/SPI1/RAC1/S100A12/BST1/CXCR4/CCL3/IL1B/RPS19/RPL13A/C5AR1/CD74/LGALS9" "FCN1/S100A9/LYZ/CFD/LGALS3/CFP/S100A12/BST1/GAPDH/HLA-DRB1/RPL30/CCL3/IL1B/SLC11A1/RPS19/RNASE6/B2M" ...
 #> #...Citation
-#> S Xu, E Hu, Y Cai, Z Xie, X Luo, L Zhan, W Tang, Q Wang, B Liu, R Wang, W Xie, T Wu, L Xie, G Yu. Using clusterProfiler to characterize multiomics data. Nature Protocols. 2024, 19(11):3292-3320 
-#> 
 ```
