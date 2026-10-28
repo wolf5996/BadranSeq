@@ -1,5 +1,27 @@
 # Changelog
 
+## BadranSeq 1.5.1
+
+### Bug fixes
+
+- `R CMD check` on R-devel no longer fails: parallel testthat execution
+  is disabled after worker results exceeded R-devel’s string length
+  limit (`Error in gsub("\\s+", "", x) : result string is too long`).
+- `DESCRIPTION` now declares `R (>= 4.1)` because the package uses the
+  native pipe, and `LICENSE` uses the DCF stub expected by
+  `R CMD check`.
+- `NES` added to
+  [`globalVariables()`](https://rdrr.io/r/utils/globalVariables.html) to
+  silence a
+  [`do_GseaPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_GseaPlot.md)
+  NOTE.
+
+### Documentation
+
+- README gains a
+  [`do_BoilPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_BoilPlot.md)
+  example figure.
+
 ## BadranSeq 1.5.0
 
 ### New features

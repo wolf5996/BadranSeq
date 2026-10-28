@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BadranSeq</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,22 @@
       <small>Source: <a href="https://github.com/wolf5996/BadranSeq/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.1" id="badranseq-151">BadranSeq 1.5.1<a class="anchor" aria-label="anchor" href="#badranseq-151"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-1-5-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-1"></a></h3>
+<ul><li>
+<code>R CMD check</code> on R-devel no longer fails: parallel testthat execution is disabled after worker results exceeded R-devel’s string length limit (<code>Error in gsub("\\s+", "", x) : result string is too long</code>).</li>
+<li>
+<code>DESCRIPTION</code> now declares <code>R (&gt;= 4.1)</code> because the package uses the native pipe, and <code>LICENSE</code> uses the DCF stub expected by <code>R CMD check</code>.</li>
+<li>
+<code>NES</code> added to <code><a href="https://rdrr.io/r/utils/globalVariables.html" class="external-link">globalVariables()</a></code> to silence a <code><a href="../reference/do_GseaPlot.html">do_GseaPlot()</a></code> NOTE.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-1-5-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-5-1"></a></h3>
+<ul><li>README gains a <code><a href="../reference/do_BoilPlot.html">do_BoilPlot()</a></code> example figure.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.5.0" id="badranseq-150">BadranSeq 1.5.0<a class="anchor" aria-label="anchor" href="#badranseq-150"></a></h2>
 <div class="section level3">

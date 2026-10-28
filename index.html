@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">BadranSeq</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -179,10 +179,20 @@
 <p>Set <code>pairwise.display = "none"</code> to keep the omnibus test subtitle without bracket clutter.</p>
 </div>
 <div class="section level3">
+<h3 id="boil-plots-for-zero-inflated-expression">Boil plots for zero-inflated expression<a class="anchor" aria-label="anchor" href="#boil-plots-for-zero-inflated-expression"></a>
+</h3>
+<p>Single-cell expression is mostly zeros, which squash ordinary violins against the baseline. <code><a href="reference/do_BoilPlot.html">do_BoilPlot()</a></code> separates the two questions a violin blurs together: a detection bar below zero shows the percentage of cells expressing each gene, while the violin and points above zero show the distribution among expressing cells only. Groups with fewer than <code>min.nonzero</code> expressing cells are dropped from the panel:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/do_BoilPlot.html">do_BoilPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GZMA"</span>, <span class="st">"NKG7"</span>, <span class="st">"PRF1"</span><span class="op">)</span>,</span>
+<span>            group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-boil-plot-1.png" alt="" width="100%"></p>
+<p>The design follows the boil plot from <a href="https://github.com/laraj1/boilplot-r" class="external-link">boilplot-r</a> by Lara Jerman, redrawn with the BadranSeq palette and theme. <code>centrality</code>, <code>boxplot</code>, <code>group.levels</code>, <code>ncol</code> and <code>nrow</code> give the same controls as the violin functions.</p>
+</div>
+<div class="section level3">
 <h3 id="sankey-diagrams">Sankey diagrams<a class="anchor" aria-label="anchor" href="#sankey-diagrams"></a>
 </h3>
 <p><code><a href="reference/do_SankeyPlot.html">do_SankeyPlot()</a></code> visualises how categorical metadata variables relate to each other — for example, how clusters map to cell type annotations:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/do_SankeyPlot.html">do_SankeyPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"seurat_clusters"</span>, <span class="st">"seurat_annotations"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-sankey-1.png" alt="" width="100%"></p>
 <p>Each stratum is labelled; flows show how cells distribute across categories. Powered by ggalluvial.</p>
@@ -191,7 +201,7 @@
 <h3 id="gsea-results-barplot">GSEA results barplot<a class="anchor" aria-label="anchor" href="#gsea-results-barplot"></a>
 </h3>
 <p><code><a href="reference/do_GseaPlot.html">do_GseaPlot()</a></code> turns a <code>clusterProfiler</code> GSEA result into a publication-ready horizontal barplot. Unlike a dotplot, it clearly shows the direction and magnitude of NES, and labels each bar with its adjusted p-value and leading-edge genes:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">gsea_pbmc3k</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/do_GseaPlot.html">do_GseaPlot</a></span><span class="op">(</span></span>
@@ -210,18 +220,18 @@
 <h3 id="stable-release-recommended">Stable release (recommended)<a class="anchor" aria-label="anchor" href="#stable-release-recommended"></a>
 </h3>
 <p>Install the latest tagged release:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># pak (recommended)</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"wolf5996/BadranSeq@v1.5.0"</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"wolf5996/BadranSeq@v1.5.1"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># devtools</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"wolf5996/BadranSeq"</span>, ref <span class="op">=</span> <span class="st">"v1.5.0"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"wolf5996/BadranSeq"</span>, ref <span class="op">=</span> <span class="st">"v1.5.1"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
 </h3>
 <p>Install from the <code>main</code> branch for the latest changes (may include unreleased features):</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># pak</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"wolf5996/BadranSeq"</span><span class="op">)</span></span>
 <span></span>
@@ -331,7 +341,7 @@
 </h2>
 <p>If you use BadranSeq in published work, please cite:</p>
 <blockquote>
-<p>Elshenawy, B. (2025). BadranSeq: Publication-ready visualisation for single-cell RNA sequencing data in R. R package version 1.5.0. <a href="https://github.com/wolf5996/BadranSeq" class="external-link uri">https://github.com/wolf5996/BadranSeq</a></p>
+<p>Elshenawy, B. (2025). BadranSeq: Publication-ready visualisation for single-cell RNA sequencing data in R. R package version 1.5.1. <a href="https://github.com/wolf5996/BadranSeq" class="external-link uri">https://github.com/wolf5996/BadranSeq</a></p>
 </blockquote>
 </div>
 <div class="section level2">
