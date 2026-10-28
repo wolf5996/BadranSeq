@@ -15,6 +15,14 @@ test_that("do_ViolinPlot returns patchwork for multiple genes", {
   expect_s3_class(p, "patchwork")
 })
 
+test_that("do_ViolinPlot passes ncol and nrow to patchwork", {
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_ViolinPlot(pbmc3k, features = c("CD3D", "CD8A"), nrow = 2)
+  expect_equal(p$patches$layout$nrow, 2)
+  p <- do_ViolinPlot(pbmc3k, features = c("CD3D", "CD8A"), ncol = 2)
+  expect_equal(p$patches$layout$ncol, 2)
+})
+
 test_that("do_ViolinPlot uses Idents when group.by is NULL", {
   data(pbmc3k, package = "BadranSeq")
   p <- do_ViolinPlot(pbmc3k, features = "CD3D", group.by = NULL)
@@ -147,6 +155,16 @@ test_that("do_StatsViolinPlot returns patchwork for multiple genes", {
   p <- do_StatsViolinPlot(pbmc3k, features = c("CD3D", "CD8A"),
                            group.by = "seurat_clusters")
   expect_s3_class(p, "patchwork")
+})
+
+test_that("do_StatsViolinPlot passes nrow to patchwork", {
+  skip_if_not_installed("ggstatsplot")
+  data(pbmc3k, package = "BadranSeq")
+  p <- suppressWarnings(
+    do_StatsViolinPlot(pbmc3k, features = c("CD3D", "CD8A"),
+                       group.by = "seurat_clusters", nrow = 2)
+  )
+  expect_equal(p$patches$layout$nrow, 2)
 })
 
 test_that("do_StatsViolinPlot uses Idents when group.by is NULL", {
