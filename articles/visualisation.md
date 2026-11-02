@@ -437,46 +437,62 @@ detected genes and is a property of the data, not of the plot.
 
 ### Filtering out groups that barely express the gene
 
-Boil plots carry a built-in filter. A group is kept in a gene’s panel
-only if at least `min.nonzero` of its cells express that gene; every
-other group disappears from the panel entirely, taking its violin,
-points, detection bar and x-axis slot with it. The default is 10
-expressing cells. The reason is statistical: a density estimated from a
-handful of points is noise, and a detection bar for a group that does
-not express the gene says nothing a reader cannot infer from its
-absence.
+Boil plots carry a built-in filter with two thresholds. A group is kept
+in a gene’s panel only if it passes both; every other group disappears
+from the panel entirely, taking its violin, points, detection bar and
+x-axis slot with it.
 
-The filter is a **count of expressing cells**, not a percentage. A group
-of 700 cells at 2% detection (14 cells) passes the default; a group of
-30 cells at 20% (6 cells) does not. This keeps small but genuinely
-expressing populations out of the plot only when they are too small to
-draw.
+- **`min.cells`** — a raw **count** of expressing cells (default 10).
+  Guards against violins drawn from a handful of points.
+- **`min.pct`** — a minimum **fraction** of the group’s cells that
+  express the gene, on a 0–1 scale as in
+  [`Seurat::FindMarkers()`](https://satijalab.org/seurat/reference/FindMarkers.html)
+  (default 0, i.e. off; `0.25` means 25%). Removes groups where the gene
+  is present but rare.
 
-With `min.nonzero = 1`, nothing is filtered and every group that has at
+The two answer different questions. A group of 700 cells at 2% detection
+has 14 expressing cells, so it passes `min.cells = 10` but fails
+`min.pct = 0.1`. A group of 14 platelets at 100% detection passes any
+`min.pct` but fails `min.cells = 20`.
+
+With `min.cells = 1`, nothing is filtered and every group that has at
 least one expressing cell appears:
 
 ``` r
 
 do_BoilPlot(pbmc3k, features = "CCL5", group.by = "seurat_annotations",
-            min.nonzero = 1)
+            min.cells = 1)
 ```
 
     ## Warning: Groups with fewer than two datapoints have been dropped.
     ## ℹ Set `drop = FALSE` to consider such groups for position adjustment purposes.
 
-![](visualisation_files/figure-html/boil-min-nonzero-all-1.png)
+![](visualisation_files/figure-html/boil-min-cells-all-1.png)
 
-Raising the threshold strips the panel down to the groups where the gene
-is actually expressed. At 100 expressing cells only the four
-CCL5-positive populations remain:
+Raising `min.cells` strips the panel down to groups with enough
+expressing cells to draw. At 100 only the four CCL5-positive populations
+remain:
 
 ``` r
 
 do_BoilPlot(pbmc3k, features = "CCL5", group.by = "seurat_annotations",
-            min.nonzero = 100)
+            min.cells = 100)
 ```
 
-![](visualisation_files/figure-html/boil-min-nonzero-1.png)
+![](visualisation_files/figure-html/boil-min-cells-1.png)
+
+`min.pct` filters on the detection rate instead. Keeping only groups in
+which at least a quarter of cells express CCL5 drops the sparse T-cell,
+monocyte and B-cell groups but keeps the small platelet cluster, where
+every cell expresses it:
+
+``` r
+
+do_BoilPlot(pbmc3k, features = "CCL5", group.by = "seurat_annotations",
+            min.pct = 0.25)
+```
+
+![](visualisation_files/figure-html/boil-min-pct-1.png)
 
 Two details matter when reading a filtered panel:
 
@@ -490,16 +506,19 @@ Two details matter when reading a filtered panel:
   warning; if no gene qualifies the call stops with an error.
 
 To force the same groups into every panel regardless of expression, use
-`group.levels` instead of (or together with) `min.nonzero`; groups
-listed in `group.levels` are still subject to the threshold, so set
-`min.nonzero = 1` if you want them all drawn.
+`group.levels` instead of (or together with) the thresholds; groups
+listed in `group.levels` are still subject to them, so set
+`min.cells = 1` (and leave `min.pct = 0`) if you want them all drawn.
+
+`min.nonzero`, the name used in 1.5.0 and 1.5.1 for what is now
+`min.cells`, still works but warns that it is deprecated.
 
 ### Multiple genes
 
 Several genes stack vertically by default (`ncol = 1`), one panel per
-gene. Each panel keeps only the groups that pass `min.nonzero` for that
-gene, so panels can show different group sets — compare the x-axes of
-the three panels below:
+gene. Each panel keeps only the groups that pass `min.cells` and
+`min.pct` for that gene, so panels can show different group sets —
+compare the x-axes of the three panels below:
 
 ``` r
 

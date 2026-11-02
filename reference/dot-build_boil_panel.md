@@ -13,7 +13,8 @@ detection bar below zero showing the fraction of expressing cells.
   title,
   x.title,
   colors,
-  min.nonzero = 10,
+  min.cells = 10,
+  min.pct = 0,
   pt.size = 0.7,
   pt.alpha = 0.6,
   jitter.width = 0.1,
@@ -49,10 +50,15 @@ detection bar below zero showing the fraction of expressing cells.
 
   character. Named vector of colors for groups.
 
-- min.nonzero:
+- min.cells:
 
-  numeric. Minimum expressing cells for a group to be kept in the panel.
-  Groups below it are dropped entirely.
+  numeric. Minimum number of expressing cells for a group to be kept in
+  the panel.
+
+- min.pct:
+
+  numeric. Minimum fraction (0 to 1) of expressing cells for a group to
+  be kept. Groups failing either threshold are dropped entirely.
 
 - pt.size:
 
@@ -97,4 +103,4 @@ detection bar below zero showing the fraction of expressing cells.
 
 ## Value
 
-A ggplot2 object, or NULL when no group reaches `min.nonzero`.
+A ggplot2 object, or NULL when no group passes both thresholds.

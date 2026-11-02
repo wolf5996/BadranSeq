@@ -11,7 +11,7 @@ detection bar below zero showing the fraction of expressing cells."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">BadranSeq</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,8 @@ detection bar below zero showing the fraction of expressing cells.</p>
 <span>  <span class="va">title</span>,</span>
 <span>  <span class="va">x.title</span>,</span>
 <span>  <span class="va">colors</span>,</span>
-<span>  min.nonzero <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  min.cells <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  min.pct <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  pt.size <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  pt.alpha <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>  jitter.width <span class="op">=</span> <span class="fl">0.1</span>,</span>
@@ -89,9 +90,14 @@ detection bar below zero showing the fraction of expressing cells.</p>
 <dd><p>character. Named vector of colors for groups.</p></dd>
 
 
-<dt id="arg-min-nonzero">min.nonzero<a class="anchor" aria-label="anchor" href="#arg-min-nonzero"></a></dt>
-<dd><p>numeric. Minimum expressing cells for a group to be
-kept in the panel. Groups below it are dropped entirely.</p></dd>
+<dt id="arg-min-cells">min.cells<a class="anchor" aria-label="anchor" href="#arg-min-cells"></a></dt>
+<dd><p>numeric. Minimum number of expressing cells for a group
+to be kept in the panel.</p></dd>
+
+
+<dt id="arg-min-pct">min.pct<a class="anchor" aria-label="anchor" href="#arg-min-pct"></a></dt>
+<dd><p>numeric. Minimum fraction (0 to 1) of expressing cells for a
+group to be kept. Groups failing either threshold are dropped entirely.</p></dd>
 
 
 <dt id="arg-pt-size">pt.size<a class="anchor" aria-label="anchor" href="#arg-pt-size"></a></dt>
@@ -137,7 +143,7 @@ to this width (<code>scale = "width"</code>).</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A ggplot2 object, or NULL when no group reaches <code>min.nonzero</code>.</p>
+    <p>A ggplot2 object, or NULL when no group passes both thresholds.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

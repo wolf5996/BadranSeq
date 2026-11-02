@@ -1,5 +1,19 @@
 # Changelog
 
+## BadranSeq 1.5.2
+
+### Minor improvements
+
+- [`do_BoilPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_BoilPlot.md)
+  gains `min.pct`, a minimum fraction (0 to 1) of cells in a group that
+  must express the gene for the group to appear in that gene’s panel. It
+  is applied together with the existing cell-count threshold.
+
+- [`do_BoilPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_BoilPlot.md)’s
+  `min.nonzero` argument is renamed `min.cells` to make clear that it is
+  a raw count of expressing cells, not a proportion. `min.nonzero` still
+  works and emits a `lifecycle` deprecation warning.
+
 ## BadranSeq 1.5.1
 
 ### Bug fixes

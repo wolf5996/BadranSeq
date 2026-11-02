@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BadranSeq</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,14 @@
       <small>Source: <a href="https://github.com/wolf5996/BadranSeq/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.2" id="badranseq-152">BadranSeq 1.5.2<a class="anchor" aria-label="anchor" href="#badranseq-152"></a></h2>
+<div class="section level3">
+<h3 id="minor-improvements-1-5-2">Minor improvements<a class="anchor" aria-label="anchor" href="#minor-improvements-1-5-2"></a></h3>
+<ul><li><p><code><a href="../reference/do_BoilPlot.html">do_BoilPlot()</a></code> gains <code>min.pct</code>, a minimum fraction (0 to 1) of cells in a group that must express the gene for the group to appear in that gene’s panel. It is applied together with the existing cell-count threshold.</p></li>
+<li><p><code><a href="../reference/do_BoilPlot.html">do_BoilPlot()</a></code>’s <code>min.nonzero</code> argument is renamed <code>min.cells</code> to make clear that it is a raw count of expressing cells, not a proportion. <code>min.nonzero</code> still works and emits a <code>lifecycle</code> deprecation warning.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.5.1" id="badranseq-151">BadranSeq 1.5.1<a class="anchor" aria-label="anchor" href="#badranseq-151"></a></h2>
 <div class="section level3">
