@@ -12,7 +12,8 @@ do_BoilPlot(
   layer = "data",
   assay = NULL,
   colors.use = NULL,
-  min.nonzero = 10,
+  min.cells = 10,
+  min.pct = 0,
   pt.size = 0.7,
   pt.alpha = 0.6,
   jitter.width = 0.1,
@@ -24,7 +25,8 @@ do_BoilPlot(
   centrality = TRUE,
   centrality.fn = "median",
   ncol = 1,
-  nrow = NULL
+  nrow = NULL,
+  min.nonzero = deprecated()
 )
 }
 \arguments{
@@ -47,11 +49,17 @@ Use a non-negative layer such as "data" or "counts".}
 \item{colors.use}{character. Named vector of colors for groups. If NULL,
 generates colors automatically with \code{\link{generate_badranseq_colors}}.}
 
-\item{min.nonzero}{numeric. Minimum number of expressing cells a group
-needs to appear in a gene's panel (default: 10). Groups below the
-threshold are removed from that panel entirely, including their
-detection bar and x-axis position. Genes with no qualifying group are
-skipped with a warning.}
+\item{min.cells}{numeric. Minimum number of expressing cells (a raw cell
+count, not a proportion) a group needs to appear in a gene's panel
+(default: 10). Groups below the threshold are removed from that panel
+entirely, including their detection bar and x-axis position. Genes with
+no qualifying group are skipped with a warning.}
+
+\item{min.pct}{numeric. Minimum fraction of cells in a group that must
+express the gene for the group to appear, on a 0 to 1 scale as in
+\code{Seurat::FindMarkers()} (default: 0 = no fraction filter; 0.1 means
+10 percent). Applied together with \code{min.cells}: a group must pass
+both.}
 
 \item{pt.size}{numeric. Jitter point size (default: 0.7).}
 
@@ -83,6 +91,10 @@ multiple genes (default: 1, one gene per row so panels stack vertically).}
 
 \item{nrow}{numeric. Number of rows for patchwork layout (default: NULL =
 auto). Set \code{ncol = NULL} together with \code{nrow} to control rows only.}
+
+\item{min.nonzero}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{min.cells}
+instead. Renamed in 1.5.2 to make clear that the threshold is a cell
+count, not a percentage.}
 }
 \value{
 A ggplot2 object (single gene) or patchwork object (multiple genes).
@@ -102,6 +114,10 @@ coloured fill = expressing cells, percentage label underneath).
 points, centrality marker and optional boxplot (\code{boxplot = TRUE}) above
 zero use non-zero cells only.
 }
+
+Groups that barely express a gene are filtered out of that gene's panel:
+\code{min.cells} sets a minimum count of expressing cells and \code{min.pct} a
+minimum fraction of expressing cells. A group must pass both.
 
 Geometry and colours follow the original boil plot, drawn with BadranSeq's
 palette and \code{\link{theme_badranseq}}. For a single gene, returns
@@ -124,6 +140,10 @@ do_BoilPlot(pbmc3k, features = "CD8A", group.by = "seurat_annotations")
 do_BoilPlot(pbmc3k, features = c("GZMA", "NKG7", "PRF1"),
             group.by = "seurat_annotations",
             group.levels = c("NK", "CD8 T", "Memory CD4 T"))
+
+# Keep only groups where at least 25\% of cells express the gene
+do_BoilPlot(pbmc3k, features = "CCL5", group.by = "seurat_annotations",
+            min.pct = 0.25)
 
 # Mean instead of median, with boxplot overlay
 do_BoilPlot(pbmc3k, features = "MS4A1", centrality.fn = "mean",

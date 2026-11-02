@@ -10,7 +10,8 @@
   title,
   x.title,
   colors,
-  min.nonzero = 10,
+  min.cells = 10,
+  min.pct = 0,
   pt.size = 0.7,
   pt.alpha = 0.6,
   jitter.width = 0.1,
@@ -34,8 +35,11 @@
 
 \item{colors}{character. Named vector of colors for groups.}
 
-\item{min.nonzero}{numeric. Minimum expressing cells for a group to be
-kept in the panel. Groups below it are dropped entirely.}
+\item{min.cells}{numeric. Minimum number of expressing cells for a group
+to be kept in the panel.}
+
+\item{min.pct}{numeric. Minimum fraction (0 to 1) of expressing cells for a
+group to be kept. Groups failing either threshold are dropped entirely.}
 
 \item{pt.size}{numeric. Jitter point size.}
 
@@ -59,7 +63,7 @@ to this width (\code{scale = "width"}).}
 \item{centrality.fn}{character. Centrality function name ("median" or "mean").}
 }
 \value{
-A ggplot2 object, or NULL when no group reaches \code{min.nonzero}.
+A ggplot2 object, or NULL when no group passes both thresholds.
 }
 \description{
 Internal helper that constructs a single boil plot panel for one gene:
