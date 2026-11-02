@@ -2,8 +2,9 @@
 title: "Publication-Ready Single-Cell Visualisation"
 description: >
   Generate publication-quality dimensionality reduction plots with sensible
-  defaults — cell borders, cluster labels, variance annotations, and
-  split-panel silhouettes out of the box.
+  defaults — cell borders, cluster labels, variance annotations,
+  split-panel silhouettes, statistical violins, and boil plots for
+  zero-inflated genes out of the box.
 ---
 
 ```{r}
@@ -376,6 +377,106 @@ when you want a clean descriptive plot:
 do_ViolinPlot(pbmc3k, features = "CD3D",
               group.by = "seurat_annotations")
 ```
+
+## Boil plots for zero-inflated genes
+
+Most cells do not express most genes. In a conventional violin the
+zeros pile up at the baseline, the cells that *do* express the gene are
+squeezed into a thin tail, and the fraction of expressing cells has to
+be guessed from the thickness of the base. `do_BoilPlot()` separates the
+two questions:
+
+- **How many cells express the gene?** A detection bar below zero shows
+  the percentage of cells with non-zero expression per group.
+- **How is it expressed in those cells?** The violin, points and median
+  diamond above zero use non-zero cells only.
+
+The design comes from the [boilplot](https://github.com/laraj1/boilplot-r)
+package by Lara Jerman; BadranSeq redraws it with its own palette and
+theme and adds the controls below.
+
+### A single gene
+
+```{r}
+#| label: boil-basic
+#| fig.width: 9
+#| fig.height: 5
+do_BoilPlot(pbmc3k, features = "CD8A", group.by = "seurat_annotations")
+```
+
+Compare with the plain violin of the same gene above: the 51% detection
+rate in CD8 T cells and the 8–13% in the CD4 and NK groups are now read
+directly from the bars, and the non-zero distributions are no longer
+flattened by the zeros.
+
+### Dropping sparse groups with `min.nonzero`
+
+Groups with fewer than `min.nonzero` expressing cells (default 10) are
+removed from the panel, bar and all, because a violin from a handful of
+points says little. Raise the threshold to keep only well-populated
+groups:
+
+```{r}
+#| label: boil-min-nonzero
+#| fig.width: 9
+#| fig.height: 5
+do_BoilPlot(pbmc3k, features = "CD8A", group.by = "seurat_annotations",
+            min.nonzero = 50)
+```
+
+The percentages of the remaining groups are unchanged: they are still
+computed over all cells in the group, not only the expressing ones.
+
+### Multiple genes
+
+Several genes stack vertically by default (`ncol = 1`), one panel per
+gene. Each panel keeps only the groups that pass `min.nonzero` for that
+gene, so panels can show different group sets:
+
+```{r}
+#| label: boil-multi
+#| fig.width: 9
+#| fig.height: 12
+do_BoilPlot(pbmc3k, features = c("GZMA", "NKG7", "PRF1"),
+            group.by = "seurat_annotations")
+```
+
+Use `ncol` and `nrow` to change the layout, as with the violin functions.
+
+### Selecting and ordering groups
+
+`group.levels` works as in `do_StatsViolinPlot()`: it keeps only the
+listed groups, in the order given.
+
+```{r}
+#| label: boil-group-levels
+#| fig.width: 7
+#| fig.height: 5
+do_BoilPlot(pbmc3k, features = "NKG7", group.by = "seurat_annotations",
+            group.levels = c("NK", "CD8 T", "Memory CD4 T", "B"))
+```
+
+### Centrality and boxplot options
+
+The diamond marks the median of the expressing cells; switch to the
+mean with `centrality.fn = "mean"`, or remove it with
+`centrality = FALSE`. A boxplot of the non-zero values can be overlaid
+with `boxplot = TRUE`:
+
+```{r}
+#| label: boil-options
+#| fig.width: 7
+#| fig.height: 5
+do_BoilPlot(pbmc3k, features = "GZMA", group.by = "seurat_annotations",
+            group.levels = c("NK", "CD8 T"),
+            centrality.fn = "mean", boxplot = TRUE)
+```
+
+Point size, transparency and jitter width follow the original boil plot
+(`pt.size = 0.7`, `pt.alpha = 0.6`, `jitter.width = 0.1`); `violin.alpha`
+and `violin.width` control the violins. Only genes are accepted — for
+metadata columns such as `nCount_RNA`, which are never zero-inflated,
+use `do_ViolinPlot()`.
 
 ## Sankey / alluvial diagrams
 
