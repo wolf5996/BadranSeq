@@ -435,12 +435,40 @@ A median label of 0.69 is `log1p(1)`: most expressing cells in that
 group carry a single corrected count. It appears often for sparsely
 detected genes and is a property of the data, not of the plot.
 
-### Dropping sparse groups with `min.nonzero`
+### Filtering out groups that barely express the gene
 
-Groups with fewer than `min.nonzero` expressing cells (default 10) are
-removed from the panel, bar and all, because a violin from a handful of
-points says little. Raise the threshold to keep only well-populated
-groups:
+Boil plots carry a built-in filter. A group is kept in a gene’s panel
+only if at least `min.nonzero` of its cells express that gene; every
+other group disappears from the panel entirely, taking its violin,
+points, detection bar and x-axis slot with it. The default is 10
+expressing cells. The reason is statistical: a density estimated from a
+handful of points is noise, and a detection bar for a group that does
+not express the gene says nothing a reader cannot infer from its
+absence.
+
+The filter is a **count of expressing cells**, not a percentage. A group
+of 700 cells at 2% detection (14 cells) passes the default; a group of
+30 cells at 20% (6 cells) does not. This keeps small but genuinely
+expressing populations out of the plot only when they are too small to
+draw.
+
+With `min.nonzero = 1`, nothing is filtered and every group that has at
+least one expressing cell appears:
+
+``` r
+
+do_BoilPlot(pbmc3k, features = "CCL5", group.by = "seurat_annotations",
+            min.nonzero = 1)
+```
+
+    ## Warning: Groups with fewer than two datapoints have been dropped.
+    ## ℹ Set `drop = FALSE` to consider such groups for position adjustment purposes.
+
+![](visualisation_files/figure-html/boil-min-nonzero-all-1.png)
+
+Raising the threshold strips the panel down to the groups where the gene
+is actually expressed. At 100 expressing cells only the four
+CCL5-positive populations remain:
 
 ``` r
 
@@ -450,14 +478,28 @@ do_BoilPlot(pbmc3k, features = "CCL5", group.by = "seurat_annotations",
 
 ![](visualisation_files/figure-html/boil-min-nonzero-1.png)
 
-The percentages of the remaining groups are unchanged: they are still
-computed over all cells in the group, not only the expressing ones.
+Two details matter when reading a filtered panel:
+
+- The percentages of the remaining groups are unchanged. They are still
+  computed over all cells in the group, including the non-expressing
+  ones, so a bar reading 32% means 32% of all Memory CD4 T cells, not
+  32% of the cells shown.
+- Filtering is per gene. In a multi-gene plot each panel keeps the
+  groups that pass for *that* gene, so the x-axes can differ between
+  panels. A gene with no group above the threshold is skipped with a
+  warning; if no gene qualifies the call stops with an error.
+
+To force the same groups into every panel regardless of expression, use
+`group.levels` instead of (or together with) `min.nonzero`; groups
+listed in `group.levels` are still subject to the threshold, so set
+`min.nonzero = 1` if you want them all drawn.
 
 ### Multiple genes
 
 Several genes stack vertically by default (`ncol = 1`), one panel per
 gene. Each panel keeps only the groups that pass `min.nonzero` for that
-gene, so panels can show different group sets:
+gene, so panels can show different group sets — compare the x-axes of
+the three panels below:
 
 ``` r
 

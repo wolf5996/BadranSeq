@@ -456,18 +456,52 @@ sparsely detected genes and is a property of the data, not of the
 plot.</p>
 </div>
 <div class="section level3">
-<h3 id="dropping-sparse-groups-with-min-nonzero">Dropping sparse groups with <code>min.nonzero</code><a class="anchor" aria-label="anchor" href="#dropping-sparse-groups-with-min-nonzero"></a>
+<h3 id="filtering-out-groups-that-barely-express-the-gene">Filtering out groups that barely express the gene<a class="anchor" aria-label="anchor" href="#filtering-out-groups-that-barely-express-the-gene"></a>
 </h3>
-<p>Groups with fewer than <code>min.nonzero</code> expressing cells
-(default 10) are removed from the panel, bar and all, because a violin
-from a handful of points says little. Raise the threshold to keep only
-well-populated groups:</p>
+<p>Boil plots carry a built-in filter. A group is kept in a gene’s panel
+only if at least <code>min.nonzero</code> of its cells express that
+gene; every other group disappears from the panel entirely, taking its
+violin, points, detection bar and x-axis slot with it. The default is 10
+expressing cells. The reason is statistical: a density estimated from a
+handful of points is noise, and a detection bar for a group that does
+not express the gene says nothing a reader cannot infer from its
+absence.</p>
+<p>The filter is a <strong>count of expressing cells</strong>, not a
+percentage. A group of 700 cells at 2% detection (14 cells) passes the
+default; a group of 30 cells at 20% (6 cells) does not. This keeps small
+but genuinely expressing populations out of the plot only when they are
+too small to draw.</p>
+<p>With <code>min.nonzero = 1</code>, nothing is filtered and every
+group that has at least one expressing cell appears:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_BoilPlot.html">do_BoilPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CCL5"</span>, group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
+<span>            min.nonzero <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: Groups with fewer than two datapoints have been dropped.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Set `drop = FALSE` to consider such groups for position adjustment purposes.</span></span></code></pre>
+<p><img src="visualisation_files/figure-html/boil-min-nonzero-all-1.png" class="r-plt" alt="" width="864"></p>
+<p>Raising the threshold strips the panel down to the groups where the
+gene is actually expressed. At 100 expressing cells only the four
+CCL5-positive populations remain:</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_BoilPlot.html">do_BoilPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CCL5"</span>, group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
 <span>            min.nonzero <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/boil-min-nonzero-1.png" class="r-plt" alt="" width="864"></p>
-<p>The percentages of the remaining groups are unchanged: they are still
-computed over all cells in the group, not only the expressing ones.</p>
+<p>Two details matter when reading a filtered panel:</p>
+<ul>
+<li>The percentages of the remaining groups are unchanged. They are
+still computed over all cells in the group, including the non-expressing
+ones, so a bar reading 32% means 32% of all Memory CD4 T cells, not 32%
+of the cells shown.</li>
+<li>Filtering is per gene. In a multi-gene plot each panel keeps the
+groups that pass for <em>that</em> gene, so the x-axes can differ
+between panels. A gene with no group above the threshold is skipped with
+a warning; if no gene qualifies the call stops with an error.</li>
+</ul>
+<p>To force the same groups into every panel regardless of expression,
+use <code>group.levels</code> instead of (or together with)
+<code>min.nonzero</code>; groups listed in <code>group.levels</code> are
+still subject to the threshold, so set <code>min.nonzero = 1</code> if
+you want them all drawn.</p>
 </div>
 <div class="section level3">
 <h3 id="multiple-genes-1">Multiple genes<a class="anchor" aria-label="anchor" href="#multiple-genes-1"></a>
@@ -475,8 +509,8 @@ computed over all cells in the group, not only the expressing ones.</p>
 <p>Several genes stack vertically by default (<code>ncol = 1</code>),
 one panel per gene. Each panel keeps only the groups that pass
 <code>min.nonzero</code> for that gene, so panels can show different
-group sets:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+group sets — compare the x-axes of the three panels below:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_BoilPlot.html">do_BoilPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CCL5"</span>, <span class="st">"HLA-DRA"</span>, <span class="st">"IL32"</span><span class="op">)</span>,</span>
 <span>            group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/boil-multi-1.png" class="r-plt" alt="" width="864"></p>
@@ -489,7 +523,7 @@ with the violin functions.</p>
 <p><code>group.levels</code> works as in
 <code><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot()</a></code>: it keeps only the listed groups, in
 the order given.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_BoilPlot.html">do_BoilPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"NKG7"</span>, group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
 <span>            group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NK"</span>, <span class="st">"CD8 T"</span>, <span class="st">"Memory CD4 T"</span>, <span class="st">"B"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualisation_files/figure-html/boil-group-levels-1.png" class="r-plt" alt="" width="672"></p>
@@ -501,7 +535,7 @@ the order given.</p>
 mean with <code>centrality.fn = "mean"</code>, or remove it with
 <code>centrality = FALSE</code>. A boxplot of the non-zero values can be
 overlaid with <code>boxplot = TRUE</code>:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_BoilPlot.html">do_BoilPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"GZMA"</span>, group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
 <span>            group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NK"</span>, <span class="st">"CD8 T"</span><span class="op">)</span>,</span>
 <span>            centrality.fn <span class="op">=</span> <span class="st">"mean"</span>, boxplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -526,7 +560,7 @@ variables.</p>
 </h3>
 <p>A common use case — mapping cluster IDs to biological
 annotations:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_SankeyPlot.html">do_SankeyPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>              columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"seurat_clusters"</span>, <span class="st">"seurat_annotations"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 62 cell(s) with NA values excluded from plot.</span></span></code></pre>
