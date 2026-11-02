@@ -95,10 +95,12 @@ do_UmapPlot(pbmc3k, split.by = "condition")
 
 `do_StatsViolinPlot()` wraps `ggstatsplot::ggbetweenstats()` with
 Seurat-aware data extraction, automatic colour generation, and a
-`group.levels` argument for comparing specific clusters:
+`group.levels` argument for comparing specific clusters. S100A4 marks
+the transition from naive to memory T cells, so its expression steps up
+from Naive CD4 T to Memory CD4 T to CD8 T:
 
 ``` r
-do_StatsViolinPlot(pbmc3k, features = "CD3D",
+do_StatsViolinPlot(pbmc3k, features = "S100A4",
                    group.by = "seurat_annotations",
                    group.levels = c("Naive CD4 T", "Memory CD4 T", "CD8 T"))
 ```
@@ -115,14 +117,20 @@ against the baseline. `do_BoilPlot()` separates the two questions a
 violin blurs together: a detection bar below zero shows the percentage
 of cells expressing each gene, while the violin and points above zero
 show the distribution among expressing cells only. Groups with fewer
-than `min.nonzero` expressing cells are dropped from the panel:
+than `min.nonzero` expressing cells are dropped from the panel. CCL5,
+HLA-DRA and IL32 differ across cell types in both detection rate and
+expression level among expressing cells:
 
 ``` r
-do_BoilPlot(pbmc3k, features = c("GZMA", "NKG7", "PRF1"),
+do_BoilPlot(pbmc3k, features = c("CCL5", "HLA-DRA", "IL32"),
             group.by = "seurat_annotations")
 ```
 
 <img src="man/figures/README-boil-plot-1.png" alt="" width="100%" />
+
+A median of 0.69 (`log1p(1)`) means most expressing cells in that group
+carry a single corrected count, which is common for sparsely detected
+genes.
 
 The design follows the boil plot from
 [boilplot-r](https://github.com/laraj1/boilplot-r) by Lara Jerman,

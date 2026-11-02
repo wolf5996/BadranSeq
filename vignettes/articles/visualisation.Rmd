@@ -319,13 +319,15 @@ biologically relevant. The `group.levels` argument filters the grouping
 variable to a specified subset *before* the statistical test is run, so
 the test is performed only on the groups you care about.
 
-With fewer groups, pairwise brackets become readable again:
+With fewer groups, pairwise brackets become readable again. S100A4
+rises from naive to memory T cells, so the three groups have clearly
+different medians:
 
 ```{r}
 #| label: stats-violin-group-levels
 #| fig.width: 7
 #| fig.height: 6
-do_StatsViolinPlot(pbmc3k, features = "CD3D",
+do_StatsViolinPlot(pbmc3k, features = "S100A4",
                    group.by = "seurat_annotations",
                    group.levels = c("Naive CD4 T", "Memory CD4 T", "CD8 T"))
 ```
@@ -343,7 +345,7 @@ tests via the `type` argument:
 #| label: stats-violin-parametric
 #| fig.width: 7
 #| fig.height: 6
-do_StatsViolinPlot(pbmc3k, features = "CD3D",
+do_StatsViolinPlot(pbmc3k, features = "S100A4",
                    group.by = "seurat_annotations",
                    group.levels = c("Naive CD4 T", "Memory CD4 T", "CD8 T"),
                    type = "parametric")
@@ -401,13 +403,18 @@ theme and adds the controls below.
 #| label: boil-basic
 #| fig.width: 9
 #| fig.height: 5
-do_BoilPlot(pbmc3k, features = "CD8A", group.by = "seurat_annotations")
+do_BoilPlot(pbmc3k, features = "CCL5", group.by = "seurat_annotations")
 ```
 
-Compare with the plain violin of the same gene above: the 51% detection
-rate in CD8 T cells and the 8–13% in the CD4 and NK groups are now read
-directly from the bars, and the non-zero distributions are no longer
-flattened by the zeros.
+CCL5 is detected in nearly every CD8 T cell and platelet but in only a
+fifth of naive CD4 T cells, and among the cells that do express it the
+median rises from about one count in monocytes and B cells to well over
+ten in CD8 T cells. Both facts are read directly from the panel; in a
+conventional violin the zeros would hide the second one.
+
+A median label of 0.69 is `log1p(1)`: most expressing cells in that
+group carry a single corrected count. It appears often for sparsely
+detected genes and is a property of the data, not of the plot.
 
 ### Dropping sparse groups with `min.nonzero`
 
@@ -420,8 +427,8 @@ groups:
 #| label: boil-min-nonzero
 #| fig.width: 9
 #| fig.height: 5
-do_BoilPlot(pbmc3k, features = "CD8A", group.by = "seurat_annotations",
-            min.nonzero = 50)
+do_BoilPlot(pbmc3k, features = "CCL5", group.by = "seurat_annotations",
+            min.nonzero = 100)
 ```
 
 The percentages of the remaining groups are unchanged: they are still
@@ -437,7 +444,7 @@ gene, so panels can show different group sets:
 #| label: boil-multi
 #| fig.width: 9
 #| fig.height: 12
-do_BoilPlot(pbmc3k, features = c("GZMA", "NKG7", "PRF1"),
+do_BoilPlot(pbmc3k, features = c("CCL5", "HLA-DRA", "IL32"),
             group.by = "seurat_annotations")
 ```
 
