@@ -324,11 +324,13 @@ biologically relevant. The `group.levels` argument filters the grouping
 variable to a specified subset *before* the statistical test is run, so
 the test is performed only on the groups you care about.
 
-With fewer groups, pairwise brackets become readable again:
+With fewer groups, pairwise brackets become readable again. S100A4 rises
+from naive to memory T cells, so the three groups have clearly different
+medians:
 
 ``` r
 
-do_StatsViolinPlot(pbmc3k, features = "CD3D",
+do_StatsViolinPlot(pbmc3k, features = "S100A4",
                    group.by = "seurat_annotations",
                    group.levels = c("Naive CD4 T", "Memory CD4 T", "CD8 T"))
 ```
@@ -349,7 +351,7 @@ tests via the `type` argument:
 
 ``` r
 
-do_StatsViolinPlot(pbmc3k, features = "CD3D",
+do_StatsViolinPlot(pbmc3k, features = "S100A4",
                    group.by = "seurat_annotations",
                    group.levels = c("Naive CD4 T", "Memory CD4 T", "CD8 T"),
                    type = "parametric")
@@ -394,6 +396,115 @@ do_ViolinPlot(pbmc3k, features = "CD3D",
 ```
 
 ![](visualisation_files/figure-html/plain-violin-1.png)
+
+## Boil plots for zero-inflated genes
+
+Most cells do not express most genes. In a conventional violin the zeros
+pile up at the baseline, the cells that *do* express the gene are
+squeezed into a thin tail, and the fraction of expressing cells has to
+be guessed from the thickness of the base.
+[`do_BoilPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_BoilPlot.md)
+separates the two questions:
+
+- **How many cells express the gene?** A detection bar below zero shows
+  the percentage of cells with non-zero expression per group.
+- **How is it expressed in those cells?** The violin, points and median
+  diamond above zero use non-zero cells only.
+
+The design comes from the
+[boilplot](https://github.com/laraj1/boilplot-r) package by Lara Jerman;
+BadranSeq redraws it with its own palette and theme and adds the
+controls below.
+
+### A single gene
+
+``` r
+
+do_BoilPlot(pbmc3k, features = "CCL5", group.by = "seurat_annotations")
+```
+
+![](visualisation_files/figure-html/boil-basic-1.png)
+
+CCL5 is detected in nearly every CD8 T cell and platelet but in only a
+fifth of naive CD4 T cells, and among the cells that do express it the
+median rises from about one count in monocytes and B cells to well over
+ten in CD8 T cells. Both facts are read directly from the panel; in a
+conventional violin the zeros would hide the second one.
+
+A median label of 0.69 is `log1p(1)`: most expressing cells in that
+group carry a single corrected count. It appears often for sparsely
+detected genes and is a property of the data, not of the plot.
+
+### Dropping sparse groups with `min.nonzero`
+
+Groups with fewer than `min.nonzero` expressing cells (default 10) are
+removed from the panel, bar and all, because a violin from a handful of
+points says little. Raise the threshold to keep only well-populated
+groups:
+
+``` r
+
+do_BoilPlot(pbmc3k, features = "CCL5", group.by = "seurat_annotations",
+            min.nonzero = 100)
+```
+
+![](visualisation_files/figure-html/boil-min-nonzero-1.png)
+
+The percentages of the remaining groups are unchanged: they are still
+computed over all cells in the group, not only the expressing ones.
+
+### Multiple genes
+
+Several genes stack vertically by default (`ncol = 1`), one panel per
+gene. Each panel keeps only the groups that pass `min.nonzero` for that
+gene, so panels can show different group sets:
+
+``` r
+
+do_BoilPlot(pbmc3k, features = c("CCL5", "HLA-DRA", "IL32"),
+            group.by = "seurat_annotations")
+```
+
+![](visualisation_files/figure-html/boil-multi-1.png)
+
+Use `ncol` and `nrow` to change the layout, as with the violin
+functions.
+
+### Selecting and ordering groups
+
+`group.levels` works as in
+[`do_StatsViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_StatsViolinPlot.md):
+it keeps only the listed groups, in the order given.
+
+``` r
+
+do_BoilPlot(pbmc3k, features = "NKG7", group.by = "seurat_annotations",
+            group.levels = c("NK", "CD8 T", "Memory CD4 T", "B"))
+```
+
+![](visualisation_files/figure-html/boil-group-levels-1.png)
+
+### Centrality and boxplot options
+
+The diamond marks the median of the expressing cells; switch to the mean
+with `centrality.fn = "mean"`, or remove it with `centrality = FALSE`. A
+boxplot of the non-zero values can be overlaid with `boxplot = TRUE`:
+
+``` r
+
+do_BoilPlot(pbmc3k, features = "GZMA", group.by = "seurat_annotations",
+            group.levels = c("NK", "CD8 T"),
+            centrality.fn = "mean", boxplot = TRUE)
+```
+
+![](visualisation_files/figure-html/boil-options-1.png)
+
+Point size, transparency and jitter width follow the original boil plot
+(`pt.size = 0.7`, `pt.alpha = 0.6`, `jitter.width = 0.1`);
+`violin.alpha` and `violin.width` control the violins. Only genes are
+accepted — for metadata columns such as `nCount_RNA`, which are never
+zero-inflated, use
+[`do_ViolinPlot()`](https://wolf5996.github.io/BadranSeq/reference/do_ViolinPlot.md).
 
 ## Sankey / alluvial diagrams
 
