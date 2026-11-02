@@ -22,8 +22,10 @@ utils::globalVariables(c("n_cells", "n_expr", "pct", "pct_label",
 #' @param title character. Plot title (typically the gene name).
 #' @param x.title character. X-axis title (the grouping variable name).
 #' @param colors character. Named vector of colors for groups.
-#' @param min.nonzero numeric. Minimum expressing cells for a group to be
-#'   kept in the panel. Groups below it are dropped entirely.
+#' @param min.cells numeric. Minimum number of expressing cells for a group
+#'   to be kept in the panel.
+#' @param min.pct numeric. Minimum fraction (0 to 1) of expressing cells for a
+#'   group to be kept. Groups failing either threshold are dropped entirely.
 #' @param pt.size numeric. Jitter point size.
 #' @param pt.alpha numeric. Jitter point alpha.
 #' @param jitter.width numeric. Horizontal jitter width.
@@ -36,7 +38,7 @@ utils::globalVariables(c("n_cells", "n_expr", "pct", "pct_label",
 #' @param centrality logical. Whether to show centrality point and label.
 #' @param centrality.fn character. Centrality function name ("median" or "mean").
 #'
-#' @return A ggplot2 object, or NULL when no group reaches `min.nonzero`.
+#' @return A ggplot2 object, or NULL when no group passes both thresholds.
 #' @keywords internal
 .build_boil_panel <- function(
     df,
@@ -44,7 +46,8 @@ utils::globalVariables(c("n_cells", "n_expr", "pct", "pct_label",
     title,
     x.title,
     colors,
-    min.nonzero = 10,
+    min.cells = 10,
+    min.pct = 0,
     pt.size = 0.7,
     pt.alpha = 0.6,
     jitter.width = 0.1,
@@ -74,9 +77,11 @@ utils::globalVariables(c("n_cells", "n_expr", "pct", "pct_label",
   )
   detection_df$pct_label <- paste0(round(detection_df$pct * 100), "%")
 
-  # Drop groups with too few expressing cells from the panel entirely
+  # Drop groups with too few expressing cells (count or fraction) entirely
   keep_groups <- as.character(
-    detection_df[[group_col]][detection_df$n_expr >= min.nonzero]
+    detection_df[[group_col]][
+      detection_df$n_expr >= min.cells & detection_df$pct >= min.pct
+    ]
   )
   if (length(keep_groups) == 0) {
     return(NULL)
@@ -263,6 +268,10 @@ utils::globalVariables(c("n_cells", "n_expr", "pct", "pct_label",
 #'   points, centrality marker and optional boxplot (`boxplot = TRUE`) above
 #'   zero use non-zero cells only.
 #'
+#' Groups that barely express a gene are filtered out of that gene's panel:
+#' `min.cells` sets a minimum count of expressing cells and `min.pct` a
+#' minimum fraction of expressing cells. A group must pass both.
+#'
 #' Geometry and colours follow the original boil plot, drawn with BadranSeq's
 #' palette and \code{\link{theme_badranseq}}. For a single gene, returns
 #' a bare ggplot2 object. For multiple genes, returns a patchwork composition.
@@ -285,11 +294,19 @@ utils::globalVariables(c("n_cells", "n_expr", "pct", "pct_label",
 #' @param assay character. Assay to use (default: NULL = DefaultAssay).
 #' @param colors.use character. Named vector of colors for groups. If NULL,
 #'   generates colors automatically with \code{\link{generate_badranseq_colors}}.
-#' @param min.nonzero numeric. Minimum number of expressing cells a group
-#'   needs to appear in a gene's panel (default: 10). Groups below the
-#'   threshold are removed from that panel entirely, including their
-#'   detection bar and x-axis position. Genes with no qualifying group are
-#'   skipped with a warning.
+#' @param min.cells numeric. Minimum number of expressing cells (a raw cell
+#'   count, not a proportion) a group needs to appear in a gene's panel
+#'   (default: 10). Groups below the threshold are removed from that panel
+#'   entirely, including their detection bar and x-axis position. Genes with
+#'   no qualifying group are skipped with a warning.
+#' @param min.pct numeric. Minimum fraction of cells in a group that must
+#'   express the gene for the group to appear, on a 0 to 1 scale as in
+#'   \code{Seurat::FindMarkers()} (default: 0 = no fraction filter; 0.1 means
+#'   10 percent). Applied together with \code{min.cells}: a group must pass
+#'   both.
+#' @param min.nonzero `r lifecycle::badge("deprecated")` Use \code{min.cells}
+#'   instead. Renamed in 1.5.2 to make clear that the threshold is a cell
+#'   count, not a percentage.
 #' @param pt.size numeric. Jitter point size (default: 0.7).
 #' @param pt.alpha numeric. Jitter point transparency (default: 0.6).
 #' @param jitter.width numeric. Horizontal jitter width for points
@@ -330,6 +347,10 @@ utils::globalVariables(c("n_cells", "n_expr", "pct", "pct_label",
 #'             group.by = "seurat_annotations",
 #'             group.levels = c("NK", "CD8 T", "Memory CD4 T"))
 #'
+#' # Keep only groups where at least 25% of cells express the gene
+#' do_BoilPlot(pbmc3k, features = "CCL5", group.by = "seurat_annotations",
+#'             min.pct = 0.25)
+#'
 #' # Mean instead of median, with boxplot overlay
 #' do_BoilPlot(pbmc3k, features = "MS4A1", centrality.fn = "mean",
 #'             boxplot = TRUE)
@@ -345,7 +366,8 @@ do_BoilPlot <- function(
     layer = "data",
     assay = NULL,
     colors.use = NULL,
-    min.nonzero = 10,
+    min.cells = 10,
+    min.pct = 0,
     pt.size = 0.7,
     pt.alpha = 0.6,
     jitter.width = 0.1,
@@ -357,8 +379,20 @@ do_BoilPlot <- function(
     centrality = TRUE,
     centrality.fn = "median",
     ncol = 1,
-    nrow = NULL
+    nrow = NULL,
+    min.nonzero = deprecated()
 ) {
+
+  # --- Deprecated arguments ---
+
+  if (lifecycle::is_present(min.nonzero)) {
+    lifecycle::deprecate_warn(
+      when = "1.5.2",
+      what = "do_BoilPlot(min.nonzero)",
+      with = "do_BoilPlot(min.cells)"
+    )
+    min.cells <- min.nonzero
+  }
 
   # --- Validation ---
 
@@ -370,9 +404,17 @@ do_BoilPlot <- function(
     stop("features must be a non-empty character vector")
   }
 
-  if (!is.numeric(min.nonzero) || length(min.nonzero) != 1 ||
-      is.na(min.nonzero) || min.nonzero < 1) {
-    stop("min.nonzero must be a single number >= 1")
+  if (!is.numeric(min.cells) || length(min.cells) != 1 ||
+      is.na(min.cells) || min.cells < 1) {
+    stop("min.cells must be a single number >= 1 (a count of expressing cells)")
+  }
+
+  if (!is.numeric(min.pct) || length(min.pct) != 1 || is.na(min.pct) ||
+      min.pct < 0 || min.pct > 1) {
+    stop(
+      "min.pct must be a single fraction between 0 and 1 ",
+      "(e.g. 0.1 for 10 percent of cells), not a percentage."
+    )
   }
 
   features <- unique(features)
@@ -483,7 +525,8 @@ do_BoilPlot <- function(
       title = feat,
       x.title = if (inject_idents) "Identity" else group.by,
       colors = colors.use,
-      min.nonzero = min.nonzero,
+      min.cells = min.cells,
+      min.pct = min.pct,
       pt.size = pt.size,
       pt.alpha = pt.alpha,
       jitter.width = jitter.width,
@@ -499,18 +542,22 @@ do_BoilPlot <- function(
 
   names(plots) <- valid_features
 
-  # Drop genes where no group reaches min.nonzero
+  # Drop genes where no group passes min.cells and min.pct
+  threshold_txt <- paste0(
+    ">= ", min.cells, " expressing cells",
+    if (min.pct > 0) paste0(" and >= ", round(min.pct * 100), "% detection")
+  )
   empty <- vapply(plots, is.null, logical(1))
   if (any(empty)) {
     warning(
-      "No group has >= ", min.nonzero, " expressing cells for: ",
+      "No group has ", threshold_txt, " for: ",
       paste(valid_features[empty], collapse = ", "), ". Skipping."
     )
     plots <- plots[!empty]
   }
 
   if (length(plots) == 0) {
-    stop("No gene has a group with >= ", min.nonzero, " expressing cells.")
+    stop("No gene has a group with ", threshold_txt, ".")
   }
 
   # --- Return ---

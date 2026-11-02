@@ -116,10 +116,11 @@ Single-cell expression is mostly zeros, which squash ordinary violins
 against the baseline. `do_BoilPlot()` separates the two questions a
 violin blurs together: a detection bar below zero shows the percentage
 of cells expressing each gene, while the violin and points above zero
-show the distribution among expressing cells only. Groups with fewer
-than `min.nonzero` expressing cells are dropped from the panel. CCL5,
-HLA-DRA and IL32 differ across cell types in both detection rate and
-expression level among expressing cells:
+show the distribution among expressing cells only. Groups that barely
+express a gene are dropped from its panel: `min.cells` sets a minimum
+count of expressing cells (default 10) and `min.pct` a minimum detection
+fraction. CCL5, HLA-DRA and IL32 differ across cell types in both
+detection rate and expression level among expressing cells:
 
 ``` r
 do_BoilPlot(pbmc3k, features = c("CCL5", "HLA-DRA", "IL32"),
@@ -183,10 +184,10 @@ Install the latest tagged release:
 
 ``` r
 # pak (recommended)
-pak::pkg_install("wolf5996/BadranSeq@v1.5.1")
+pak::pkg_install("wolf5996/BadranSeq@v1.5.2")
 
 # devtools
-devtools::install_github("wolf5996/BadranSeq", ref = "v1.5.1")
+devtools::install_github("wolf5996/BadranSeq", ref = "v1.5.2")
 ```
 
 ### Development version
@@ -259,7 +260,7 @@ reimplements the idea in its own visual style.
 If you use BadranSeq in published work, please cite:
 
 > Elshenawy, B. (2025). BadranSeq: Publication-ready visualisation for
-> single-cell RNA sequencing data in R. R package version 1.5.1.
+> single-cell RNA sequencing data in R. R package version 1.5.2.
 > <https://github.com/wolf5996/BadranSeq>
 
 ## License

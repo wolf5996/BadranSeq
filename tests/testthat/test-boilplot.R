@@ -33,7 +33,7 @@ test_that("do_BoilPlot detection rate matches fraction of non-zero cells", {
   grp <- pbmc3k$seurat_annotations
   expected <- tapply(expr > 0, grp, mean)
   n_expr <- tapply(expr > 0, grp, sum)
-  expected <- expected[!is.na(n_expr) & n_expr >= 10]  # default min.nonzero
+  expected <- expected[!is.na(n_expr) & n_expr >= 10]  # default min.cells
 
   label_layer <- Filter(function(l) inherits(l$geom, "GeomText"), p$layers)[[1]]
   det <- label_layer$data
@@ -49,10 +49,10 @@ test_that("do_BoilPlot violin and points use non-zero cells only", {
   expect_true(all(p$data$.value > 0))
 })
 
-test_that("do_BoilPlot drops groups below min.nonzero from the panel", {
+test_that("do_BoilPlot drops groups below min.cells from the panel", {
   data(pbmc3k, package = "BadranSeq")
   p <- do_BoilPlot(pbmc3k, features = "CD8A",
-                   group.by = "seurat_annotations", min.nonzero = 50)
+                   group.by = "seurat_annotations", min.cells = 50)
 
   expr <- SeuratObject::LayerData(pbmc3k, layer = "data")["CD8A", ]
   n_expr <- tapply(expr > 0, pbmc3k$seurat_annotations, sum)
@@ -67,14 +67,50 @@ test_that("do_BoilPlot skips genes with no qualifying group and errors when none
   data(pbmc3k, package = "BadranSeq")
   expect_warning(
     p <- do_BoilPlot(pbmc3k, features = c("NKG7", "CD8A"),
-                     group.by = "seurat_annotations", min.nonzero = 200),
+                     group.by = "seurat_annotations", min.cells = 200),
     "Skipping"
   )
   expect_s3_class(p, "ggplot")
   expect_error(
-    suppressWarnings(do_BoilPlot(pbmc3k, features = "CD8A", min.nonzero = 5000)),
+    suppressWarnings(do_BoilPlot(pbmc3k, features = "CD8A", min.cells = 5000)),
     "No gene has a group"
   )
+})
+
+test_that("do_BoilPlot min.pct keeps only groups above a detection fraction", {
+  data(pbmc3k, package = "BadranSeq")
+  p <- do_BoilPlot(pbmc3k, features = "CCL5",
+                   group.by = "seurat_annotations", min.pct = 0.25)
+
+  expr <- SeuratObject::LayerData(pbmc3k, layer = "data")["CCL5", ]
+  grp <- pbmc3k$seurat_annotations
+  pct <- tapply(expr > 0, grp, mean)
+  n_expr <- tapply(expr > 0, grp, sum)
+  expected <- names(pct)[!is.na(pct) & pct >= 0.25 & n_expr >= 10]
+
+  expect_setequal(levels(p$data$seurat_annotations), expected)
+  expect_true(length(expected) < length(unique(na.omit(grp))))
+})
+
+test_that("do_BoilPlot min.cells and min.pct are applied together", {
+  data(pbmc3k, package = "BadranSeq")
+  # Platelet: 14 cells, 100% CCL5 detection -> passes min.pct, fails min.cells = 20
+  p <- do_BoilPlot(pbmc3k, features = "CCL5",
+                   group.by = "seurat_annotations", min.pct = 0.25, min.cells = 20)
+  expect_false("Platelet" %in% levels(p$data$seurat_annotations))
+  expect_true("CD8 T" %in% levels(p$data$seurat_annotations))
+})
+
+test_that("do_BoilPlot min.nonzero is deprecated but still works", {
+  data(pbmc3k, package = "BadranSeq")
+  lifecycle::expect_deprecated(
+    p <- do_BoilPlot(pbmc3k, features = "CD8A",
+                     group.by = "seurat_annotations", min.nonzero = 50)
+  )
+  p_new <- do_BoilPlot(pbmc3k, features = "CD8A",
+                       group.by = "seurat_annotations", min.cells = 50)
+  expect_equal(levels(p$data$seurat_annotations),
+               levels(p_new$data$seurat_annotations))
 })
 
 test_that("do_BoilPlot group.levels subsets and orders groups", {
@@ -121,8 +157,12 @@ test_that("do_BoilPlot validates inputs", {
   expect_error(do_BoilPlot(pbmc3k, features = character(0)), "non-empty")
   expect_error(do_BoilPlot(pbmc3k, features = "CD8A", group.by = "fake_col"),
                "not found in metadata")
-  expect_error(do_BoilPlot(pbmc3k, features = "CD8A", min.nonzero = 0),
-               "min.nonzero")
+  expect_error(do_BoilPlot(pbmc3k, features = "CD8A", min.cells = 0),
+               "min.cells")
+  expect_error(do_BoilPlot(pbmc3k, features = "CD8A", min.pct = 25),
+               "min.pct")
+  expect_error(do_BoilPlot(pbmc3k, features = "CD8A", min.pct = -0.1),
+               "min.pct")
 })
 
 test_that("do_BoilPlot has no boxplot by default and adds one on request", {
