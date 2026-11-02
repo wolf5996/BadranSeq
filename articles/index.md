@@ -14,4 +14,5 @@
 
   Generate publication-quality dimensionality reduction plots with
   sensible defaults — cell borders, cluster labels, variance
-  annotations, and split-panel silhouettes out of the box.
+  annotations, split-panel silhouettes, statistical violins, and boil
+  plots for zero-inflated genes out of the box.

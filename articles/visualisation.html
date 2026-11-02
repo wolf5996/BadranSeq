@@ -10,8 +10,8 @@
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Publication-Ready Single-Cell Visualisation">
-<meta name="description" content="Generate publication-quality dimensionality reduction plots with sensible defaults — cell borders, cluster labels, variance annotations, and split-panel silhouettes out of the box.">
-<meta property="og:description" content="Generate publication-quality dimensionality reduction plots with sensible defaults — cell borders, cluster labels, variance annotations, and split-panel silhouettes out of the box.">
+<meta name="description" content="Generate publication-quality dimensionality reduction plots with sensible defaults — cell borders, cluster labels, variance annotations, split-panel silhouettes, statistical violins, and boil plots for zero-inflated genes out of the box.">
+<meta property="og:description" content="Generate publication-quality dimensionality reduction plots with sensible defaults — cell borders, cluster labels, variance annotations, split-panel silhouettes, statistical violins, and boil plots for zero-inflated genes out of the box.">
 <meta property="og:image" content="https://wolf5996.github.io/BadranSeq/logo.png">
 </head>
 <body>
@@ -418,6 +418,96 @@ Use this when you want a clean descriptive plot:</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="boil-plots-for-zero-inflated-genes">Boil plots for zero-inflated genes<a class="anchor" aria-label="anchor" href="#boil-plots-for-zero-inflated-genes"></a>
+</h2>
+<p>Most cells do not express most genes. In a conventional violin the
+zeros pile up at the baseline, the cells that <em>do</em> express the
+gene are squeezed into a thin tail, and the fraction of expressing cells
+has to be guessed from the thickness of the base.
+<code><a href="../reference/do_BoilPlot.html">do_BoilPlot()</a></code> separates the two questions:</p>
+<ul>
+<li>
+<strong>How many cells express the gene?</strong> A detection bar
+below zero shows the percentage of cells with non-zero expression per
+group.</li>
+<li>
+<strong>How is it expressed in those cells?</strong> The violin,
+points and median diamond above zero use non-zero cells only.</li>
+</ul>
+<p>The design comes from the <a href="https://github.com/laraj1/boilplot-r" class="external-link">boilplot</a> package by Lara
+Jerman; BadranSeq redraws it with its own palette and theme and adds the
+controls below.</p>
+<div class="section level3">
+<h3 id="a-single-gene">A single gene<a class="anchor" aria-label="anchor" href="#a-single-gene"></a>
+</h3>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_BoilPlot.html">do_BoilPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD8A"</span>, group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="visualisation_files/figure-html/boil-basic-1.png" class="r-plt" alt="" width="864"></p>
+<p>Compare with the plain violin of the same gene above: the 51%
+detection rate in CD8 T cells and the 8–13% in the CD4 and NK groups are
+now read directly from the bars, and the non-zero distributions are no
+longer flattened by the zeros.</p>
+</div>
+<div class="section level3">
+<h3 id="dropping-sparse-groups-with-min-nonzero">Dropping sparse groups with <code>min.nonzero</code><a class="anchor" aria-label="anchor" href="#dropping-sparse-groups-with-min-nonzero"></a>
+</h3>
+<p>Groups with fewer than <code>min.nonzero</code> expressing cells
+(default 10) are removed from the panel, bar and all, because a violin
+from a handful of points says little. Raise the threshold to keep only
+well-populated groups:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_BoilPlot.html">do_BoilPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"CD8A"</span>, group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
+<span>            min.nonzero <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
+<p><img src="visualisation_files/figure-html/boil-min-nonzero-1.png" class="r-plt" alt="" width="864"></p>
+<p>The percentages of the remaining groups are unchanged: they are still
+computed over all cells in the group, not only the expressing ones.</p>
+</div>
+<div class="section level3">
+<h3 id="multiple-genes-1">Multiple genes<a class="anchor" aria-label="anchor" href="#multiple-genes-1"></a>
+</h3>
+<p>Several genes stack vertically by default (<code>ncol = 1</code>),
+one panel per gene. Each panel keeps only the groups that pass
+<code>min.nonzero</code> for that gene, so panels can show different
+group sets:</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_BoilPlot.html">do_BoilPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GZMA"</span>, <span class="st">"NKG7"</span>, <span class="st">"PRF1"</span><span class="op">)</span>,</span>
+<span>            group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="visualisation_files/figure-html/boil-multi-1.png" class="r-plt" alt="" width="864"></p>
+<p>Use <code>ncol</code> and <code>nrow</code> to change the layout, as
+with the violin functions.</p>
+</div>
+<div class="section level3">
+<h3 id="selecting-and-ordering-groups">Selecting and ordering groups<a class="anchor" aria-label="anchor" href="#selecting-and-ordering-groups"></a>
+</h3>
+<p><code>group.levels</code> works as in
+<code><a href="../reference/do_StatsViolinPlot.html">do_StatsViolinPlot()</a></code>: it keeps only the listed groups, in
+the order given.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_BoilPlot.html">do_BoilPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"NKG7"</span>, group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
+<span>            group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NK"</span>, <span class="st">"CD8 T"</span>, <span class="st">"Memory CD4 T"</span>, <span class="st">"B"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="visualisation_files/figure-html/boil-group-levels-1.png" class="r-plt" alt="" width="672"></p>
+</div>
+<div class="section level3">
+<h3 id="centrality-and-boxplot-options">Centrality and boxplot options<a class="anchor" aria-label="anchor" href="#centrality-and-boxplot-options"></a>
+</h3>
+<p>The diamond marks the median of the expressing cells; switch to the
+mean with <code>centrality.fn = "mean"</code>, or remove it with
+<code>centrality = FALSE</code>. A boxplot of the non-zero values can be
+overlaid with <code>boxplot = TRUE</code>:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/do_BoilPlot.html">do_BoilPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="st">"GZMA"</span>, group.by <span class="op">=</span> <span class="st">"seurat_annotations"</span>,</span>
+<span>            group.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NK"</span>, <span class="st">"CD8 T"</span><span class="op">)</span>,</span>
+<span>            centrality.fn <span class="op">=</span> <span class="st">"mean"</span>, boxplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="visualisation_files/figure-html/boil-options-1.png" class="r-plt" alt="" width="672"></p>
+<p>Point size, transparency and jitter width follow the original boil
+plot (<code>pt.size = 0.7</code>, <code>pt.alpha = 0.6</code>,
+<code>jitter.width = 0.1</code>); <code>violin.alpha</code> and
+<code>violin.width</code> control the violins. Only genes are accepted —
+for metadata columns such as <code>nCount_RNA</code>, which are never
+zero-inflated, use <code><a href="../reference/do_ViolinPlot.html">do_ViolinPlot()</a></code>.</p>
+</div>
+</div>
+<div class="section level2">
 <h2 id="sankey-alluvial-diagrams">Sankey / alluvial diagrams<a class="anchor" aria-label="anchor" href="#sankey-alluvial-diagrams"></a>
 </h2>
 <p><code><a href="../reference/do_SankeyPlot.html">do_SankeyPlot()</a></code> visualises relationships between
@@ -429,7 +519,7 @@ variables.</p>
 </h3>
 <p>A common use case — mapping cluster IDs to biological
 annotations:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/do_SankeyPlot.html">do_SankeyPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>              columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"seurat_clusters"</span>, <span class="st">"seurat_annotations"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 62 cell(s) with NA values excluded from plot.</span></span></code></pre>
